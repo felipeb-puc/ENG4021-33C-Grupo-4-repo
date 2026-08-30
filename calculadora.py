@@ -16,11 +16,11 @@ def divisao(a, b):
 
 ## EXPONENCIACAO
 def exponenciacao(a, b):
-    return a**b
+    return
 
 ## RADICIACAO
 def radiciacao(a, b):
-    return a^(1/b)
+    return 
 
 ## DIVISAO INTEIRA
 def divisao_inteira(a, b):
