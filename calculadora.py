@@ -1,10 +1,10 @@
 ## SOMA
 def soma(a, b):
-    return
+    return a+b
 
 ## SUBTRAÇAO
 def subtracao(a, b):
-    return
+    return a- b
 
 ## MULTIPLICAÇÃO
 def multiplicacao(a, b):
@@ -16,7 +16,7 @@ def divisao(a, b):
 
 ## EXPONENCIACAO
 def exponenciacao(a, b):
-    return a^b
+    return a**b
 
 ## RADICIACAO
 def radiciacao(a, b):
