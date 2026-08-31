@@ -1,37 +1,37 @@
 ## SOMA
-def soma(a, b):
-    return
+def calcula_soma(a, b):
+    return a + b
 
 ## SUBTRAÇAO
-def subtracao(a, b):
-    return
+def calcula_subtracao(a, b):
+    return a - b
 
 ## MULTIPLICAÇÃO
-def multiplicacao(a, b):
+def calcula_multiplicacao(a, b):
     return
 
 ## DIVISÃO
-def divisao(a, b):
+def calcula_divisao(a, b):
     return
 
 ## EXPONENCIACAO
-def exponenciacao(a, b):
+def calcula_exponenciacao(a, b):
     return
 
 ## RADICIACAO
-def radiciacao(a, b):
+def calcula_radiciacao(a, b):
     return 
 
 ## DIVISAO INTEIRA
-def divisao_inteira(a, b):
+def calcula_divisao_inteira(a, b):
     return
 
 ## RESTO DA DIVISAO
-def resto_divisao(a, b):
+def calcula_resto_divisao(a, b):
     return
 
 ## PERCENTUAL
-def percentual(a, b):
+def calcula_percentual(a, b):
     return
 
 
