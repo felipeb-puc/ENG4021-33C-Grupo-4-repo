@@ -16,7 +16,7 @@ def divisao(a, b):
 
 ## EXPONENCIACAO
 def exponenciacao(a, b):
-    return a^b
+    return a**b
 
 ## RADICIACAO
 def radiciacao(a, b):
