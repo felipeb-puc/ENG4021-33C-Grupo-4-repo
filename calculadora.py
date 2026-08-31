@@ -1,39 +1,39 @@
 ## SOMA
-def soma(a, b):
+def calcula_soma(a, b):
     return a+b
 
 ## SUBTRAÇAO
-def subtracao(a, b):
+def calcula_subtracao(a, b):
     return a- b
 
 ## MULTIPLICAÇÃO
-def multiplicacao(a, b):
+def calcula_multiplicacao(a, b):
     return
 
 ## DIVISÃO
-def divisao(a, b):
+def calcula_divisao(a, b):
     return
 
 ## EXPONENCIACAO
-def exponenciacao(a, b):
+def calcula_exponenciacao(a, b):
     return a**b
 
 ## RADICIACAO
-def radiciacao(a, b):
+def calcula_radiciacao(a, b):
     if a>0 and b>0:
         return a**(1/b)
     return 0
 
 ## DIVISAO INTEIRA
-def divisao_inteira(a, b):
+def calcula_divisao_inteira(a, b):
     return
 
 ## RESTO DA DIVISAO
-def resto_divisao(a, b):
+def calcula_resto_divisao(a, b):
     return
 
 ## PERCENTUAL
-def percentual(a, b):
+def calcula_percentual(a, b):
     return
 
 
@@ -74,23 +74,23 @@ def main():
         b = float(input("Segundo número: "))
 
         if operacao == 1:
-            print("A soma é :", soma(a, b))              
+            print("A soma é :", calcula_soma(a, b))
         elif operacao == 2:
-            print("A subtração é :", subtracao(a, b))         
+            print("A subtração é :", calcula_subtracao(a, b))
         elif operacao == 3:
-            print("A multiplicação é :", multiplicacao(a, b))     
+            print("A multiplicação é :", calcula_multiplicacao(a, b))
         elif operacao == 4:
-            print("A divisão é :", divisao(a, b))           
+            print("A divisão é :", calcula_divisao(a, b))
         elif operacao == 5:
-            print("A exponenciação é :", exponenciacao(a, b))     
+            print("A exponenciação é :", calcula_exponenciacao(a, b))
         elif operacao == 6:
-            print("A radiciação é :", radiciacao(a, b))        
+            print("A radiciação é :", calcula_radiciacao(a, b))
         elif operacao == 7:
-            print("A divisão inteira é :", divisao_inteira(a, b))   
+            print("A divisão inteira é :", calcula_divisao_inteira(a, b))
         elif operacao == 8:
-            print("O resto da divisão é :", resto_divisao(a, b))     
+            print("O resto da divisão é :", calcula_resto_divisao(a, b))
         elif operacao == 9:
-            print("O percentual é :", percentual(a, b))        
+            print("O percentual é :", calcula_percentual(a, b))
         else:
             print("Opção inválida.")
 
