@@ -8,11 +8,11 @@ def calcula_subtracao(a, b):
 
 ## MULTIPLICAÇÃO
 def calcula_multiplicacao(a, b):
-    return
+    return a * b 
 
 ## DIVISÃO
 def calcula_divisao(a, b):
-    return
+    return a / b
 
 ## EXPONENCIACAO
 def calcula_exponenciacao(a, b):
