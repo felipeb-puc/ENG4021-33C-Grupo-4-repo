@@ -8,11 +8,13 @@ def calcula_subtracao(a, b):
 
 ## MULTIPLICAÇÃO
 def calcula_multiplicacao(a, b):
-    return
+    return a * b 
 
 ## DIVISÃO
 def calcula_divisao(a, b):
-    return
+    if b == 0
+        return "Não existe divisão por zero"
+    return a / b
 
 ## EXPONENCIACAO
 def calcula_exponenciacao(a, b):
