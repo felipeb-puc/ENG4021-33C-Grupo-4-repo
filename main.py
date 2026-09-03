@@ -4,7 +4,7 @@ def calcula_soma(a, b):
 
 ## SUBTRAÇAO
 def calcula_subtracao(a, b):
-    return a- b
+    return a - b
 
 ## MULTIPLICAÇÃO
 def calcula_multiplicacao(a, b):
@@ -18,7 +18,7 @@ def calcula_divisao(a, b):
 
 ## EXPONENCIACAO
 def calcula_exponenciacao(a, b):
-    return a**b
+    return a ** b
 
 ## RADICIACAO
 def calcula_radiciacao(a, b):
