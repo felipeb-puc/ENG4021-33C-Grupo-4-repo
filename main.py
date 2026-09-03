@@ -12,7 +12,7 @@ def calcula_multiplicacao(a, b):
 
 ## DIVISÃO
 def calcula_divisao(a, b):
-    if b == 0
+    if b == 0:
         return "Não existe divisão por zero"
     return a / b
 
