@@ -28,16 +28,20 @@ def calcula_radiciacao(a, b):
 
 ## DIVISAO INTEIRA
 def calcula_divisao_inteira(a, b):
+    if b == 0:
+        return "Não existe divisão por zero" 
     return a//b
 
 ## RESTO DA DIVISAO
 def calcula_resto_divisao(a, b):
+    if b == 0:
+        return "Não existe divisão por zero"
     return a % b
 
 ## PERCENTUAL
 def calcula_percentual(a, b):
-    return
-
+    return (a/100) * b
+    
 
 def exibe_mensagem_inicial():
 
