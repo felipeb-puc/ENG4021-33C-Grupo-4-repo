@@ -28,11 +28,11 @@ def calcula_radiciacao(a, b):
 
 ## DIVISAO INTEIRA
 def calcula_divisao_inteira(a, b):
-    return
+    return a//b
 
 ## RESTO DA DIVISAO
 def calcula_resto_divisao(a, b):
-    return
+    return a % b
 
 ## PERCENTUAL
 def calcula_percentual(a, b):
