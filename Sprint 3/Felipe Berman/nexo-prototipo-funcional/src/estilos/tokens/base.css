@@ -7,3 +7,6 @@ a:hover{color:var(--text-link-hover);text-decoration:underline;text-underline-of
 :focus-visible{outline:none;box-shadow:var(--ring-focus)}
 img{max-width:100%;display:block}
 ::selection{background:var(--green-200);color:var(--green-900)}
+/* Autopreenchimento do Chrome pinta o campo de azul. O inset cobre esse fundo
+   com a cor do campo; !important porque o Input zera box-shadow inline. */
+input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 1000px var(--paper) inset !important;-webkit-text-fill-color:var(--text-heading);caret-color:var(--text-heading)}
