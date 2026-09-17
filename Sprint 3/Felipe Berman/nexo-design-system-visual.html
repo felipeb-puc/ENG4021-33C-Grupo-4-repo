@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>NEXO — Design System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.544.0/dist/umd/lucide.min.js"></script>
+<style>
+:root{
+--green-50:#eef2f1;--green-100:#c9d5d2;--green-200:#afc1bd;--green-300:#8ba59f;--green-400:#75948c;
+--green-500:#52796f;--green-600:#4b6e65;--green-700:#3a564f;--green-800:#2d433d;--green-900:#22332f;
+--paper:#ffffff;
+--neutral-50:oklch(98.2% 0.004 174);--neutral-100:oklch(95.4% 0.005 174);--neutral-200:oklch(90.5% 0.006 174);
+--neutral-300:oklch(82% 0.007 174);--neutral-400:oklch(66% 0.008 174);--neutral-500:oklch(52% 0.008 174);
+--neutral-600:oklch(42% 0.008 174);--neutral-700:oklch(33% 0.008 174);--neutral-800:oklch(24% 0.008 174);--neutral-900:oklch(17% 0.008 174);
+--success:#4b6e65;--success-surface:#eef2f1;--warning:#8a6a2f;--warning-surface:#f6efe2;
+--danger:#8c3f3a;--danger-surface:#f6eae9;--info:#3a5664;--info-surface:#eaeff2;
+--surface-page:var(--paper);--surface-page-alt:var(--green-50);--surface-card:var(--paper);--surface-card-alt:var(--green-50);
+--surface-inverse:var(--green-900);--surface-inverse-alt:var(--green-800);--surface-accent:var(--green-500);
+--surface-subtle:var(--green-100);--surface-disabled:var(--neutral-100);
+--text-heading:var(--neutral-900);--text-body:var(--neutral-700);--text-muted:var(--neutral-500);
+--text-accent:var(--green-600);--text-on-accent:var(--paper);--text-on-inverse:var(--green-50);
+--text-on-inverse-muted:var(--green-200);--text-disabled:var(--neutral-400);--text-link:var(--green-600);--text-link-hover:var(--green-800);
+--border-subtle:var(--neutral-200);--border-default:var(--green-100);--border-strong:var(--green-300);--border-accent:var(--green-500);
+--border-inverse:color-mix(in oklch,var(--green-50) 22%,transparent);--focus-ring:color-mix(in oklch,var(--green-500) 40%,transparent);
+--font-sans:"Inter","Inter var",system-ui,-apple-system,"Segoe UI",sans-serif;
+--fw-regular:400;--fw-medium:500;--fw-semibold:600;--fw-bold:700;--fw-extrabold:800;
+--fs-display-1:64px;--lh-display-1:1.02;--tr-display-1:-0.03em;
+--fs-display-2:48px;--lh-display-2:1.06;--tr-display-2:-0.025em;
+--fs-display-3:38px;--lh-display-3:1.1;--tr-display-3:-0.02em;
+--fs-h1:30px;--lh-h1:1.16;--tr-h1:-0.018em;
+--fs-h2:24px;--lh-h2:1.22;--tr-h2:-0.014em;
+--fs-h3:20px;--lh-h3:1.3;--tr-h3:-0.01em;
+--fs-h4:17px;--lh-h4:1.35;--tr-h4:-0.006em;
+--fs-body-lg:17px;--lh-body-lg:1.62;
+--fs-body:15px;--lh-body:1.65;
+--fs-body-sm:13.5px;--lh-body-sm:1.6;
+--fs-caption:12px;--lh-caption:1.45;
+--fs-eyebrow:12px;--lh-eyebrow:1.2;--tr-eyebrow:0.1em;
+--fs-label:13px;--fs-button:14.5px;--tr-button:-0.005em;
+--space-0:0;--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;
+--space-6:24px;--space-7:32px;--space-8:40px;--space-9:48px;--space-10:64px;--space-11:80px;--space-12:112px;
+--radius-xs:4px;--radius-sm:8px;--radius-md:12px;--radius-lg:18px;--radius-xl:26px;--radius-pill:999px;
+--container-max:1200px;--gutter:24px;
+--control-h-sm:34px;--control-h:42px;--control-h-lg:50px;
+--shadow-xs:0 1px 2px color-mix(in oklch,var(--green-900) 8%,transparent);
+--shadow-sm:0 2px 6px color-mix(in oklch,var(--green-900) 8%,transparent);
+--shadow-md:0 8px 20px -6px color-mix(in oklch,var(--green-900) 14%,transparent);
+--shadow-lg:0 20px 44px -14px color-mix(in oklch,var(--green-900) 20%,transparent);
+--ring-focus:0 0 0 3px var(--focus-ring);
+--ease-out:cubic-bezier(.22,.61,.36,1);--dur-fast:120ms;--dur:200ms;
+--hatch-dark:repeating-linear-gradient(-45deg,color-mix(in oklch,var(--green-50) 5%,transparent) 0 1px,transparent 1px 9px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--font-sans);font-size:var(--fs-body);line-height:var(--lh-body);color:var(--text-body);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;color:var(--text-heading);font-weight:var(--fw-bold);letter-spacing:-0.02em}
+p{margin:0}
+code{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;background:var(--green-50);color:var(--green-800);padding:2px 6px;border-radius:4px;font-size:12.5px}
+
+/* layout */
+.container{max-width:var(--container-max);margin:0 auto;padding:0 var(--gutter)}
+.top{position:sticky;top:0;z-index:20;background:color-mix(in oklch,var(--paper) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border-subtle)}
+.top-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav{display:flex;gap:20px;overflow-x:auto}
+.nav a{font-size:13.5px;font-weight:var(--fw-medium);color:var(--text-muted);white-space:nowrap;padding:6px 0}
+.nav a:hover{color:var(--green-700);text-decoration:none}
+
+.hero{background:var(--green-900);background-image:var(--hatch-dark);color:var(--text-on-inverse);padding:80px 0 64px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-eyebrow);letter-spacing:var(--tr-eyebrow);text-transform:uppercase;font-weight:var(--fw-semibold);color:var(--text-on-inverse-muted)}
+.dots{display:inline-flex;gap:4px}
+.dot{width:6px;height:6px;border-radius:999px}
+.hero h1{font-size:var(--fs-display-2);line-height:var(--lh-display-2);letter-spacing:var(--tr-display-2);color:var(--paper);margin-top:16px;max-width:640px}
+.hero p{font-size:var(--fs-body-lg);color:var(--text-on-inverse-muted);margin-top:14px;max-width:580px}
+
+section.block{padding:64px 0;border-bottom:1px solid var(--border-subtle)}
+.block-head{margin-bottom:32px}
+.block-head .eyebrow{color:var(--green-500)}
+.block-head h2{font-size:var(--fs-h1);line-height:var(--lh-h1);letter-spacing:var(--tr-h1);margin-top:10px}
+.block-head p{color:var(--text-muted);font-size:var(--fs-body);margin-top:8px;max-width:640px}
+
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+@media (max-width:900px){.g3,.g4,.g5{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
+
+/* color swatches */
+.swatch{border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border-subtle)}
+.swatch-fill{height:74px}
+.swatch-label{padding:10px 12px;background:var(--paper)}
+.swatch-name{font-size:12.5px;font-weight:var(--fw-semibold);color:var(--text-heading)}
+.swatch-hex{font-size:11.5px;color:var(--text-muted);font-family:ui-monospace,monospace}
+
+.scale-row{display:flex;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border-subtle)}
+.scale-cell{flex:1;height:64px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font-size:10.5px;font-weight:var(--fw-semibold)}
+
+/* type specimens */
+.type-row{display:flex;align-items:baseline;justify-content:space-between;gap:24px;padding:20px 0;border-bottom:1px solid var(--border-subtle)}
+.type-row:last-child{border-bottom:none}
+.type-meta{flex:0 0 200px;font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace;line-height:1.7}
+.type-sample{flex:1;color:var(--text-heading)}
+
+/* card component wrapper */
+.showcase{background:var(--paper);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:28px}
+.showcase-label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:var(--fw-semibold);margin-bottom:16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.col{display:flex;flex-direction:column;gap:12px}
+
+/* spacing bars */
+.space-bar{display:flex;align-items:center;gap:16px;padding:8px 0}
+.space-bar .bar{background:var(--green-500);height:14px;border-radius:3px}
+.space-bar .label{width:120px;font-size:12px;font-family:ui-monospace,monospace;color:var(--text-muted)}
+
+/* radius specimens */
+.radius-box{width:76px;height:76px;background:var(--green-100);border:1.5px solid var(--green-400)}
+
+footer{background:var(--green-900);background-image:var(--hatch-dark);color:var(--text-on-inverse-muted);padding:48px 0;text-align:center;font-size:13px}
+footer a{color:var(--green-200)}
+
+.tocpill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:color-mix(in oklch,var(--green-50) 14%,transparent);border:1px solid var(--border-inverse);font-size:12px;color:var(--green-100)}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="container top-inner">
+    <span style="display:inline-flex;align-items:center;gap:6px;font-family:var(--font-sans);font-size:19px;font-weight:700;letter-spacing:-0.03em;color:var(--neutral-900)">
+      NEX
+      <svg width="34" height="16" viewBox="0 0 34 16" style="display:block;overflow:visible">
+        <circle cx="8" cy="8" r="6" fill="none" stroke="var(--green-800)" stroke-width="2.4"/>
+        <circle cx="16.4" cy="8" r="6" fill="none" stroke="var(--green-500)" stroke-width="2.4"/>
+        <circle cx="24.8" cy="8" r="6" fill="none" stroke="var(--green-300)" stroke-width="2.4"/>
+      </svg>
+    </span>
+    <nav class="nav">
+      <a href="#cor">Cor</a>
+      <a href="#tipografia">Tipografia</a>
+      <a href="#espacamento">Espaçamento</a>
+      <a href="#efeitos">Sombras &amp; efeitos</a>
+      <a href="#core">Core</a>
+      <a href="#forms">Formulários</a>
+      <a href="#nav">Navegação</a>
+      <a href="#feedback">Feedback</a>
+      <a href="#marca">Marca</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="container">
+    <span class="eyebrow"><span class="dots"><span class="dot" style="background:var(--green-500)"></span><span class="dot" style="background:var(--green-300)"></span></span> Design system</span>
+    <h1>NEXO — sistema de design</h1>
+    <p>Referência visual completa dos tokens e dos 16 componentes exportados do Claude Design (pasta <code style="background:transparent;color:var(--green-200)">Design System/Nexo/</code>). Uma escala de verde, Inter em cinco pesos, cantos pill-vs-8px e sombras esverdeadas — nunca preto neutro.</p>
+    <div class="row" style="margin-top:28px">
+      <span class="tocpill"><i data-lucide="palette" width="14" height="14"></i> 1 matiz, 10 tons</span>
+      <span class="tocpill"><i data-lucide="type" width="14" height="14"></i> Inter, 5 pesos</span>
+      <span class="tocpill"><i data-lucide="component" width="14" height="14"></i> 16 componentes</span>
+    </div>
+  </div>
+</header>
+
+<!-- COR -->
+<section class="block" id="cor">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Fundação</span>
+      <h2>Cor</h2>
+      <p>Uma única escala de verde (exportada do Figma) governa a marca inteira. Neutros são derivados da mesma matiz (croma ≤ 0.008 em OKLCH) para nunca soar cinza-frio. No máximo duas cores de fundo além do branco por página: <code>green-50</code> e <code>green-900</code>.</p>
+    </div>
+
+    <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em">Escala de marca — green-50 → green-900</div>
+    <div class="grid g5" id="green-scale"></div>
+
+    <div style="height:36px"></div>
+    <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em">Neutros derivados (mesma matiz, dessaturados)</div>
+    <div class="grid g5" id="neutral-scale"></div>
+
+    <div style="height:36px"></div>
+    <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em">Status — derivados, baixa saturação, nunca vermelho/âmbar/azul saturado</div>
+    <div class="grid g4" id="status-scale"></div>
+
+    <div style="height:36px"></div>
+    <div style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em">Papéis</div>
+    <div class="grid g4">
+      <div class="swatch"><div class="swatch-fill" style="background:var(--green-600)"></div><div class="swatch-label"><div class="swatch-name">Ação primária</div><div class="swatch-hex">green-600</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:var(--green-900)"></div><div class="swatch-label"><div class="swatch-name">Faixas escuras / superfície inversa</div><div class="swatch-hex">green-900</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:var(--green-500)"></div><div class="swatch-label"><div class="swatch-name">Destaque preenchido (accent)</div><div class="swatch-hex">green-500</div></div></div>
+      <div class="swatch"><div class="swatch-fill" style="background:var(--green-50)"></div><div class="swatch-label"><div class="swatch-name">Tint de seção / botão secundário</div><div class="swatch-hex">green-50</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIPOGRAFIA -->
+<section class="block" id="tipografia">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Fundação</span>
+      <h2>Tipografia</h2>
+      <p>Só Inter, em cinco pesos. Display é 700 com leading apertado (1.02–1.10) e tracking negativo; texto de corpo é 400–500 com leading 1.6–1.75. Eyebrows são 12px maiúsculo com tracking 0.1em, sempre precedidos pelo marcador de dois pontos.</p>
+    </div>
+    <div class="showcase">
+      <div class="type-row"><div class="type-meta">Display 1<br>64 / 1.02 / −0.03em / 700</div><div class="type-sample" style="font-size:var(--fs-display-1);line-height:var(--lh-display-1);letter-spacing:var(--tr-display-1);font-weight:700">Seu primeiro estágio</div></div>
+      <div class="type-row"><div class="type-meta">Display 2<br>48 / 1.06 / −0.025em / 700</div><div class="type-sample" style="font-size:var(--fs-display-2);line-height:var(--lh-display-2);letter-spacing:var(--tr-display-2);font-weight:700">Oportunidades abertas agora</div></div>
+      <div class="type-row"><div class="type-meta">Display 3<br>38 / 1.1 / −0.02em / 700</div><div class="type-sample" style="font-size:var(--fs-display-3);line-height:var(--lh-display-3);letter-spacing:var(--tr-display-3);font-weight:700">Estágio de verdade, com regras claras</div></div>
+      <div class="type-row"><div class="type-meta">Heading 1<br>30 / 1.16 / −0.018em / 700</div><div class="type-sample" style="font-size:var(--fs-h1);line-height:var(--lh-h1);letter-spacing:var(--tr-h1);font-weight:700">Vagas recomendadas para você</div></div>
+      <div class="type-row"><div class="type-meta">Heading 2<br>24 / 1.22 / −0.014em / 700</div><div class="type-sample" style="font-size:var(--fs-h2);line-height:var(--lh-h2);letter-spacing:var(--tr-h2);font-weight:700">Como funciona a candidatura</div></div>
+      <div class="type-row"><div class="type-meta">Heading 3<br>20 / 1.3 / −0.01em / 700</div><div class="type-sample" style="font-size:var(--fs-h3);line-height:var(--lh-h3);letter-spacing:var(--tr-h3);font-weight:700">Requisitos da vaga</div></div>
+      <div class="type-row"><div class="type-meta">Heading 4<br>17 / 1.35 / −0.006em / 700</div><div class="type-sample" style="font-size:var(--fs-h4);line-height:var(--lh-h4);letter-spacing:var(--tr-h4);font-weight:700">Visagio Consultoria</div></div>
+      <div class="type-row"><div class="type-meta">Body lg<br>17 / 1.62 / 400</div><div class="type-sample" style="font-size:var(--fs-body-lg);line-height:var(--lh-body-lg)">Enviaremos seu currículo diretamente para a empresa assim que você confirmar a candidatura.</div></div>
+      <div class="type-row"><div class="type-meta">Body<br>15 / 1.65 / 400</div><div class="type-sample" style="font-size:var(--fs-body);line-height:var(--lh-body)">Somos agente de integração há 16 anos, conectando estudantes a estágios de verdade.</div></div>
+      <div class="type-row"><div class="type-meta">Body sm<br>13.5 / 1.6 / 400</div><div class="type-sample" style="font-size:var(--fs-body-sm);line-height:var(--lh-body-sm)">30h/semana · presencial · bolsa-auxílio R$ 2.400</div></div>
+      <div class="type-row"><div class="type-meta">Caption<br>12 / 1.45 / 400</div><div class="type-sample" style="font-size:var(--fs-caption);line-height:var(--lh-caption);color:var(--text-muted)">Encerra em 3 dias</div></div>
+      <div class="type-row"><div class="type-meta">Eyebrow<br>12 / 1.2 / 0.1em / 600 · UPPERCASE</div><div class="type-sample"><span class="eyebrow" style="color:var(--green-600)"><span class="dots"><span class="dot" style="background:var(--green-500)"></span><span class="dot" style="background:var(--green-300)"></span></span> Vagas abertas</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ESPAÇAMENTO -->
+<section class="block" id="espacamento">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Fundação</span>
+      <h2>Espaçamento, raios &amp; layout</h2>
+      <p>Escala base de 4px. Container de 1200px com 24px de gutter. Cantos seguem a regra pill-vs-8px: coisas que se clicam são redondas, coisas em que se digita são quadradas.</p>
+    </div>
+    <div class="grid g2" style="align-items:start">
+      <div class="showcase">
+        <div class="showcase-label">Escala de espaço (--space-1 … --space-12)</div>
+        <div id="space-scale"></div>
+      </div>
+      <div class="col">
+        <div class="showcase">
+          <div class="showcase-label">Raios de canto</div>
+          <div class="row">
+            <div class="col" style="align-items:center;gap:8px"><div class="radius-box" style="border-radius:var(--radius-xs)"></div><span style="font-size:11px;color:var(--text-muted)">xs 4px · campos</span></div>
+            <div class="col" style="align-items:center;gap:8px"><div class="radius-box" style="border-radius:var(--radius-sm)"></div><span style="font-size:11px;color:var(--text-muted)">sm 8px · selects</span></div>
+            <div class="col" style="align-items:center;gap:8px"><div class="radius-box" style="border-radius:var(--radius-md)"></div><span style="font-size:11px;color:var(--text-muted)">md 12px · toasts</span></div>
+            <div class="col" style="align-items:center;gap:8px"><div class="radius-box" style="border-radius:var(--radius-lg)"></div><span style="font-size:11px;color:var(--text-muted)">lg 18px · cards</span></div>
+            <div class="col" style="align-items:center;gap:8px"><div class="radius-box" style="border-radius:var(--radius-xl)"></div><span style="font-size:11px;color:var(--text-muted)">xl 26px · painéis</span></div>
+            <div class="col" style="align-items:center;gap:8px"><div class="radius-box" style="border-radius:var(--radius-pill)"></div><span style="font-size:11px;color:var(--text-muted)">pill · botões</span></div>
+          </div>
+        </div>
+        <div class="showcase">
+          <div class="showcase-label">Alturas de controle</div>
+          <div class="col">
+            <div style="height:var(--control-h-sm);background:var(--green-50);border:1px solid var(--border-default);border-radius:var(--radius-sm);display:flex;align-items:center;padding:0 12px;font-size:12px;color:var(--text-muted)">control-h-sm · 34px</div>
+            <div style="height:var(--control-h);background:var(--green-50);border:1px solid var(--border-default);border-radius:var(--radius-sm);display:flex;align-items:center;padding:0 12px;font-size:12px;color:var(--text-muted)">control-h · 42px</div>
+            <div style="height:var(--control-h-lg);background:var(--green-50);border:1px solid var(--border-default);border-radius:var(--radius-sm);display:flex;align-items:center;padding:0 12px;font-size:12px;color:var(--text-muted)">control-h-lg · 50px</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EFEITOS -->
+<section class="block" id="efeitos">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Fundação</span>
+      <h2>Sombras, foco &amp; textura</h2>
+      <p>Sombras sempre esverdeadas, nunca preto neutro. Anel de foco de 3px em green-500 a 40% de opacidade — sempre visível, nunca removido. A textura de fundo é uma hachura diagonal −45° sobre faixas green-900.</p>
+    </div>
+    <div class="grid g4">
+      <div class="col" style="align-items:center;gap:10px"><div style="width:100%;height:70px;background:var(--paper);border-radius:var(--radius-md);box-shadow:var(--shadow-xs)"></div><span style="font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace">shadow-xs</span></div>
+      <div class="col" style="align-items:center;gap:10px"><div style="width:100%;height:70px;background:var(--paper);border-radius:var(--radius-md);box-shadow:var(--shadow-sm)"></div><span style="font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace">shadow-sm</span></div>
+      <div class="col" style="align-items:center;gap:10px"><div style="width:100%;height:70px;background:var(--paper);border-radius:var(--radius-md);box-shadow:var(--shadow-md)"></div><span style="font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace">shadow-md</span></div>
+      <div class="col" style="align-items:center;gap:10px"><div style="width:100%;height:70px;background:var(--paper);border-radius:var(--radius-md);box-shadow:var(--shadow-lg)"></div><span style="font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace">shadow-lg</span></div>
+    </div>
+    <div style="height:24px"></div>
+    <div class="grid g3">
+      <div class="col" style="align-items:center;gap:10px"><input placeholder="Anel de foco" style="width:100%;height:42px;border-radius:8px;border:1px solid var(--green-500);box-shadow:var(--ring-focus);padding:0 14px;font:inherit;outline:none"><span style="font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace">--ring-focus</span></div>
+      <div class="col" style="align-items:center;gap:10px"><div style="width:100%;height:70px;border-radius:var(--radius-md);background:var(--green-900);background-image:var(--hatch-dark)"></div><span style="font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace">hatch-dark −45°</span></div>
+      <div class="col" style="align-items:center;gap:10px"><div style="width:100%;height:70px;border-radius:var(--radius-md);background:var(--green-50);position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(-45deg,color-mix(in oklch,var(--green-900) 6%,transparent) 0 1px,transparent 1px 9px)"></div></div><span style="font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace">hatch-light −45°</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CORE -->
+<section class="block" id="core">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Componentes</span>
+      <h2>Core</h2>
+      <p>Button, IconButton, Icon, Card, Badge, Tag.</p>
+    </div>
+
+    <div class="showcase">
+      <div class="showcase-label">Button — variants (size md)</div>
+      <div class="row">
+        <button class="btn" data-variant="primary">Ver vagas <i data-lucide="arrow-right" width="17" height="17"></i></button>
+        <button class="btn" data-variant="dark">Candidatar-se</button>
+        <button class="btn" data-variant="secondary">Salvar para depois</button>
+        <button class="btn" data-variant="outline">Criar alerta</button>
+        <button class="btn" data-variant="ghost">Ver detalhes</button>
+        <button class="btn" data-variant="primary" disabled>Desabilitado</button>
+      </div>
+      <div style="height:20px"></div>
+      <div class="showcase-label">Tamanhos</div>
+      <div class="row" style="align-items:center">
+        <button class="btn" data-variant="primary" data-size="sm">Pequeno</button>
+        <button class="btn" data-variant="primary" data-size="md">Médio</button>
+        <button class="btn" data-variant="primary" data-size="lg">Grande</button>
+      </div>
+      <div style="height:20px"></div>
+      <div style="background:var(--green-900);background-image:var(--hatch-dark);border-radius:var(--radius-md);padding:20px">
+        <div class="row"><button class="btn" data-variant="inverse">Botão inverso</button></div>
+      </div>
+    </div>
+
+    <div style="height:16px"></div>
+    <div class="grid g2">
+      <div class="showcase">
+        <div class="showcase-label">IconButton</div>
+        <div class="row" style="align-items:center">
+          <button class="icbtn" data-variant="secondary" data-size="sm"><i data-lucide="bookmark" width="14" height="14"></i></button>
+          <button class="icbtn" data-variant="primary" data-size="md"><i data-lucide="search" width="18" height="18"></i></button>
+          <button class="icbtn" data-variant="outline" data-size="md"><i data-lucide="bell" width="18" height="18"></i></button>
+          <button class="icbtn" data-variant="ghost" data-size="lg"><i data-lucide="settings" width="21" height="21"></i></button>
+        </div>
+      </div>
+      <div class="showcase">
+        <div class="showcase-label">Badge</div>
+        <div class="row">
+          <span class="badge" data-tone="neutral">Estágio</span>
+          <span class="badge" data-tone="accent">Em destaque</span>
+          <span class="badge" data-tone="success"><i data-lucide="check-circle" width="13" height="13"></i> Aprovada</span>
+          <span class="badge" data-tone="warning"><i data-lucide="alert-triangle" width="13" height="13"></i> Prazo próximo</span>
+          <span class="badge" data-tone="danger"><i data-lucide="alert-circle" width="13" height="13"></i> Recusada</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:16px"></div>
+    <div class="showcase">
+      <div class="showcase-label">Tag (filtro)</div>
+      <div class="row">
+        <span class="tag">Remoto</span>
+        <span class="tag">Híbrido</span>
+        <span class="tag" data-selected="true">Presencial</span>
+        <span class="tag">Bolsa-auxílio <i data-lucide="x" width="13" height="13" style="opacity:.7"></i></span>
+      </div>
+    </div>
+
+    <div style="height:16px"></div>
+    <div class="grid g4">
+      <div class="card" data-tone="light"><div class="badge" data-tone="neutral" style="margin-bottom:12px">Estágio</div><h4>Visagio Consultoria</h4><p style="margin-top:8px;color:var(--text-muted);font-size:13.5px">Analista de dados júnior · 30h/semana</p></div>
+      <div class="card" data-tone="tint"><div class="badge" data-tone="neutral" style="margin-bottom:12px">Monitoria</div><h4>Cálculo I</h4><p style="margin-top:8px;color:var(--green-700);font-size:13.5px">Depto. de Matemática · PUC-Rio</p></div>
+      <div class="card" data-tone="dark"><div class="badge" data-tone="inverse" style="margin-bottom:12px">IC</div><h4 style="color:var(--text-on-inverse)">Laboratório de IA</h4><p style="margin-top:8px;color:var(--text-on-inverse-muted);font-size:13.5px">Bolsa CNPq · 20h/semana</p></div>
+      <div class="card" data-tone="accent"><div class="badge" style="background:rgba(255,255,255,.22);color:#fff;border-color:transparent;margin-bottom:12px">Em destaque</div><h4 style="color:#fff">Equipe de Competição</h4><p style="margin-top:8px;color:rgba(255,255,255,.85);font-size:13.5px">Baja SAE · vagas abertas</p></div>
+    </div>
+
+    <div style="height:16px"></div>
+    <div class="showcase">
+      <div class="showcase-label">Icon — vocabulário Lucide em uso (outline, stroke 2px, 24px grid)</div>
+      <div class="grid g5" style="gap:20px">
+        <span class="iconspec" data-name="arrow-right"></span>
+        <span class="iconspec" data-name="search"></span>
+        <span class="iconspec" data-name="map-pin"></span>
+        <span class="iconspec" data-name="building-2"></span>
+        <span class="iconspec" data-name="clock"></span>
+        <span class="iconspec" data-name="wallet"></span>
+        <span class="iconspec" data-name="calendar-check"></span>
+        <span class="iconspec" data-name="users"></span>
+        <span class="iconspec" data-name="graduation-cap"></span>
+        <span class="iconspec" data-name="bookmark-check"></span>
+        <span class="iconspec" data-name="share-2"></span>
+        <span class="iconspec" data-name="bell"></span>
+        <span class="iconspec" data-name="file-text"></span>
+        <span class="iconspec" data-name="scale"></span>
+        <span class="iconspec" data-name="chevron-right"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMS -->
+<section class="block" id="forms">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Componentes</span>
+      <h2>Formulários</h2>
+      <p>Input, Select, Checkbox, Radio, Switch.</p>
+    </div>
+    <div class="grid g2">
+      <div class="showcase">
+        <div class="showcase-label">Input</div>
+        <div class="col" style="max-width:340px">
+          <label class="field-label">E-mail</label>
+          <div class="input" data-icon="mail"><i data-lucide="mail" width="17" height="17" style="color:var(--text-muted)"></i><input placeholder="voce@aluno.puc-rio.br"></div>
+          <label class="field-label" style="margin-top:8px">Senha</label>
+          <div class="input" data-focus="true"><input placeholder="Foco ativo" type="password" value="nexo1234"></div>
+          <label class="field-label" style="margin-top:8px">Matrícula</label>
+          <div class="input" data-error="true"><input placeholder="Campo com erro"></div>
+          <span style="font-size:12px;color:var(--danger)">Matrícula inválida</span>
+        </div>
+      </div>
+      <div class="showcase">
+        <div class="showcase-label">Select</div>
+        <div class="col" style="max-width:340px">
+          <label class="field-label">Universidade</label>
+          <div class="input" style="justify-content:space-between"><span>PUC-Rio</span><i data-lucide="chevron-down" width="16" height="16" style="color:var(--text-muted)"></i></div>
+        </div>
+        <div style="height:20px"></div>
+        <div class="showcase-label">Switch</div>
+        <div class="col">
+          <label class="switch-row"><span class="switch" data-checked="true"><span class="switch-dot"></span></span> Visível para recrutadores</label>
+          <label class="switch-row"><span class="switch"><span class="switch-dot"></span></span> Receber e-mail de prazo</label>
+        </div>
+      </div>
+      <div class="showcase">
+        <div class="showcase-label">Checkbox</div>
+        <div class="col">
+          <label class="check-row"><span class="checkbox" data-checked="true"><i data-lucide="check" width="13" height="13"></i></span> Aceito os termos de uso</label>
+          <label class="check-row"><span class="checkbox"></span> Quero receber notificações</label>
+        </div>
+      </div>
+      <div class="showcase">
+        <div class="showcase-label">Radio</div>
+        <div class="col">
+          <label class="radio-row"><span class="radio" data-checked="true"><span class="radio-dot"></span></span> Estudante</label>
+          <label class="radio-row"><span class="radio"><span class="radio-dot"></span></span> Recrutador</label>
+          <label class="radio-row"><span class="radio"><span class="radio-dot"></span></span> Representante acadêmico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NAV -->
+<section class="block" id="nav">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Componentes</span>
+      <h2>Navegação</h2>
+      <p>Tabs — variantes underline e pill.</p>
+    </div>
+    <div class="grid g2">
+      <div class="showcase">
+        <div class="showcase-label">Tabs · underline</div>
+        <div class="tabs-underline">
+          <span class="tab" data-active="true">Todas <span class="tab-count">128</span></span>
+          <span class="tab">Estágio <span class="tab-count">54</span></span>
+          <span class="tab">Monitoria <span class="tab-count">31</span></span>
+          <span class="tab">Iniciação científica <span class="tab-count">18</span></span>
+        </div>
+      </div>
+      <div class="showcase">
+        <div class="showcase-label">Tabs · pill</div>
+        <div class="tabs-pill">
+          <span class="pill-tab" data-active="true">Favoritos</span>
+          <span class="pill-tab">Candidaturas</span>
+          <span class="pill-tab">Histórico</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEEDBACK -->
+<section class="block" id="feedback">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Componentes</span>
+      <h2>Feedback</h2>
+      <p>Dialog, Toast, Tooltip.</p>
+    </div>
+    <div class="grid g2">
+      <div class="showcase">
+        <div class="showcase-label">Toast — tons</div>
+        <div class="col">
+          <div class="toast" data-tone="success"><span class="toast-icon" data-tone="success"><i data-lucide="check-circle" width="16" height="16"></i></span><div><div class="toast-title">Candidatura enviada</div><div class="toast-msg">A Visagio Consultoria vai analisar seu perfil.</div></div></div>
+          <div class="toast" data-tone="warning"><span class="toast-icon" data-tone="warning"><i data-lucide="alert-triangle" width="16" height="16"></i></span><div><div class="toast-title">Prazo se encerra em breve</div><div class="toast-msg">Faltam 3 dias para o fim das inscrições.</div></div></div>
+          <div class="toast" data-tone="danger"><span class="toast-icon" data-tone="danger"><i data-lucide="alert-circle" width="16" height="16"></i></span><div><div class="toast-title">Não foi possível salvar</div><div class="toast-msg">Verifique sua conexão e tente novamente.</div></div></div>
+        </div>
+      </div>
+      <div class="showcase">
+        <div class="showcase-label">Dialog</div>
+        <div style="background:rgba(34,51,47,.55);border-radius:var(--radius-md);padding:32px;display:flex;justify-content:center">
+          <div class="dialog">
+            <h4>Encerrar esta vaga?</h4>
+            <p style="margin-top:8px;font-size:13.5px;color:var(--text-muted)">As candidaturas já enviadas continuam visíveis no histórico do aluno.</p>
+            <div class="row" style="margin-top:20px;justify-content:flex-end">
+              <button class="btn" data-variant="ghost" data-size="sm">Cancelar</button>
+              <button class="btn" data-variant="primary" data-size="sm">Encerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="showcase">
+      <div class="showcase-label">Tooltip</div>
+      <div class="row" style="align-items:center">
+        <button class="icbtn" data-variant="outline" data-size="md"><i data-lucide="info" width="18" height="18"></i></button>
+        <span class="tooltip">Carga horária semanal declarada pela empresa</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARCA -->
+<section class="block" id="marca" style="border-bottom:none">
+  <div class="container">
+    <div class="block-head">
+      <span class="eyebrow">Marca</span>
+      <h2>Logo &amp; wordmark</h2>
+      <p>Três anéis sobrepostos formam o "O" de NEX<b>O</b> — cada anel representa um dos três públicos: estudantes, universidades e contratantes.</p>
+    </div>
+    <div class="grid g2">
+      <div class="showcase" style="display:flex;align-items:center;justify-content:center;padding:48px">
+        <span style="display:inline-flex;align-items:center;font-family:var(--font-sans);font-size:40px;font-weight:700;letter-spacing:-0.035em;color:var(--neutral-900)">NEX
+          <svg width="58" height="28" viewBox="0 0 58 28" style="display:block;overflow:visible;margin-left:4px">
+            <circle cx="14" cy="14" r="10.5" fill="none" stroke="var(--green-800)" stroke-width="4"/>
+            <circle cx="27.7" cy="14" r="10.5" fill="none" stroke="var(--green-500)" stroke-width="4"/>
+            <circle cx="41.4" cy="14" r="10.5" fill="none" stroke="var(--green-300)" stroke-width="4"/>
+          </svg>
+        </span>
+      </div>
+      <div class="showcase" style="display:flex;align-items:center;justify-content:center;padding:48px;background:var(--green-900);background-image:var(--hatch-dark)">
+        <span style="display:inline-flex;align-items:center;font-family:var(--font-sans);font-size:40px;font-weight:700;letter-spacing:-0.035em;color:var(--green-50)">NEX
+          <svg width="58" height="28" viewBox="0 0 58 28" style="display:block;overflow:visible;margin-left:4px">
+            <circle cx="14" cy="14" r="10.5" fill="none" stroke="var(--green-500)" stroke-width="4"/>
+            <circle cx="27.7" cy="14" r="10.5" fill="none" stroke="var(--green-300)" stroke-width="4"/>
+            <circle cx="41.4" cy="14" r="10.5" fill="none" stroke="var(--green-100)" stroke-width="4"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Nexo — Design System · gerado a partir de <code style="background:transparent;color:var(--green-100)">Design System/Nexo/</code> · Projeto de Software, Grupo 4, PUC-Rio
+  </div>
+</footer>
+
+<script>
+// green scale
+const green = [50,100,200,300,400,500,600,700,800,900];
+document.getElementById('green-scale').innerHTML = green.map(n=>{
+  const dark = n>=500;
+  return `<div class="swatch"><div class="swatch-fill" style="background:var(--green-${n})"></div><div class="swatch-label"><div class="swatch-name">green-${n}</div><div class="swatch-hex">var(--green-${n})</div></div></div>`;
+}).join('');
+
+const neutral = [50,100,200,300,400,500,600,700,800,900];
+document.getElementById('neutral-scale').innerHTML = neutral.map(n=>{
+  return `<div class="swatch"><div class="swatch-fill" style="background:var(--neutral-${n})"></div><div class="swatch-label"><div class="swatch-name">neutral-${n}</div><div class="swatch-hex">oklch</div></div></div>`;
+}).join('');
+
+const status = [
+  ['success','Sucesso'],['warning','Alerta'],['danger','Perigo'],['info','Info']
+];
+document.getElementById('status-scale').innerHTML = status.map(([k,label])=>{
+  return `<div class="swatch"><div class="swatch-fill" style="background:var(--${k})"></div><div class="swatch-label"><div class="swatch-name">${label}</div><div class="swatch-hex">--${k}</div></div></div>`;
+}).join('');
+
+const spaces = [1,2,3,4,5,6,7,8,9,10,11,12];
+document.getElementById('space-scale').innerHTML = spaces.map(n=>{
+  return `<div class="space-bar"><span class="label">--space-${n}</span><div class="bar" style="width:var(--space-${n})"></div></div>`;
+}).join('');
+
+// icon spec labels
+document.querySelectorAll('.iconspec').forEach(el=>{
+  const name = el.dataset.name;
+  el.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--green-700)"><i data-lucide="${name}" width="22" height="22"></i><span style="font-size:11px;color:var(--text-muted);font-family:ui-monospace,monospace">${name}</span></div>`;
+});
+
+lucide.createIcons();
+</script>
+
+<style>
+/* ---- component classes (mirror the .jsx style objects) ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--control-h);padding:0 22px;border-radius:var(--radius-pill);
+  font-family:var(--font-sans);font-size:var(--fs-button);font-weight:var(--fw-semibold);letter-spacing:var(--tr-button);line-height:1;cursor:pointer;
+  border:1px solid transparent;transition:background var(--dur) var(--ease-out),border-color var(--dur) var(--ease-out),transform var(--dur-fast) var(--ease-out)}
+.btn[data-size="sm"]{height:var(--control-h-sm);padding:0 16px;font-size:13.5px;gap:6px}
+.btn[data-size="lg"]{height:var(--control-h-lg);padding:0 28px;font-size:16px;gap:10px}
+.btn[data-variant="primary"]{background:var(--green-600);color:var(--text-on-accent);border-color:var(--green-600)}
+.btn[data-variant="primary"]:hover{background:var(--green-700);border-color:var(--green-700)}
+.btn[data-variant="dark"]{background:var(--green-900);color:var(--text-on-inverse);border-color:var(--green-900)}
+.btn[data-variant="dark"]:hover{background:var(--green-800);border-color:var(--green-800)}
+.btn[data-variant="secondary"]{background:var(--green-50);color:var(--green-800);border-color:var(--green-100)}
+.btn[data-variant="secondary"]:hover{background:var(--green-100);border-color:var(--green-200)}
+.btn[data-variant="outline"]{background:transparent;color:var(--green-700);border-color:var(--border-strong)}
+.btn[data-variant="outline"]:hover{background:var(--green-50);border-color:var(--green-500)}
+.btn[data-variant="ghost"]{background:transparent;color:var(--green-700);border-color:transparent}
+.btn[data-variant="ghost"]:hover{background:var(--green-50)}
+.btn[data-variant="inverse"]{background:var(--paper);color:var(--green-900);border-color:var(--paper)}
+.btn[data-variant="inverse"]:hover{background:var(--green-50);border-color:var(--green-50)}
+.btn:disabled{background:var(--surface-disabled);color:var(--text-disabled);border-color:var(--border-subtle);cursor:not-allowed}
+.btn:active:not(:disabled){transform:scale(0.975)}
+
+.icbtn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:var(--radius-pill);border:1px solid transparent;cursor:pointer;transition:background var(--dur) var(--ease-out)}
+.icbtn[data-size="sm"]{width:32px;height:32px}
+.icbtn[data-size="lg"]{width:48px;height:48px}
+.icbtn[data-variant="secondary"]{background:var(--green-50);color:var(--green-800);border-color:var(--green-100)}
+.icbtn[data-variant="secondary"]:hover{background:var(--green-100)}
+.icbtn[data-variant="primary"]{background:var(--green-600);color:var(--paper);border-color:var(--green-600)}
+.icbtn[data-variant="primary"]:hover{background:var(--green-700)}
+.icbtn[data-variant="outline"]{background:transparent;color:var(--green-700);border-color:var(--border-strong)}
+.icbtn[data-variant="outline"]:hover{background:var(--green-50);border-color:var(--green-500)}
+.icbtn[data-variant="ghost"]{background:transparent;color:var(--text-muted);border-color:transparent}
+.icbtn[data-variant="ghost"]:hover{background:var(--green-50);color:var(--green-800)}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:var(--radius-pill);font-size:var(--fs-caption);font-weight:var(--fw-semibold);line-height:var(--lh-caption)}
+.badge[data-tone="neutral"]{background:var(--green-50);color:var(--green-700);border:1px solid var(--green-100)}
+.badge[data-tone="accent"]{background:var(--green-600);color:var(--paper);border:1px solid var(--green-600)}
+.badge[data-tone="inverse"]{background:rgba(238,242,241,.14);color:var(--green-50);border:1px solid var(--border-inverse)}
+.badge[data-tone="success"]{background:var(--success-surface);color:var(--success);border:1px solid rgba(75,110,101,.25)}
+.badge[data-tone="warning"]{background:var(--warning-surface);color:var(--warning);border:1px solid rgba(138,106,47,.25)}
+.badge[data-tone="danger"]{background:var(--danger-surface);color:var(--danger);border:1px solid rgba(140,63,58,.25)}
+
+.tag{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:var(--radius-pill);font-size:var(--fs-body-sm);font-weight:var(--fw-medium);
+  background:transparent;color:var(--green-700);border:1px solid var(--border-strong);cursor:pointer;transition:background var(--dur) var(--ease-out)}
+.tag:hover{background:var(--green-50)}
+.tag[data-selected="true"]{background:var(--green-800);color:var(--green-50);border-color:var(--green-800)}
+
+.card{border-radius:var(--radius-lg);padding:var(--space-6);box-shadow:var(--shadow-xs);transition:box-shadow var(--dur) var(--ease-out),transform var(--dur) var(--ease-out)}
+.card[data-tone="light"]{background:var(--surface-card);border:1px solid var(--border-default);color:var(--text-body)}
+.card[data-tone="tint"]{background:var(--surface-card-alt);border:1px solid var(--green-100);color:var(--green-800)}
+.card[data-tone="dark"]{background:var(--surface-inverse-alt);border:1px solid var(--border-inverse);color:var(--text-on-inverse-muted)}
+.card[data-tone="accent"]{background:var(--green-500);border:1px solid var(--green-500);color:var(--paper)}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+
+.field-label{font-size:var(--fs-label);font-weight:var(--fw-semibold);color:var(--text-heading)}
+.input{display:flex;align-items:center;gap:8px;height:var(--control-h);padding:0 14px;background:var(--paper);border:1px solid var(--border-default);border-radius:var(--radius-sm);transition:border-color var(--dur) var(--ease-out),box-shadow var(--dur) var(--ease-out)}
+.input input{flex:1;min-width:0;border:none;outline:none;background:transparent;font:inherit;font-size:var(--fs-body);color:var(--text-heading)}
+.input[data-focus="true"]{border-color:var(--green-500);box-shadow:var(--ring-focus)}
+.input[data-error="true"]{border-color:var(--danger)}
+
+.check-row,.radio-row,.switch-row{display:inline-flex;gap:10px;align-items:center;cursor:pointer;font-size:var(--fs-body-sm);font-weight:var(--fw-medium);color:var(--text-heading);margin:4px 0}
+.checkbox{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:var(--radius-xs);background:var(--paper);border:1px solid var(--border-strong);color:var(--paper)}
+.checkbox[data-checked="true"]{background:var(--green-600);border-color:var(--green-600)}
+.radio{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:var(--radius-pill);background:var(--paper);border:1px solid var(--border-strong)}
+.radio[data-checked="true"]{border-color:var(--green-600)}
+.radio-dot{width:9px;height:9px;border-radius:999px;background:transparent}
+.radio[data-checked="true"] .radio-dot{background:var(--green-600)}
+.switch{position:relative;display:inline-block;width:42px;height:24px;border-radius:999px;background:var(--green-100)}
+.switch[data-checked="true"]{background:var(--green-600)}
+.switch-dot{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:999px;background:var(--paper);box-shadow:var(--shadow-xs);transition:left var(--dur) var(--ease-out)}
+.switch[data-checked="true"] .switch-dot{left:21px}
+
+.tabs-underline{display:flex;gap:28px;border-bottom:1px solid var(--border-subtle)}
+.tab{padding:0 0 12px;font-size:var(--fs-body);font-weight:var(--fw-medium);color:var(--text-muted);cursor:pointer}
+.tab[data-active="true"]{font-weight:var(--fw-semibold);color:var(--green-800);box-shadow:inset 0 -2px 0 0 var(--green-600)}
+.tab-count{margin-left:6px;font-size:var(--fs-caption);color:var(--text-muted)}
+.tabs-pill{display:inline-flex;gap:4px;padding:4px;background:var(--green-50);border-radius:999px}
+.pill-tab{height:34px;display:inline-flex;align-items:center;padding:0 16px;border-radius:999px;font-size:var(--fs-body-sm);font-weight:var(--fw-semibold);color:var(--green-600);cursor:pointer}
+.pill-tab[data-active="true"]{background:var(--paper);color:var(--green-800);box-shadow:var(--shadow-xs)}
+
+.toast{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--paper);border:1px solid var(--border-default);border-radius:var(--radius-md);box-shadow:var(--shadow-md)}
+.toast-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;flex:0 0 auto}
+.toast-icon[data-tone="success"]{background:var(--success-surface);color:var(--success)}
+.toast-icon[data-tone="warning"]{background:var(--warning-surface);color:var(--warning)}
+.toast-icon[data-tone="danger"]{background:var(--danger-surface);color:var(--danger)}
+.toast-title{font-size:var(--fs-body-sm);font-weight:var(--fw-semibold);color:var(--text-heading)}
+.toast-msg{font-size:var(--fs-caption);line-height:1.5;color:var(--text-muted)}
+
+.dialog{width:340px;background:var(--paper);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-lg)}
+.tooltip{background:var(--green-900);color:var(--paper);font-size:12px;padding:6px 10px;border-radius:var(--radius-sm)}
+</style>
+
+</body>
+</html>
