@@ -249,7 +249,7 @@ function Secao({ titulo, aviso, children }) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(230px, 100%), 1fr))",
           gap: 16,
           marginTop: 16,
         }}

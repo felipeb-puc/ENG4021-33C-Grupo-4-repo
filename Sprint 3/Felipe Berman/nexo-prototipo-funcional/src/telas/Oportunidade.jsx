@@ -35,7 +35,7 @@ export default function Oportunidade() {
   // Fora do escopo responde igual a inexistente: não confirma que a vaga existe.
   if (!alunoPodeAbrir(o, aluno, estado.instituicoes)) {
     return (
-      <main style={{ maxWidth: 720, margin: "0 auto", padding: "80px 40px" }}>
+      <main style={{ maxWidth: 720, margin: "0 auto", padding: "80px clamp(16px, 4vw, 40px)" }}>
         <Card tone="tint" padding={40} style={{ textAlign: "center" }}>
           <h1 style={{ fontSize: "var(--fs-h2)", color: "var(--green-900)" }}>
             Oportunidade não encontrada
@@ -99,7 +99,7 @@ export default function Oportunidade() {
   };
 
   return (
-    <main style={{ maxWidth: 1080, margin: "0 auto", padding: "32px 40px 80px" }}>
+    <main style={{ maxWidth: 1080, margin: "0 auto", padding: "32px clamp(16px, 4vw, 40px) 80px" }}>
       <Link to="/busca" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 14 }}>
         <Icon name="arrow-left" size={15} /> Voltar para a busca
       </Link>
@@ -121,7 +121,7 @@ export default function Oportunidade() {
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 28, marginTop: 28, alignItems: "flex-start" }}>
         <div style={{ flex: "999 1 480px", minWidth: 0, display: "flex", flexDirection: "column", gap: 22 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(220px, 100%), 1fr))", gap: 12 }}>
             {campos.map((c) => (
               <Card key={c.rotulo} tone="tint" padding={16}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 12.5, fontWeight: 600, color: "var(--green-700)" }}>

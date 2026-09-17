@@ -70,12 +70,12 @@ export default function Inicio() {
   const completude = completudeDoCurriculo(aluno);
 
   return (
-    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 40px 80px" }}>
+    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px clamp(16px, 4vw, 40px) 80px" }}>
       {/* ---------- saudação ---------- */}
       <section
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))",
           gap: 40,
           alignItems: "center",
         }}
@@ -204,7 +204,7 @@ export default function Inicio() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fill, minmax(min(280px, 100%), 1fr))",
               gap: 20,
               marginTop: 20,
             }}

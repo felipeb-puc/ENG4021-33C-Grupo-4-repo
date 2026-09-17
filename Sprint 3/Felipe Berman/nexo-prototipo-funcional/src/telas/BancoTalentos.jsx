@@ -57,7 +57,7 @@ export default function BancoTalentos() {
     filtros.texto || filtros.universidadeId || filtros.cursoId || filtros.periodoMinimo || filtros.crMinimo != null || filtros.areas.length || filtros.tiposExperiencia.length;
 
   return (
-    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 40px 80px" }}>
+    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px clamp(16px, 4vw, 40px) 80px" }}>
       <h1 style={{ fontSize: "var(--fs-h1)" }}>{ehRecrutador ? "Buscar candidatos" : "Alunos da universidade"}</h1>
       <p style={{ fontSize: 14.5, color: "var(--text-muted)", marginTop: 6 }}>
         {ehRecrutador
@@ -66,7 +66,7 @@ export default function BancoTalentos() {
       </p>
 
       <Card padding={20} style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 16 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14, alignItems: "end" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(180px, 100%), 1fr))", gap: 14, alignItems: "end" }}>
           <Input size="sm" label="Nome ou habilidade" icon="search" value={filtros.texto} onChange={(e) => mudar("texto", e.target.value)} />
           {ehRecrutador ? (
             <Select size="sm" label="Universidade" value={filtros.universidadeId ?? ""} onChange={(e) => mudar("universidadeId", num(e.target.value))}
@@ -116,7 +116,7 @@ export default function BancoTalentos() {
           <p style={{ fontSize: 14.5, color: "var(--green-800)" }}>Ninguém com esses filtros.</p>
         </Card>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16, marginTop: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(300px, 100%), 1fr))", gap: 16, marginTop: 10 }}>
           {resultado.map((a) => {
             const uni = universidades.find((u) => u.id === a.universidadeId);
             return (

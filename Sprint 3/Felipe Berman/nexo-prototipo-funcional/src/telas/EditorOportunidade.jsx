@@ -98,7 +98,7 @@ export default function EditorOportunidade() {
   };
 
   return (
-    <main style={{ maxWidth: 820, margin: "0 auto", padding: "40px 40px 80px" }}>
+    <main style={{ maxWidth: 820, margin: "0 auto", padding: "40px clamp(16px, 4vw, 40px) 80px" }}>
       <h1 style={{ fontSize: "var(--fs-h1)" }}>{existente ? "Editar oportunidade" : "Publicar oportunidade"}</h1>
       <p style={{ fontSize: 14.5, color: "var(--text-muted)", marginTop: 6 }}>
         {ehRecrutador
@@ -275,5 +275,5 @@ function Rotulo({ children }) {
 }
 
 function Grade({ children }) {
-  return <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>{children}</div>;
+  return <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(220px, 100%), 1fr))", gap: 16 }}>{children}</div>;
 }

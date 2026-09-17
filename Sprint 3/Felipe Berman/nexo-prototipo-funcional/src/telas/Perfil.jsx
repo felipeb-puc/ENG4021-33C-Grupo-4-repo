@@ -58,7 +58,7 @@ export default function Perfil() {
   };
 
   return (
-    <main style={{ maxWidth: 900, margin: "0 auto", padding: "40px 40px 80px" }}>
+    <main style={{ maxWidth: 900, margin: "0 auto", padding: "40px clamp(16px, 4vw, 40px) 80px" }}>
       <h1 style={{ fontSize: "var(--fs-h1)" }}>Perfil e currículo</h1>
 
       <Tabs
@@ -102,7 +102,7 @@ export default function Perfil() {
             <p style={{ fontSize: 14, color: "var(--text-muted)" }}>
               {uni?.nome} · {nomeDoCurso(aluno.cursoId)} · matrícula {aluno.matricula}. Universidade e curso vêm do cadastro e não são editáveis.
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(200px, 100%), 1fr))", gap: 16 }}>
               <Select label="Período" value={form.periodo} onChange={(e) => mudar("periodo", e.target.value)}
                 options={PERIODOS.map((p) => ({ value: String(p), label: `${p}º período` }))} />
               <Input label="CR" type="number" step="0.1" min="0" max="10" hint="Opcional. Algumas vagas exigem." value={form.cr} error={erros.cr} onChange={(e) => mudar("cr", e.target.value)} />
@@ -129,7 +129,7 @@ export default function Perfil() {
             ) : null}
             {form.experiencias.map((x, i) => (
               <Card key={i} tone="tint" padding={16} style={{ display: "flex", flexDirection: "column", gap: 12 }} data-experiencia={i}>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, alignItems: "end" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(180px, 100%), 1fr))", gap: 12, alignItems: "end" }}>
                   <Select size="sm" label="Tipo" value={x.tipo} onChange={(e) => mudarExperiencia(i, "tipo", e.target.value)}
                     options={Object.values(TIPO_EXPERIENCIA).map((t) => ({ value: t, label: ROTULO_EXPERIENCIA[t] }))} />
                   <Input size="sm" label="Título" value={x.titulo} onChange={(e) => mudarExperiencia(i, "titulo", e.target.value)} />

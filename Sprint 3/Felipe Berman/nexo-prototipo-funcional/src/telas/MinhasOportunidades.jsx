@@ -39,7 +39,7 @@ export default function MinhasOportunidades() {
   const historico = minhas.filter((c) => STATUS_ENCERRADOS.includes(c.status));
 
   return (
-    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 40px 80px" }}>
+    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px clamp(16px, 4vw, 40px) 80px" }}>
       <h1 style={{ fontSize: "var(--fs-h1)" }}>Minhas oportunidades</h1>
 
       <Tabs
@@ -58,7 +58,7 @@ export default function MinhasOportunidades() {
           favoritos.length === 0 ? (
             <Vazio titulo="Nenhuma oportunidade salva" texto="Use o marcador nos cards para guardar o que quer ver depois." />
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(280px, 100%), 1fr))", gap: 20 }}>
               {favoritos.map((o) => (
                 <CardOportunidade key={o.id} oportunidade={o} />
               ))}

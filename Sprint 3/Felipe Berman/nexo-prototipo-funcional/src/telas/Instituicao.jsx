@@ -68,7 +68,7 @@ export default function Instituicao() {
 
   if (!inst || (ehAluno && !alunoPodeVerInstituicao(usuario.aluno, inst))) {
     return (
-      <main style={{ maxWidth: 720, margin: "0 auto", padding: "80px 40px" }}>
+      <main style={{ maxWidth: 720, margin: "0 auto", padding: "80px clamp(16px, 4vw, 40px)" }}>
         <Card tone="tint" padding={40} style={{ textAlign: "center" }}>
           <h1 style={{ fontSize: "var(--fs-h2)", color: "var(--green-900)" }}>Instituição não encontrada</h1>
           <p style={{ fontSize: 14.5, color: "var(--green-800)", marginTop: 10 }}>
@@ -100,7 +100,7 @@ export default function Instituicao() {
   };
 
   return (
-    <main style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 40px 80px" }}>
+    <main style={{ maxWidth: 1080, margin: "0 auto", padding: "40px clamp(16px, 4vw, 40px) 80px" }}>
       <header style={{ display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
         {logos[inst.logo] ? (
           <img src={logos[inst.logo]} alt="" style={{ width: 80, height: 80, borderRadius: 999, objectFit: "contain", background: "var(--paper)", border: "1px solid var(--border-subtle)", padding: 6 }} />
@@ -143,7 +143,7 @@ export default function Instituicao() {
           {erros.geral ? <p style={{ color: "var(--danger)" }}>{erros.geral}</p> : null}
           <AreaTexto label="Descrição" linhas={5} maxLength={600} value={form.descricao} error={erros.descricao}
             hint={`${form.descricao.length}/600`} onChange={(v) => mudar("descricao", v)} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(220px, 100%), 1fr))", gap: 16 }}>
             <Input label="Site" placeholder="https://" value={form.site} error={erros.site} onChange={(e) => mudar("site", e.target.value)} />
             <Input label="Cidade" value={form.cidade} error={erros.cidade} onChange={(e) => mudar("cidade", e.target.value)} />
           </div>
@@ -169,7 +169,7 @@ export default function Instituicao() {
               <p style={{ fontSize: 14.5, color: "var(--green-800)" }}>Nenhuma oportunidade aberta agora.</p>
             </Card>
           ) : ehAluno ? (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20, marginTop: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(280px, 100%), 1fr))", gap: 20, marginTop: 16 }}>
               {oportunidades.map((o) => (
                 <CardOportunidade key={o.id} oportunidade={o} />
               ))}

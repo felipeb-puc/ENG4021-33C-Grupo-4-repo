@@ -51,7 +51,7 @@ export default function EscolherTipoConta() {
   const navegar = useNavigate();
 
   return (
-    <main style={{ maxWidth: 1120, margin: "0 auto", padding: "48px 40px 80px" }}>
+    <main style={{ maxWidth: 1120, margin: "0 auto", padding: "48px clamp(16px, 4vw, 40px) 80px" }}>
       <Link
         to="/"
         style={{
@@ -92,7 +92,7 @@ export default function EscolherTipoConta() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(290px, 100%), 1fr))",
           gap: 20,
           marginTop: 40,
         }}

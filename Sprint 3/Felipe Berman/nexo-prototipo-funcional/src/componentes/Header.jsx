@@ -1,4 +1,5 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Logo } from "../ds/brand/Logo.jsx";
 import { Button } from "../ds/core/Button.jsx";
@@ -28,6 +29,8 @@ const estiloAba = ({ isActive }) => ({
   fontSize: 14,
   fontWeight: isActive ? 600 : 500,
   textDecoration: "none",
+  whiteSpace: "nowrap",
+  flexShrink: 0,
   border: isActive ? "1px solid var(--green-600)" : "1px solid transparent",
   background: isActive ? "var(--green-600)" : "transparent",
   color: isActive ? "var(--paper)" : "var(--text-body)",
@@ -87,6 +90,15 @@ function Avatar({ nome, tom = "claro" }) {
 export default function Header() {
   const { usuario, estado, sair, recomecarDemonstracao } = useEstado();
   const navegar = useNavigate();
+  const { pathname } = useLocation();
+
+  /* No celular as abas rolam de lado; sem isso, abrir "Perfil da instituição"
+     deixa a aba ativa fora da tela. No desktop, com tudo visível, não mexe. */
+  useEffect(() => {
+    document
+      .querySelector(".header-nav a.active")
+      ?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [pathname]);
 
   const aoSair = () => {
     sair();
@@ -99,11 +111,13 @@ export default function Header() {
   };
 
   const barra = {
-    height: 74,
+    /* Altura mínima, não fixa: no celular o conteúdo quebra em duas linhas e,
+       com height fixa, a segunda linha vazava por cima da página. */
+    minHeight: 74,
     display: "flex",
     alignItems: "center",
-    gap: 20,
-    padding: "0 40px",
+    gap: "10px 20px",
+    padding: "10px clamp(16px, 4vw, 40px)",
     borderBottom: "1px solid var(--border-subtle)",
     boxShadow: "var(--shadow-xs)",
     position: "sticky",
@@ -146,7 +160,7 @@ export default function Header() {
           <Logo size={22} />
         </Link>
 
-        <nav style={{ display: "flex", gap: 6, alignItems: "center" }}>
+        <nav className="header-nav" style={{ display: "flex", gap: 6, alignItems: "center" }}>
           <NavLink to="/inicio" style={estiloAba}>
             Início
           </NavLink>
@@ -173,7 +187,7 @@ export default function Header() {
             flexWrap: "wrap",
           }}
         >
-          <span style={{ fontSize: 13, color: "var(--text-muted)" }}>
+          <span className="so-desktop" style={{ fontSize: 13, color: "var(--text-muted)" }}>
             {usuario.instituicao?.sigla || usuario.instituicao?.nome}
           </span>
           <Link to="/perfil" aria-label="Meu perfil" style={{ display: "inline-flex" }}>
@@ -192,7 +206,7 @@ export default function Header() {
         <Link to="/admin" aria-label="NEXO — administração" style={{ display: "inline-flex" }}>
           <Logo size={21} />
         </Link>
-        <nav style={{ display: "flex", gap: 6, alignItems: "center" }}>
+        <nav className="header-nav" style={{ display: "flex", gap: 6, alignItems: "center" }}>
           <NavLink to="/admin" style={estiloAba}>
             Verificação de contas
           </NavLink>
@@ -215,6 +229,7 @@ export default function Header() {
       </Link>
 
       <span
+        className="so-desktop"
         style={{
           fontSize: 12,
           letterSpacing: "0.08em",
@@ -230,7 +245,7 @@ export default function Header() {
         {ehRecrutador ? "Recrutador" : "Representante acadêmico"}
       </span>
 
-      <nav style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+      <nav className="header-nav" style={{ display: "flex", gap: 6, alignItems: "center" }}>
         <NavLink to="/painel" end style={estiloAba}>
           Visão geral
         </NavLink>
@@ -254,7 +269,7 @@ export default function Header() {
           flexWrap: "wrap",
         }}
       >
-        <span style={{ fontSize: 13, color: "var(--text-muted)" }}>
+        <span className="so-desktop" style={{ fontSize: 13, color: "var(--text-muted)" }}>
           {usuario.instituicao?.nome}
         </span>
         <Avatar nome={usuario.nome} tom="escuro" />
@@ -283,7 +298,7 @@ function BotoesSessao({ aoSair, aoRecomecar }) {
           textUnderlineOffset: 3,
         }}
       >
-        Recomeçar demonstração
+        Recomeçar<span className="so-desktop"> demonstração</span>
       </button>
       <Button variant="outline" size="sm" iconLeft="log-out" onClick={aoSair}>
         Sair

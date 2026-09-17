@@ -39,3 +39,52 @@
     padding-inline: 16px;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Celular.
+   Os componentes usam estilo inline, que não aceita media query; o que muda
+   por largura de tela fica aqui, em classe ou em variável lida pelo inline.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --colunas-cadastro: minmax(0, 1fr) minmax(280px, 360px);
+}
+
+@media (max-width: 720px) {
+  :root {
+    /* Os tamanhos de display foram pensados para desktop: 64px num título de
+       375px de tela quebra palavra por palavra. */
+    --fs-display-1: 40px;
+    --fs-display-2: 34px;
+    --fs-display-3: 30px;
+    /* A coluna lateral do cadastro vai para baixo do formulário. */
+    --colunas-cadastro: minmax(0, 1fr);
+  }
+
+  .so-desktop {
+    display: none;
+  }
+
+  /* Abas do cabeçalho viram uma segunda linha inteira, com rolagem lateral
+     em vez de quebrar pill por pill. */
+  .header-nav {
+    order: 3;
+    flex: 1 0 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-block: 3px; /* senão o anel de foco da aba é cortado */
+  }
+
+  /* !important porque padding e gap são inline. Sem isso as três abas do
+     estudante passam da largura e "Minhas oportunidades" fica cortada.
+     As quatro abas de quem publica não cabem de qualquer jeito e rolam. */
+  .header-nav {
+    gap: 2px !important;
+  }
+  .header-nav > a {
+    padding-inline: 8px !important;
+  }
+  .header-nav svg {
+    display: none;
+  }
+}

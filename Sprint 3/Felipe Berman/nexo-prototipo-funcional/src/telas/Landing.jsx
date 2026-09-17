@@ -79,9 +79,9 @@ export default function Landing() {
         style={{
           maxWidth: 1280,
           margin: "0 auto",
-          padding: "72px 40px 64px",
+          padding: "72px clamp(16px, 4vw, 40px) 64px",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(340px, 100%), 1fr))",
           gap: 56,
           alignItems: "center",
         }}
@@ -125,7 +125,7 @@ export default function Landing() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(230px, 100%), 1fr))",
               gap: 14,
               marginTop: 44,
             }}
@@ -178,7 +178,7 @@ export default function Landing() {
         style={{
           background: "var(--green-900)",
           backgroundImage: "var(--hatch-dark)",
-          padding: "64px 40px",
+          padding: "64px clamp(16px, 4vw, 40px)",
         }}
       >
         <div
@@ -186,7 +186,7 @@ export default function Landing() {
             maxWidth: 1280,
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))",
             gap: 48,
             alignItems: "center",
           }}
@@ -220,7 +220,7 @@ export default function Landing() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(160px, 100%), 1fr))",
               gap: 12,
             }}
           >
