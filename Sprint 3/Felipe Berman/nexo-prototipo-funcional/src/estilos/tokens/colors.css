@@ -1,0 +1,55 @@
+:root{
+/* ---- Brand green scale (exported from Figma — the single source palette) ---- */
+--green-50:#eef2f1;--green-100:#c9d5d2;--green-200:#afc1bd;--green-300:#8ba59f;--green-400:#75948c;
+--green-500:#52796f;--green-600:#4b6e65;--green-700:#3a564f;--green-800:#2d433d;--green-900:#22332f;
+
+/* ---- Neutrals (derived from the green scale: same hue, desaturated) ---- */
+--paper:#ffffff;
+--neutral-50:oklch(98.2% 0.004 174);
+--neutral-100:oklch(95.4% 0.005 174);
+--neutral-200:oklch(90.5% 0.006 174);
+--neutral-300:oklch(82% 0.007 174);
+--neutral-400:oklch(66% 0.008 174);
+--neutral-500:oklch(52% 0.008 174);
+--neutral-600:oklch(42% 0.008 174);
+--neutral-700:oklch(33% 0.008 174);
+--neutral-800:oklch(24% 0.008 174);
+--neutral-900:oklch(17% 0.008 174);
+
+/* ---- Semantic status (derived; hue-matched to the brand green, low chroma) ---- */
+--success:#4b6e65;--success-surface:#eef2f1;
+--warning:#8a6a2f;--warning-surface:#f6efe2;
+--danger:#8c3f3a;--danger-surface:#f6eae9;
+--info:#3a5664;--info-surface:#eaeff2;
+
+/* ---- Semantic aliases: surfaces ---- */
+--surface-page:var(--paper);
+--surface-page-alt:var(--green-50);
+--surface-card:var(--paper);
+--surface-card-alt:var(--green-50);
+--surface-inverse:var(--green-900);
+--surface-inverse-alt:var(--green-800);
+--surface-accent:var(--green-500);
+--surface-subtle:var(--green-100);
+--surface-disabled:var(--neutral-100);
+
+/* ---- Semantic aliases: text ---- */
+--text-heading:var(--neutral-900);
+--text-body:var(--neutral-700);
+--text-muted:var(--neutral-500);
+--text-accent:var(--green-600);
+--text-on-accent:var(--paper);
+--text-on-inverse:var(--green-50);
+--text-on-inverse-muted:var(--green-200);
+--text-disabled:var(--neutral-400);
+--text-link:var(--green-600);
+--text-link-hover:var(--green-800);
+
+/* ---- Semantic aliases: borders ---- */
+--border-subtle:var(--neutral-200);
+--border-default:var(--green-100);
+--border-strong:var(--green-300);
+--border-accent:var(--green-500);
+--border-inverse:color-mix(in oklch,var(--green-50) 22%,transparent);
+--focus-ring:color-mix(in oklch,var(--green-500) 40%,transparent);
+}
