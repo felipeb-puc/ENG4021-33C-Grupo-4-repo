@@ -25,7 +25,9 @@ export function Input({ label, hint, error, icon, size = "md", id, style, ...res
           onFocus={(e) => { setFocus(true); rest.onFocus && rest.onFocus(e); }}
           onBlur={(e) => { setFocus(false); rest.onBlur && rest.onBlur(e); }}
           style={{
-            flex: 1, minWidth: 0, border: "none", outline: "none", background: "transparent",
+            // boxShadow: o anel de foco já é desenhado na caixa de fora; sem isto,
+            // a regra global de :focus-visible desenha um segundo anel por dentro.
+            flex: 1, minWidth: 0, border: "none", outline: "none", background: "transparent", boxShadow: "none",
             font: "inherit", fontSize: "var(--fs-body)", color: "var(--text-heading)",
           }}
         />
