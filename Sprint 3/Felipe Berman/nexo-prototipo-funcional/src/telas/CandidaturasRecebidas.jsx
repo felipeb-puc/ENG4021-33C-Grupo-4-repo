@@ -75,7 +75,7 @@ export default function CandidaturasRecebidas() {
   const num = (v) => (v === "" ? null : Number(v));
 
   return (
-    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 40px 80px" }}>
+    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px clamp(16px, 4vw, 40px) 80px" }}>
       <h1 style={{ fontSize: "var(--fs-h1)" }}>Candidaturas recebidas</h1>
       <p style={{ fontSize: 14.5, color: "var(--text-muted)", marginTop: 6 }}>
         {ehRecrutador
@@ -84,7 +84,7 @@ export default function CandidaturasRecebidas() {
       </p>
 
       <Card padding={20} style={{ marginTop: 24 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14, alignItems: "end" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(180px, 100%), 1fr))", gap: 14, alignItems: "end" }}>
           <Input size="sm" label="Nome ou habilidade" icon="search" value={filtros.texto} onChange={(e) => mudar("texto", e.target.value)} />
           <Select size="sm" label="Oportunidade" value={oportunidadeId ?? ""} onChange={(e) => escolherVaga(e.target.value)}
             options={[{ value: "", label: "Todas" }, ...minhasVagas.map((o) => ({ value: String(o.id), label: o.titulo }))]} />

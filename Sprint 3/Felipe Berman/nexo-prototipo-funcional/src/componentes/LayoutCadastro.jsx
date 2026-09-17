@@ -21,11 +21,11 @@ export default function LayoutCadastro({
     <main
       style={{
         display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) minmax(280px, 360px)",
+        gridTemplateColumns: "var(--colunas-cadastro)",
         minHeight: "calc(100vh - 74px)",
       }}
     >
-      <div style={{ padding: "40px 48px 72px" }}>
+      <div style={{ padding: "40px clamp(16px, 4vw, 48px) 72px" }}>
         <Link
           to="/criar-conta"
           style={{
@@ -39,7 +39,7 @@ export default function LayoutCadastro({
           <Icon name="arrow-left" size={15} /> Trocar tipo de conta
         </Link>
 
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 9, marginTop: 24 }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 9, marginTop: 24 }}>
           <span style={{ display: "flex" }}>
             <span
               style={{ width: 11, height: 11, borderRadius: 99, background: "var(--green-800)" }}
@@ -96,7 +96,7 @@ export default function LayoutCadastro({
         style={{
           background: "var(--green-900)",
           backgroundImage: "var(--hatch-dark)",
-          padding: "40px 30px",
+          padding: "40px clamp(16px, 4vw, 30px)",
           display: "flex",
           flexDirection: "column",
           gap: 24,

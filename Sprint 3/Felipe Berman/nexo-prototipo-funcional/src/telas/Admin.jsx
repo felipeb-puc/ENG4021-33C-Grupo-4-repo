@@ -20,7 +20,7 @@ export default function Admin() {
   const verificados = estado.membros.filter((m) => m.verificado);
 
   return (
-    <main style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 40px 80px" }}>
+    <main style={{ maxWidth: 1000, margin: "0 auto", padding: "40px clamp(16px, 4vw, 40px) 80px" }}>
       <h1 style={{ fontSize: "var(--fs-h1)" }}>Verificação de contas</h1>
       <p style={{ fontSize: 14.5, color: "var(--text-muted)", marginTop: 6 }}>
         Conta não verificada salva rascunhos, mas não publica nem edita o perfil da instituição.

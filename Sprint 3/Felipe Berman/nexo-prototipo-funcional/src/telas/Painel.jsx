@@ -60,7 +60,7 @@ export default function Painel() {
   };
 
   return (
-    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 40px 80px" }}>
+    <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px clamp(16px, 4vw, 40px) 80px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 20, flexWrap: "wrap" }}>
         <div>
           <h1 style={{ fontSize: "var(--fs-h1)" }}>{usuario.instituicao?.nome}</h1>

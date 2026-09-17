@@ -26,7 +26,7 @@ export default function CurriculoAluno() {
 
   if (!podeVerCurriculo(membro, aluno, estado)) {
     return (
-      <main style={{ maxWidth: 720, margin: "0 auto", padding: "80px 40px" }}>
+      <main style={{ maxWidth: 720, margin: "0 auto", padding: "80px clamp(16px, 4vw, 40px)" }}>
         <Card tone="tint" padding={40} style={{ textAlign: "center" }}>
           <h1 style={{ fontSize: "var(--fs-h2)", color: "var(--green-900)" }}>Currículo indisponível</h1>
           <p style={{ fontSize: 14.5, color: "var(--green-800)", marginTop: 10 }}>
@@ -46,7 +46,7 @@ export default function CurriculoAluno() {
   const candidaturas = estado.candidaturas.filter((c) => c.alunoId === aluno.id && vagasDaInstituicao.has(c.oportunidadeId));
 
   return (
-    <main style={{ maxWidth: 900, margin: "0 auto", padding: "32px 40px 80px" }}>
+    <main style={{ maxWidth: 900, margin: "0 auto", padding: "32px clamp(16px, 4vw, 40px) 80px" }}>
       <Link to="/painel/talentos" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 14 }}>
         <Icon name="arrow-left" size={15} /> Voltar
       </Link>

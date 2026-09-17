@@ -14,7 +14,7 @@ export default function EmBreve({ titulo, etapa }) {
   const navegar = useNavigate();
 
   return (
-    <main style={{ maxWidth: 720, margin: "0 auto", padding: "80px 40px" }}>
+    <main style={{ maxWidth: 720, margin: "0 auto", padding: "80px clamp(16px, 4vw, 40px)" }}>
       <Card tone="tint" padding={40} style={{ textAlign: "center" }}>
         <span
           style={{
