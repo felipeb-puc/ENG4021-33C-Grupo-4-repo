@@ -1,0 +1,41 @@
+/* Entrada única de estilos do NEXO.
+   Ordem importa: tokens antes de base, base antes do que for específico. */
+
+@import "./tokens/fonts.css";
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/effects.css";
+@import "./tokens/base.css";
+
+/* --------------------------------------------------------------------------
+   Utilidades mínimas de layout.
+   O design system estiliza por objeto de estilo inline nos componentes; aqui
+   ficam só as poucas coisas que precisam existir como CSS de verdade
+   (container, foco, estados que dependem de pseudo-classe).
+   -------------------------------------------------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: var(--container, 1200px);
+  margin: 0 auto;
+  padding-inline: 24px;
+}
+
+.pagina {
+  min-height: 100vh;
+  background: var(--surface-page);
+}
+
+/* Link que não deve parecer link (cards clicáveis, itens de lista) */
+.sem-sublinhado,
+.sem-sublinhado:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+@media (max-width: 720px) {
+  .container {
+    padding-inline: 16px;
+  }
+}

@@ -1,0 +1,5 @@
+/* Inter — fonte oficial do design system NEXO.
+   O design system original carregava TTFs variáveis de assets/fonts/, que não
+   foram importados para esta pasta. A fonte é carregada do Google Fonts (mesma
+   fonte, mesma licença OFL) pelo <link> em index.html.
+   A família e os fallbacks ficam em typography.css (--font-sans). */

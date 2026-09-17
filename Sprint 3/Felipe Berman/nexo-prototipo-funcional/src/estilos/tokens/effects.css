@@ -1,0 +1,28 @@
+:root{
+/* Shadows: soft, green-tinted, never neutral-black */
+--shadow-xs:0 1px 2px color-mix(in oklch,var(--green-900) 8%,transparent);
+--shadow-sm:0 2px 6px color-mix(in oklch,var(--green-900) 8%,transparent);
+--shadow-md:0 8px 20px -6px color-mix(in oklch,var(--green-900) 14%,transparent);
+--shadow-lg:0 20px 44px -14px color-mix(in oklch,var(--green-900) 20%,transparent);
+--shadow-inset-hairline:inset 0 0 0 1px color-mix(in oklch,var(--green-900) 6%,transparent);
+
+--ring-focus:0 0 0 3px var(--focus-ring);
+
+/* Motion */
+--ease-out:cubic-bezier(.22,.61,.36,1); /* @kind other */
+--ease-in-out:cubic-bezier(.4,0,.2,1); /* @kind other */
+--dur-fast:120ms; /* @kind other */
+--dur:200ms; /* @kind other */
+--dur-slow:320ms; /* @kind other */
+
+/* Overlays / blur */
+--overlay-scrim:color-mix(in oklch,var(--green-900) 55%,transparent);
+--blur-panel:saturate(140%) blur(14px); /* @kind other */
+--glass-panel:color-mix(in oklch,var(--paper) 78%,transparent);
+
+/* Signature diagonal hatch used on dark green bands */
+--hatch-dark:repeating-linear-gradient(-45deg,color-mix(in oklch,var(--green-50) 5%,transparent) 0 1px,transparent 1px 9px); /* @kind other */
+--hatch-light:repeating-linear-gradient(-45deg,color-mix(in oklch,var(--green-900) 6%,transparent) 0 1px,transparent 1px 9px); /* @kind other */
+/* Protection gradient for text over imagery */
+--scrim-bottom:linear-gradient(to top,color-mix(in oklch,var(--green-900) 88%,transparent),transparent 72%); /* @kind other */
+}
