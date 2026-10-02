@@ -8,21 +8,26 @@ body {
 
 #topo {
   padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
 
 #topo img {
   width: 120px;
-  margin-right: 30px;
+  margin-right: auto;
 }
 
-a {
+#topo a {
   color: #4b6e65;
   font-size: 17px;
-  margin-right: 24px;
 }
 
 #principal {
   padding: 40px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .texto-acima-do-titulo {
@@ -45,6 +50,12 @@ h1 {
 #principal img {
   width: 600px;
   margin-top: 40px;
+}
+
+#principal a {
+  color: #4b6e65;
+  font-size: 17px;
+  margin-right: 24px;
 }
 
 #publicos {
