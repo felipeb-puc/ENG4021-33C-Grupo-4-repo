@@ -8,11 +8,18 @@ body {
 
 #topo {
   padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
 
 #topo img {
   width: 100px;
-  margin-right: 30px;
+  margin-right: auto;
+}
+
+#topo a {
+  margin-right: 0px;
 }
 
 a {
@@ -28,12 +35,12 @@ a {
 
 #usuario {
   color: #3a564f;
-  margin-left: 40px;
-  margin-right: 24px;
 }
 
 #conteudo {
   padding: 40px 40px;
+  margin-left: 100px;
+  margin-right: 150px;
 }
 
 h1 {
@@ -45,6 +52,12 @@ h1 {
 #abas {
   padding-bottom: 12px;
   margin-bottom: 24px;
+  display: flex;
+  gap: 24px;
+}
+
+#abas a {
+  margin-right: 0px;
 }
 
 #aba-atual {
