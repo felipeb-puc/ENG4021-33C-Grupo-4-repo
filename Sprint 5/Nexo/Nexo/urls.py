@@ -20,5 +20,10 @@ from nexoapp.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home)
+    path('', home),
+    path('templates/tela-inicial.html', home),
+    path('templates/PROJETOtela_escolha_login.html', criar_conta),
+    path('templates/PROJETOtela_informacoes_estudante.html', cadastro_estudante),
+    path('templates/PROJETOtela_informacoes_recrutador.html', cadastro_recrutador),
+    path('templates/PROJETOtela_informacoes_representante.html', cadastro_representante),
 ]
