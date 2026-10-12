@@ -26,4 +26,6 @@ urlpatterns = [
     path('templates/PROJETOtela_informacoes_estudante.html', cadastro_estudante),
     path('templates/PROJETOtela_informacoes_recrutador.html', cadastro_recrutador),
     path('templates/PROJETOtela_informacoes_representante.html', cadastro_representante),
+    path('templates/Inicio.html', inicio),
+    path('templates/Iniciacao-Cientifica.html', iniciacao_cientifica),
 ]
