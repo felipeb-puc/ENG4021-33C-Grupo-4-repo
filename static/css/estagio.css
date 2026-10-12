@@ -1,0 +1,95 @@
+body {
+  font-family: Inter;
+  font-size: 15px;
+  color: #313735;
+  margin: 0px;
+}
+
+a {
+  color: #4b6e65;
+  margin-right: 20px;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+h4 {
+  font-size: 28px;
+  color: #2d433d;
+  margin-bottom: 0px;
+}
+
+.secao {
+  padding: 20px 40px;
+}
+
+.linha {
+  display: flex;
+  justify-content: space-between;
+}
+
+.lado-a-lado {
+  display: flex;
+}
+
+.lado-a-lado div {
+  margin-right: 30px;
+}
+
+.logo {
+  width: 40px;
+}
+
+.imagem {
+  width: 450px;
+  border-radius: 12px;
+}
+
+.pilula {
+  border: 1px solid #c9d5d2;
+  border-radius: 10px;
+  padding: 4px 10px;
+  margin-right: 10px;
+}
+
+.verde {
+  background-color: #4b6e65;
+  color: #ffffff;
+}
+
+.claro {
+  background-color: #eef2f1;
+  font-size: 12px;
+}
+
+.caixa {
+  width: 250px;
+  border: 1px solid #c9d5d2;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.cinza {
+  font-size: 14px;
+  font-weight: normal;
+  color: #646a68;
+}
+
+.escuro {
+  background-color: #2d433d;
+  color: #ffffff;
+}
+
+.campo {
+  border: 1px solid #c9d5d2;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 15px;
+  width: 200px;
+}
+
+.busca {
+  width: 600px;
+  margin-bottom: 20px;
+}
