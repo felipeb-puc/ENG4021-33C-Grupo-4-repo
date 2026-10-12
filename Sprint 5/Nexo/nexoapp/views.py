@@ -15,3 +15,9 @@ def cadastro_recrutador(request):
 
 def cadastro_representante(request):
     return render(request, "PROJETOtela_informacoes_representante.html")
+
+def inicio(request):
+    return render(request, "Inicio.html")
+
+def iniciacao_cientifica(request):
+    return render(request, "Iniciacao-Cientifica.html")
