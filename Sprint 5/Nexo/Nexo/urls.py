@@ -28,4 +28,6 @@ urlpatterns = [
     path('templates/PROJETOtela_informacoes_representante.html', cadastro_representante),
     path('templates/Inicio.html', inicio),
     path('templates/Iniciacao-Cientifica.html', iniciacao_cientifica),
+    path('templates/Estagio.html', estagio),
+    path('templates/Liga-Academica.html', liga_academica),
 ]
