@@ -21,3 +21,9 @@ def inicio(request):
 
 def iniciacao_cientifica(request):
     return render(request, "Iniciacao-Cientifica.html")
+
+def estagio(request):
+    return render(request, "estagio.html")
+
+def liga_academica(request):
+    return render( request, "tela-liga-academica.html")
