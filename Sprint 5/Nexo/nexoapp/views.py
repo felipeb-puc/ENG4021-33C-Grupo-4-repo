@@ -27,3 +27,13 @@ def estagio(request):
 
 def liga_academica(request):
     return render( request, "tela-liga-academica.html")
+
+def minha_oportunidade_candidaturas_ativas(request):
+    return render (request, "tela-minha-oportunidade-candidaturas-ativas.html")
+
+def minha_oportunidade_favoritos(request):
+    return render (request, "minha-oportunidade-favoritos.html")
+
+def minha_oportunidade_historico(request):
+    return render (request, "minha-oportunidade-historico.html")
+    
