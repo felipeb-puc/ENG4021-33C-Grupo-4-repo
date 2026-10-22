@@ -1,0 +1,127 @@
+body {
+  font-family: Inter;
+  font-size: 15px;
+  color: #313735;
+  background-color: #ffffff;
+  margin: 0px;
+}
+
+a {
+  color: #4b6e65;
+  margin-right: 20px;
+}
+
+#topo {
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#topo img {
+  width: 40px;
+  margin-right: 20px;
+}
+
+#principal {
+  padding: 20px 40px;
+}
+
+h1 {
+  font-size: 30px;
+  color: #0c110f;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 17px;
+  color: #0c110f;
+}
+
+.cinza {
+  font-size: 13px;
+  color: #646a68;
+}
+
+#busca {
+  width: 600px;
+  font-size: 15px;
+  padding: 10px 12px;
+  margin-top: 20px;
+  border: 1px solid #c9d5d2;
+  border-radius: 8px;
+}
+
+#tipos {
+  margin-top: 20px;
+}
+
+.pilula {
+  border: 1px solid #c9d5d2;
+  border-radius: 10px;
+  padding: 4px 10px;
+  margin-right: 10px;
+}
+
+.pilula-verde {
+  background-color: #4b6e65;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 4px 10px;
+  margin-right: 10px;
+}
+
+.pilula-clara {
+  background-color: #eef2f1;
+  font-size: 12px;
+  border-radius: 10px;
+  padding: 4px 10px;
+}
+
+#corpo {
+  display: flex;
+  margin-top: 30px;
+}
+
+#filtros {
+  width: 300px;
+  margin-right: 60px;
+}
+
+label {
+  font-size: 13px;
+  color: #0c110f;
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+
+select {
+  width: 300px;
+  font-size: 15px;
+  padding: 8px 10px;
+  border: 1px solid #c9d5d2;
+  border-radius: 8px;
+}
+
+#resultados {
+  width: 900px;
+}
+
+#barra-resultados {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#barra-resultados select {
+  width: 180px;
+}
+
+.oportunidade {
+  width: 280px;
+  margin-top: 20px;
+}
+
+.oportunidade h2 {
+  margin-top: 12px;
+  margin-bottom: 4px;
+}

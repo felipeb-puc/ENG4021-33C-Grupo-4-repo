@@ -36,4 +36,10 @@ def minha_oportunidade_favoritos(request):
 
 def minha_oportunidade_historico(request):
     return render (request, "minha-oportunidade-historico.html")
-    
+
+def login(request):
+    return render(request, "tela-login.html")
+
+def busca(request):
+    return render(request, "tela-busca.html")
+

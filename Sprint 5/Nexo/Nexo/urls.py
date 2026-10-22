@@ -32,5 +32,7 @@ urlpatterns = [
     path('templates/Liga-Academica.html', liga_academica),
     path('templetes/Candidatura-ativa.html', minha_oportunidade_candidaturas_ativas),
     path('templetes/Favoritos.html', minha_oportunidade_favoritos),
-    path('templetes/Historico.html', minha_oportunidade_historico)
+    path('templetes/Historico.html', minha_oportunidade_historico),
+    path('templates/tela-login.html', login),
+    path('templates/tela-busca.html', busca)
 ]
