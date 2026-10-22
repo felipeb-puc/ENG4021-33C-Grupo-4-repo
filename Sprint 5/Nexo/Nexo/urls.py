@@ -30,7 +30,7 @@ urlpatterns = [
     path('templates/Iniciacao-Cientifica.html', iniciacao_cientifica),
     path('templates/Estagio.html', estagio),
     path('templates/Liga-Academica.html', liga_academica),
-    path('templetes/Candidatura-ativa.html', minha_oportunidade_candidaturas_ativas),
-    path('templetes/Favoritos.html', minha_oportunidade_favoritos),
-    path('templetes/Historico.html', minha_oportunidade_historico)
+    path('templates/tela-minha-oportunidades-canditaturas-ativas.html', minha_oportunidade_candidaturas_ativas),
+    path('templates/tela-minha-oportunidades-favoritos.html', minha_oportunidade_favoritos),
+    path('templates/tela-minha-oportunidades-historico.html', minha_oportunidade_historico)
 ]

@@ -71,3 +71,8 @@ class Candidatura(models.Model):
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
     oportunidade = models.ForeignKey(Oportunidade, on_delete=models.CASCADE)
     data = models.DateTimeField(auto_now_add=True)
+
+class Favorito(models.Model):
+    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
+    oportunidade = models.ForeignKey(Oportunidade, on_delete=models.CASCADE)
+    data = models.DateTimeField(auto_now_add=True)

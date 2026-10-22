@@ -28,21 +28,13 @@
             <a href="../templates/tela-minha-oportunidades-historico.html" id="aba-atual">Histórico 2</a>
         </div>
 
+        {% for candidatura in candidaturas %}
         <div class="candidatura">
-            <span class="tipo-e-data">Monitoria  candidatura em 20/08/2026</span>
-            <h2><a href="/oportunidade/6">Monitoria de Cálculo a Várias Variáveis</a></h2>
-            <p class="instituicao">Departamento de Matemática</p>
-            <p>Início em 01/10.</p>
-            <span class="statusA">Aprovada</span>
+            <span class="tipo-e-data">{{ candidatura.oportunidade.get_tipo_display }}  candidatura em {{ candidatura.data|date:"d/m/Y" }}</span>
+            <h2><a href="#">{{ candidatura.oportunidade.titulo }}</a></h2>
+            <p class="instituicao">{{ candidatura.oportunidade.instituicao.nome }}</p>
         </div>
-
-        <div class="candidatura">
-            <span class="tipo-e-data">Estágio  candidatura em 15/07/2026</span>
-            <h2><a href="/oportunidade/7">Estágio em engenharia de processos</a></h2>
-            <p class="instituicao">Nortec Indústria</p>
-            <p>Não selecionada na etapa final.</p>
-            <span class="statusR">Recusada</span>
-        </div>
+        {% endfor %}
     </div>
 
 </body>

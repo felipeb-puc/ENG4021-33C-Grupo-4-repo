@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html>
 
@@ -20,36 +19,21 @@
 <p>Monitoria 24 | Iniciação científica 18 | Liga acadêmica 9 | Estágio 62</p>
 
 <h2>Liga acadêmica</h2>
-<p>9 oportunidades abertas na sua universidade</p>
+<p>{{ oportunidades|length }} oportunidades abertas na sua universidade</p>
 
 <button>Recentes</button>
 <button>Perto de mim</button>
 <button>Filtros</button>
 
+{% for oportunidade in oportunidades %}
 <div class="cartao">
-<h3>Processo seletivo 2026.2</h3>
-<p>Liga de Empreendedorismo</p>
-<p>6h por semana | Voluntário | Híbrido</p>
-<p>Inscrições até 26/09/2026</p>
+<h3>{{ oportunidade.titulo }}</h3>
+<p>{{ oportunidade.instituicao.nome }}</p>
+<p>{{ oportunidade.carga_horaria }}h por semana | R$ {{ oportunidade.remuneracao }} | {{ oportunidade.get_modalidade_display }}</p>
+<p>Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}</p>
 <button>Candidatar-se</button>
 </div>
-
-<div class="cartao">
-<h3>Diretoria de marketing e conteúdo</h3>
-<p>Liga de Finanças</p>
-<p>8h por semana | Voluntário | Remoto</p>
-<p>Inscrições até 03/10/2026</p>
-<button>Candidatar-se</button>
-</div>
-
-<div class="cartao">
-<h3>Grupo de estudos em direito digital</h3>
-<p>Liga de Direito e Tecnologia</p>
-<p>4h por semana | Voluntário | Presencial</p>
-<p>Inscrições até 08/10/2026</p>
-<button>Candidatar-se</button>
-</div>
+{% endfor %}
 
 </body>
 </html>
-```

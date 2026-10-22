@@ -36,13 +36,18 @@
                 <div class="campo">
                     <label>Universidade</label>
                     <select>
-                        <option>PUC-Rio</option>
+                        {% for universidade in universidades %}
+                        <option>{{ universidade.nome }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="campo">
                     <label>Curso</label>
                     <select>
                         <option>Selecione o curso</option>
+                        {% for curso in cursos %}
+                        <option>{{ curso.nome }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="campo">

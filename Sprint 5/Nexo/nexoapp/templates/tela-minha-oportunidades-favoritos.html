@@ -28,57 +28,20 @@
             <a href="../templates/tela-minha-oportunidades-historico.html">Histórico 2</a>
         </div>
 
+        {% for favorito in favoritos %}
         <div class="favorito">
-            <span class="tipo">Iniciação científica</span>
-            <h2><a href="/oportunidade/2">Visão computacional para inspeção industrial</a></h2>
-            <p class="instituicao">Departamento de Informática</p>
+            <span class="tipo">{{ favorito.oportunidade.get_tipo_display }}</span>
+            <h2><a href="#">{{ favorito.oportunidade.titulo }}</a></h2>
+            <p class="instituicao">{{ favorito.oportunidade.instituicao.nome }}</p>
             <ul>
-                <li>20h por semana</li>
-                <li>R$ 1.100 por mês</li>
-                <li>Híbrido</li>
+                <li>{{ favorito.oportunidade.carga_horaria }}h por semana</li>
+                <li>R$ {{ favorito.oportunidade.remuneracao }} por mês</li>
+                <li>{{ favorito.oportunidade.get_modalidade_display }}</li>
             </ul>
-            <span class="prazo">Inscrições até 10/10/2026</span>
-            <a href="/oportunidade/2">Ver -></a>
+            <span class="prazo">Inscrições até {{ favorito.oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
+            <a href="#">Ver -></a>
         </div>
-
-        <div class="favorito">
-            <span class="tipo">Liga acadêmica</span>
-            <h2><a href="/oportunidade/3">Processo seletivo 2026.2</a></h2>
-            <p class="instituicao">Liga de Empreendedorismo</p>
-            <ul>
-                <li>6h por semana</li>
-                <li>Voluntária, com certificado</li>
-                <li>Híbrido</li>
-            </ul>
-            <span class="prazo">Inscrições encerradas</span>
-            <a href="/oportunidade/3">Ver -></a>
-        </div>
-
-        <div class="favorito">
-            <span class="tipo">Equipe de competição</span>
-            <h2><a href="/oportunidade/4">Eletrônica embarcada e telemetria</a></h2>
-            <p class="instituicao">Equipe Fórmula SAE</p>
-            <ul>
-                <li>12h por semana</li>
-                <li>Voluntária, com certificado</li>
-                <li>Presencial</li>
-            </ul>
-            <span class="prazo">Faltam 4 dias</span>
-            <a href="/oportunidade/4">Ver -></a>
-        </div>
-
-        <div class="favorito">
-            <span class="tipo">Estágio</span>
-            <h2><a href="/oportunidade/5">Estágio em produto e dados</a></h2>
-            <p class="instituicao">Opportunity</p>
-            <ul>
-                <li>20h por semana</li>
-                <li>R$ 1.800 por mês</li>
-                <li>Presencial</li>
-            </ul>
-            <span class="prazo">Faltam 6 dias</span>
-            <a href="/oportunidade/5">Ver -></a>
-        </div>
+        {% endfor %}
 
     </div>
 

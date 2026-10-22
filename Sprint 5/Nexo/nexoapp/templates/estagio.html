@@ -48,24 +48,19 @@
         </div>
         <div>
             <div class="linha">
-                <p class="cinza">2 oportunidades</p>
+                <p class="cinza">{{ oportunidades|length }} oportunidades</p>
                 <p class="campo">Recentes</p>
             </div>
             <div class="lado-a-lado">
+                {% for oportunidade in oportunidades %}
                 <div class="caixa">
-                    <span class="pilula claro">Estágio</span>
-                    <h3>Estágio em tecnologia e automação</h3>
-                    <p class="cinza">Visagio</p>
-                    <p>30h por semana, R$ 2.400 por mês, híbrido</p>
-                    <p class="cinza">Inscrições até 20/10/2026 <a href="#">Ver -></a></p>
+                    <span class="pilula claro">{{ oportunidade.get_tipo_display }}</span>
+                    <h3>{{ oportunidade.titulo }}</h3>
+                    <p class="cinza">{{ oportunidade.instituicao.nome }}</p>
+                    <p>{{ oportunidade.carga_horaria }}h por semana, R$ {{ oportunidade.remuneracao }} por mês, {{ oportunidade.get_modalidade_display }}</p>
+                    <p class="cinza">Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }} <a href="#">Ver -></a></p>
                 </div>
-                <div class="caixa">
-                    <span class="pilula claro">Estágio</span>
-                    <h3>Estágio em engenharia de processos</h3>
-                    <p class="cinza">Nortec Indústria</p>
-                    <p>30h por semana, R$ 2.000 por mês, presencial</p>
-                    <p class="cinza">Faltam 3 dias <a href="#">Ver -></a></p>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

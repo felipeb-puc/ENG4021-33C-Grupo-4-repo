@@ -31,9 +31,9 @@
             <h1>Bem-vinda de volta, Isabela</h1>
             <h6 class="cinza">Engenharia de Produção · 5º período · PUC</h6>
             <div class="lado-a-lado">
-                <div><h4>16</h4><h5 class="cinza">oportunidades abertas para você</h5></div>
-                <div><h4>4</h4><h5 class="cinza">salvas para depois</h5></div>
-                <div><h4>2</h4><h5 class="cinza">candidaturas em andamento</h5></div>
+                <div><h4>{{ oportunidades|length }}</h4><h5 class="cinza">oportunidades abertas para você</h5></div>
+                <div><h4>{{ favoritos|length }}</h4><h5 class="cinza">salvas para depois</h5></div>
+                <div><h4>{{ candidaturas|length }}</h4><h5 class="cinza">candidaturas em andamento</h5></div>
             </div>
         </div>
         <img class="imagem" src="../static/imagens/06-home-estudante-grupo-sorrindo-COxBKa2z.jpg">
@@ -54,37 +54,15 @@
         <p class="cinza">Oportunidades da PUC-Rio com inscrição mais próxima do fim.</p>
         <div class="lado-a-lado">
 
+            {% for oportunidade in oportunidades %}
             <div class="caixa">
-                <span class="pilula claro">Equipe de competição</span>
-                <h3>Visão computacional do robô autônomo</h3>
-                <p class="cinza">Equipe de Robótica</p>
-                <p>8h por semana, voluntária, presencial</p>
+                <span class="pilula claro">{{ oportunidade.get_tipo_display }}</span>
+                <h3>{{ oportunidade.titulo }}</h3>
+                <p class="cinza">{{ oportunidade.instituicao.nome }}</p>
+                <p>{{ oportunidade.carga_horaria }}h por semana, R$ {{ oportunidade.remuneracao }} por mês, {{ oportunidade.get_modalidade_display }}</p>
                 <a href="#">Ver -></a>
             </div>
-
-            <div class="caixa">
-                <span class="pilula claro">Liga acadêmica</span>
-                <h3>Processo seletivo 2026.2</h3>
-                <p class="cinza">Liga de Empreendedorismo</p>
-                <p>6h por semana, voluntária, híbrido</p>
-                <a href="#">Ver -></a>
-            </div>
-
-            <div class="caixa">
-                <span class="pilula claro">Equipe de competição</span>
-                <h3>Subsistema de suspensão e direção</h3>
-                <p class="cinza">Equipe Baja SAE</p>
-                <p>10h por semana, voluntária, presencial</p>
-                <a href="#">Ver -></a>
-            </div>
-            
-            <div class="caixa">
-                <span class="pilula claro">Monitoria</span>
-                <h3>Monitoria de Programação I</h3>
-                <p class="cinza">Departamento de Informática</p>
-                <p>8h por semana, R$ 450 por mês, presencial</p>
-                <a href="#">Ver -></a>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </body>
