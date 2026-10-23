@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar - Nexo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../static/css/tela-busca.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="topo">
+        <div>
+            <img src="../static/imagens/logo.svg">
+            <a href="../templates/Inicio.html">Início</a>
+            <a href="../templates/tela-busca.html" class="pilula-verde">Buscar</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades 6</a>
+        </div>
+        <div>
+            <span>PUC</span>
+            <span class="pilula-verde">IC</span>
+            <a href="/">Recomeçar demonstração</a>
+            <a href="../templates/tela-inicial.html">Sair</a>
+        </div>
+    </div>
+
+    <div id="principal">
+        <h1>Oportunidades abertas na PUC-Rio</h1>
+        <p class="cinza">Você vê o que é da sua universidade e os estágios publicados para ela.</p>
+
+        <input type="text" id="busca" placeholder="Buscar por título, instituição, curso...">
+
+        <div id="tipos">
+            <a href="../templates/tela-busca.html" class="pilula-verde">Todas 16</a>
+            <a href="../templates/estagio.html" class="pilula">Estágio 4</a>
+            <a href="/" class="pilula">Monitoria 3</a>
+            <a href="../templates/Iniciacao-Cientifica.html" class="pilula">Iniciação científica 3</a>
+            <a href="../templates/tela-liga-academica.html" class="pilula">Liga acadêmica 3</a>
+            <a href="/" class="pilula">Equipe de competição 3</a>
+        </div>
+
+        <div id="corpo">
+        <div id="filtros">
+            <h2>Filtros</h2>
+            <form>
+                <label for="curso">Curso</label>
+                <select id="curso">
+                    <option>Qualquer curso</option>
+                    <option>Engenharia de Produção</option>
+                    <option>Engenharia da Computação</option>
+                    <option>Ciência da Computação</option>
+                    <option>Economia</option>
+                    <option>Administração</option>
+                    <option>Direito</option>
+                    <option>Engenharia Civil</option>
+                    <option>Engenharia Mecânica</option>
+                    <option>Matemática</option>
+                    <option>Física</option>
+                </select>
+
+                <label for="periodo">Estou no período</label>
+                <select id="periodo">
+                    <option>Qualquer período</option>
+                    <option>1º período</option>
+                    <option>2º período</option>
+                    <option>3º período</option>
+                    <option>4º período</option>
+                    <option>5º período</option>
+                    <option>6º período</option>
+                    <option>7º período</option>
+                    <option>8º período</option>
+                    <option>9º período</option>
+                    <option>10º período</option>
+                </select>
+                <p class="cinza">Esconde o que exige período mais avançado.</p>
+
+                <label>Modalidade</label>
+                <div>
+                    <input type="checkbox" id="presencial"> <label for="presencial">Presencial</label>
+                    <input type="checkbox" id="hibrido"> <label for="hibrido">Híbrido</label>
+                    <input type="checkbox" id="remoto"> <label for="remoto">Remoto</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="remuneradas"> <label for="remuneradas">Só remuneradas</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="abertas" checked> <label for="abertas">Só inscrições abertas</label>
+                </div>
+            </form>
+        </div>
+
+        <div id="resultados">
+            <div id="barra-resultados">
+                <p class="cinza">1 oportunidade</p>
+
+                <form>
+                    <select id="ordenar">
+                        <option>Recentes</option>
+                        <option>Encerrando</option>
+                        <option>Maior bolsa</option>
+                    </select>
+                </form>
+            </div>
+
+            <div class="oportunidade">
+                <span class="pilula-clara">Estágio</span>
+                <h2>Estágio em tecnologia e automação</h2>
+                <p class="cinza">Visagio</p>
+                <p>30h por semana</p>
+                <p>R$ 2.400 por mês</p>
+                <p>Híbrido</p>
+                <p class="cinza">Faltam 2 dias</p>
+                <a href="/">Ver -></a>
+            </div>
+        </div>
+        </div>
+    </div>
+
+</body>
+</html>
