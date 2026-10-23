@@ -4,38 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minhas oportunidades - Nexo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="../static/css/tela-minha-oportunidades-canditaturas-ativas.css" rel="stylesheet">
 </head>
 <body>
 
-    <div id="topo">
-        <img src="../static/imagens/logo.svg">
-        <a href="../templates/Inicio.html">Início</a>
-        <a href="/busca">Buscar</a>
-        <a href="/minhas-oportunidades" id="pagina-atual">Minhas oportunidades 6</a>
-        <span id="usuario">PUC IC</span>
-        <a href="../templates/tela-inicial.html">Recomeçar demonstração</a>
-        <a href="../templates/tela-inicial.html">Sair</a>
-    </div>
+    <header id="topo">
+        <img src="../static/imagens/logo.svg" alt="NEXO">
+        <span id="usuario" title="PUC-Rio">IC</span>
+        <a href="../templates/tela-inicial.html" class="sublinhado">Recomeçar</a>
+        <a href="../templates/tela-inicial.html" class="contorno">⇥ Sair</a>
 
-    <div id="conteudo">
+        <nav>
+            <a href="../templates/Inicio.html">Início</a>
+            <a href="../templates/tela-busca.html">⌕ Buscar</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" id="pagina-atual">Minhas oportunidades</a>
+        </nav>
+    </header>
+
+    <main id="conteudo">
         <h1>Minhas oportunidades</h1>
 
-        <div id="abas">
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" id="aba-atual">Candidaturas ativas 2</a>
-            <a href="../templates/tela-minha-oportunidades-favoritos.html">Favoritos 4</a>
-            <a href="../templates/tela-minha-oportunidades-historico.html">Histórico 2</a>
-        </div>
+        <div id="abas"></div>
 
-        {% for candidatura in candidaturas %}
-        <div class="candidatura">
-            <span class="tipo-e-data">{{ candidatura.oportunidade.get_tipo_display }}  candidatura em {{ candidatura.data|date:"d/m/Y" }}</span>
-            <h2><a href="#">{{ candidatura.oportunidade.titulo }}</a></h2>
-            <p class="instituicao">{{ candidatura.oportunidade.instituicao.nome }}</p>
-        </div>
-        {% endfor %}
-    </div>
+        <div id="lista"></div>
+    </main>
+
+    <script>
+        // Dados de exemplo (troque pelos seus). Deixe uma lista vazia [] para ver a mensagem de vazio.
+        const dados = {
+            candidaturas: [
+                { tipo: "Estágio", titulo: "Estágio em tecnologia e automação", inst: "Visagio", data: "20/10/2026", status: "Em análise" },
+                { tipo: "Iniciação científica", titulo: "IC em robótica móvel", inst: "Laboratório de Robótica", data: "15/10/2026", status: "Entrevista marcada" }
+            ],
+            favoritos: [
+                { tipo: "Estágio", titulo: "Estágio em análise de dados", inst: "Consultoria Atlântica", data: "Prazo 04/11/2026" },
+                { tipo: "Monitoria", titulo: "Monitoria de Cálculo I", inst: "Departamento de Matemática", data: "Prazo 28/10/2026" },
+                { tipo: "Liga acadêmica", titulo: "Liga de Mercado Financeiro", inst: "PUC-Rio", data: "Prazo 30/10/2026" },
+                { tipo: "Equipe de competição", titulo: "Equipe Baja SAE", inst: "PUC-Rio", data: "Prazo 31/10/2026" }
+            ],
+            historico: [
+                { tipo: "Monitoria", titulo: "Monitoria de Programação", inst: "Departamento de Informática", data: "02/09/2026", status: "Aprovada" },
+                { tipo: "Estágio", titulo: "Estágio em engenharia de projetos", inst: "Construtora Horizonte", data: "10/08/2026", status: "Não selecionada" }
+            ]
+        };
+
+        const abas = [
+            { id: "candidaturas", nome: "Candidaturas ativas", texto: "candidatura em", vazio: "Nenhuma candidatura em andamento", dica: "Quando você se candidatar, o status aparece aqui." },
+            { id: "favoritos", nome: "Favoritos", texto: "", vazio: "Nenhum favorito ainda", dica: "Toque no coração de uma oportunidade para salvá-la aqui." },
+            { id: "historico", nome: "Histórico", texto: "encerrada em", vazio: "Seu histórico está vazio", dica: "Candidaturas finalizadas aparecem aqui." }
+        ];
+
+        const corStatus = { "Aprovada": "aprovada", "Não selecionada": "recusada" };
+        const $ = id => document.getElementById(id);
+        let abaAtual = "candidaturas";
+
+        function escolherAba(id) { abaAtual = id; atualizar(); return false; }
+
+        function remover(i) { dados.favoritos.splice(i, 1); atualizar(); }
+
+        function atualizar() {
+            // Abas com contador
+            $("abas").innerHTML = abas.map(a =>
+                `<a href="#" ${a.id === abaAtual ? 'id="aba-atual"' : ""} onclick="return escolherAba('${a.id}')">
+                    ${a.nome} <span class="contador">${dados[a.id].length}</span>
+                </a>`).join("");
+
+            const aba = abas.find(a => a.id === abaAtual);
+            const itens = dados[abaAtual];
+
+            // Lista ou mensagem de vazio
+            $("lista").innerHTML = itens.length === 0
+                ? `<div class="vazio"><h3>${aba.vazio}</h3><p>${aba.dica}</p></div>`
+                : itens.map((o, i) => `
+                    <div class="candidatura">
+                        <div class="linha">
+                            <span class="tipo-e-data">${o.tipo} · ${aba.texto} ${o.data}</span>
+                            ${abaAtual === "favoritos"
+                                ? `<button type="button" class="desfavoritar" title="Remover dos favoritos" onclick="remover(${i})">♥</button>`
+                                : ""}
+                        </div>
+                        <h2><a href="#">${o.titulo}</a></h2>
+                        <p class="instituicao">${o.inst}</p>
+                        ${o.status ? `<span class="status ${corStatus[o.status] || ""}">${o.status}</span>` : ""}
+                    </div>`).join("");
+        }
+
+        atualizar();
+    </script>
 
 </body>
 </html>
