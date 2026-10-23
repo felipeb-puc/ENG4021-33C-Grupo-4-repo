@@ -1,229 +1,39 @@
-:root {
-    --verde: #56716a;
-    --verde-escuro: #2f403b;
-    --verde-claro: #e9efed;
-    --cinza: #5d6b67;
-    --borda: #d5ddda;
-}
+<!DOCTYPE html>
+<html>
 
-* {
-    box-sizing: border-box;
-}
+<head>
+    <title>Tela Liga Acadêmica</title>
+    <link rel="stylesheet" href="../static/css/tela-liga-academica.css">
+</head>
 
-body {
-    margin: 0;
-    font-family: "Inter", Arial, sans-serif;
-    background: #fff;
-    color: #111816;
-}
+<body>
 
-/* Topo */
+<h1>NEXO</h1>
 
-header {
-    position: sticky;
-    top: 0;
-    background: #fff;
-    padding: 16px;
-    border-bottom: 1px solid var(--borda);
-}
+<button>Tela inicial</button>
+<button>Histórico</button>
+<button>Favoritos 6</button>
+<button>Candidaturas 3</button>
+<button>Perfil</button>
 
-.logo {
-    margin: 0 0 10px;
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: -1px;
-}
+<p>Monitoria 24 | Iniciação científica 18 | Liga acadêmica 9 | Estágio 62</p>
 
-nav {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-}
+<h2>Liga acadêmica</h2>
+<p>{{ oportunidades|length }} oportunidades abertas na sua universidade</p>
 
-nav a {
-    flex-shrink: 0;
-    padding: 8px 12px;
-    border-radius: 20px;
-    color: var(--verde-escuro);
-    text-decoration: none;
-    font-weight: 500;
-}
+<button>Recentes</button>
+<button>Perto de mim</button>
+<button>Filtros</button>
 
-nav a:hover {
-    background: var(--verde-claro);
-}
+{% for oportunidade in oportunidades %}
+<div class="cartao">
+<h3>{{ oportunidade.titulo }}</h3>
+<p>{{ oportunidade.instituicao.nome }}</p>
+<p>{{ oportunidade.carga_horaria }}h por semana | R$ {{ oportunidade.remuneracao }} | {{ oportunidade.get_modalidade_display }}</p>
+<p>Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}</p>
+<button>Candidatar-se</button>
+</div>
+{% endfor %}
 
-nav span {
-    padding: 1px 7px;
-    border-radius: 10px;
-    background: var(--verde);
-    color: #fff;
-    font-size: 12px;
-}
-
-/* Conteúdo */
-
-main {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 24px 16px 48px;
-}
-
-.categorias {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.categorias a {
-    padding: 7px 14px;
-    border: 1.5px solid var(--borda);
-    border-radius: 20px;
-    color: var(--verde-escuro);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.categorias a.ativo {
-    background: var(--verde-escuro);
-    border-color: var(--verde-escuro);
-    color: #fff;
-}
-
-h2 {
-    margin: 28px 0 4px;
-    font-size: 34px;
-    font-weight: 800;
-    letter-spacing: -1px;
-}
-
-.subtitulo {
-    margin: 0 0 20px;
-    color: var(--cinza);
-}
-
-.filtros {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.filtros button {
-    padding: 8px 14px;
-    border: 1.5px solid var(--borda);
-    border-radius: 20px;
-    background: #fff;
-    color: var(--verde-escuro);
-    font: inherit;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.filtros button.ativo {
-    background: var(--verde-claro);
-    border-color: var(--verde);
-}
-
-/* Cartões */
-
-.cartao {
-    padding: 20px;
-    margin-bottom: 14px;
-    border: 1.5px solid var(--borda);
-    border-radius: 18px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.cartao:hover {
-    border-color: var(--verde);
-    box-shadow: 0 4px 16px rgba(47, 64, 59, 0.08);
-}
-
-.modalidade {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 12px;
-    background: var(--verde-claro);
-    color: var(--verde-escuro);
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.cartao h3 {
-    margin: 12px 0 2px;
-    font-size: 19px;
-}
-
-.instituicao {
-    margin: 0;
-    color: var(--cinza);
-}
-
-.info {
-    display: flex;
-    gap: 8px;
-    margin: 14px 0;
-}
-
-.info span {
-    padding: 4px 10px;
-    border-radius: 8px;
-    background: #f4f6f5;
-    font-size: 14px;
-}
-
-.rodape {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    padding-top: 14px;
-    border-top: 1px solid var(--verde-claro);
-}
-
-.prazo {
-    margin: 0;
-    font-size: 13px;
-    color: var(--cinza);
-}
-
-.prazo strong {
-    display: block;
-    color: #111816;
-}
-
-.candidatar {
-    padding: 10px 18px;
-    border: none;
-    border-radius: 20px;
-    background: var(--verde);
-    color: #fff;
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.candidatar:hover {
-    background: var(--verde-escuro);
-}
-
-/* Vazio */
-
-.vazio {
-    padding: 40px 20px;
-    border-radius: 18px;
-    background: #eef2f0;
-    text-align: center;
-}
-
-.vazio h3 {
-    margin: 0 0 6px;
-    color: var(--verde-escuro);
-}
-
-.vazio p {
-    margin: 0;
-    color: var(--cinza);
-}
+</body>
+</html>
