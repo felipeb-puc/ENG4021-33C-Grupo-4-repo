@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Instituicao, Curso, Oportunidade, Candidatura, Favorito
+from .models import Instituicao, Oportunidade, Candidatura, Favorito
 from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm
 # Create your views here.
 def home(request):
@@ -9,9 +9,7 @@ def criar_conta(request):
     return render(request, "PROJETOtela_escolha_login.html")
 
 def cadastro_estudante(request):
-    universidades = Instituicao.objects.filter(tipo="faculdade")
-    cursos = Curso.objects.all()
-    return render(request, "PROJETOtela_informacoes_estudante.html", {"universidades": universidades, "cursos": cursos})
+    return cadastro_aluno(request)
 
 def cadastro_recrutador(request):
     empresas = Instituicao.objects.filter(tipo="empresa")
@@ -20,6 +18,28 @@ def cadastro_recrutador(request):
 def cadastro_representante(request):
     instituicoes = Instituicao.objects.exclude(tipo="empresa")
     return render(request, "PROJETOtela_informacoes_representante.html", {"instituicoes": instituicoes})
+
+def cadastro_aluno(request):
+    if request.method == "POST":
+        form = CadastroAlunoForm(request.POST)
+        if form.is_valid():
+            # O salvamento da conta será implementado na próxima etapa.
+            return render(
+                request,
+                "PROJETOtela_informacoes_estudante.html",
+                {
+                    "form": CadastroAlunoForm(),
+                    "sucesso": True,
+                },
+            )
+    else:
+        form = CadastroAlunoForm()
+
+    return render(
+        request,
+        "PROJETOtela_informacoes_estudante.html",
+        {"form": form},
+    )
 
 def inicio(request):
     oportunidades = Oportunidade.objects.order_by("prazo_inscricao")
@@ -81,57 +101,5 @@ def cadastro_representante(request):
     return render(
         request,
         "PROJETOtela_informacoes_representante.html",
-        {"form": form}
-    )
-    def cadastro_aluno(request):
-    if request.method == "POST":
-        form = CadastroAlunoForm(request.POST)
-
-        if form.is_valid():
-            dados = form.cleaned_data
-
-            # Aqui você poderá salvar o aluno no banco de dados.
-            # Não armazene a senha em texto puro.
-
-            return render(
-                request,
-                "cadastro_aluno.html",
-                {
-                    "form": CadastroAlunoForm(),
-                    "sucesso": True,
-                }
-            )
-    else:
-        form = CadastroAlunoForm()
-
-    return render(
-        request,
-        "cadastro_aluno.html",
-        {"form": form}
-    )
-    def cadastro_aluno(request):
-    if request.method == "POST":
-        form = CadastroAlunoForm(request.POST)
-
-        if form.is_valid():
-            dados = form.cleaned_data
-
-            # Aqui você poderá salvar o aluno no banco de dados.
-            # Não armazene a senha em texto puro.
-
-            return render(
-                request,
-                "cadastro_aluno.html",
-                {
-                    "form": CadastroAlunoForm(),
-                    "sucesso": True,
-                }
-            )
-    else:
-        form = CadastroAlunoForm()
-
-    return render(
-        request,
-        "cadastro_aluno.html",
         {"form": form}
     )

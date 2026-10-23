@@ -1,3 +1,7 @@
+
+from django import forms
+
+
 class CadastroRecrutadorForm(forms.Form):
     nome = forms.CharField(
         label="Nome completo",
@@ -64,7 +68,8 @@ class CadastroRepresentanteForm(forms.Form):
         label="Aceito os termos e a política de privacidade",
         required=True
     )
-    class CadastroAlunoForm(forms.Form):
+
+class CadastroAlunoForm(forms.Form):
     nome_completo = forms.CharField(
         label="Nome completo",
         max_length=150,
