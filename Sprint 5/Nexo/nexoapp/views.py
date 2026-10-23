@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Instituicao, Curso, Oportunidade, Candidatura, Favorito
-
+from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm
 # Create your views here.
 def home(request):
     return render(request, "tela-inicial.html")
@@ -51,3 +51,35 @@ def liga_academica(request):
     oportunidades = Oportunidade.objects.filter(tipo="liga")
     return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades})
     
+def cadastro_recrutador(request):
+    if request.method == "POST":
+        form = CadastroRecrutadorForm(request.POST)
+        if form.is_valid():
+            # Dados validados; o salvamento da conta será
+            # implementado na próxima etapa.
+            pass
+    else:
+        form = CadastroRecrutadorForm()
+
+    return render(
+        request,
+        "PROJETOtela_informacoes_recrutador.html",
+        {"form": form}
+    )
+
+
+def cadastro_representante(request):
+    if request.method == "POST":
+        form = CadastroRepresentanteForm(request.POST)
+        if form.is_valid():
+            # Dados validados; o salvamento da conta será
+            # implementado na próxima etapa.
+            pass
+    else:
+        form = CadastroRepresentanteForm()
+
+    return render(
+        request,
+        "PROJETOtela_informacoes_representante.html",
+        {"form": form}
+    )
