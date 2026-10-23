@@ -32,6 +32,7 @@ class Aluno(models.Model):
     matricula = models.CharField(max_length=20)
     periodo = models.IntegerField()
     curriculo = models.TextField()
+    
 
     def __str__(self):
         return self.matricula

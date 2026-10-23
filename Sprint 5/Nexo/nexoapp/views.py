@@ -27,27 +27,27 @@ def inicio(request):
     candidaturas = Candidatura.objects.all()
     return render(request, "Inicio.html", {"oportunidades": oportunidades, "favoritos": favoritos, "candidaturas": candidaturas})
 
+def minha_oportunidade_favoritos(request):
+    favoritos = Favorito.objects.all()
+    return render(request, "tela-minha-oportunidades-favoritos.html", {"favoritos": favoritos})
+
 def iniciacao_cientifica(request):
     oportunidades = Oportunidade.objects.filter(tipo="ic")
     return render(request, "Iniciacao-Cientifica.html", {"oportunidades": oportunidades})
+
+def minha_oportunidade_historico(request):
+    candidaturas = Candidatura.objects.all()
+    return render(request, "tela-minha-oportunidades-historico.html", {"candidaturas": candidaturas})
 
 def estagio(request):
     oportunidades = Oportunidade.objects.filter(tipo="estagio")
     return render(request, "estagio.html", {"oportunidades": oportunidades})
 
-def liga_academica(request):
-    oportunidades = Oportunidade.objects.filter(tipo="liga")
-    return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades})
-
 def minha_oportunidade_candidaturas_ativas(request):
     candidaturas = Candidatura.objects.all()
     return render(request, "tela-minha-oportunidades-canditaturas-ativas.html", {"candidaturas": candidaturas})
 
-def minha_oportunidade_favoritos(request):
-    favoritos = Favorito.objects.all()
-    return render(request, "tela-minha-oportunidades-favoritos.html", {"favoritos": favoritos})
-
-def minha_oportunidade_historico(request):
-    candidaturas = Candidatura.objects.all()
-    return render(request, "tela-minha-oportunidades-historico.html", {"candidaturas": candidaturas})
+def liga_academica(request):
+    oportunidades = Oportunidade.objects.filter(tipo="liga")
+    return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades})
     
