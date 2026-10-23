@@ -1,29 +1,230 @@
+:root {
+    --verde: #56716a;
+    --verde-escuro: #2f403b;
+    --verde-claro: #e9efed;
+    --cinza: #5d6b67;
+    --borda: #d5ddda;
+}
+
+* {
+    box-sizing: border-box;
+}
 
 body {
-    font-family: Arial;
-    margin: 20px;
-    color: #333;
+    margin: 0;
+    font-family: "Inter", Arial, sans-serif;
+    background: #fff;
+    color: #111816;
 }
 
-h1 {
-    color: #779b91;
+/* Topo */
+
+header {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 16px;
+    border-bottom: 1px solid var(--borda);
 }
 
-button {
-    padding: 8px;
-    margin: 3px;
-    background: white;
-    border: 1px solid #aaa;
+.logo {
+    margin: 0 0 10px;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -1px;
 }
+
+nav {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+}
+
+nav a {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border-radius: 20px;
+    color: var(--verde-escuro);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav a:hover {
+    background: var(--verde-claro);
+}
+
+nav span {
+    padding: 1px 7px;
+    border-radius: 10px;
+    background: var(--verde);
+    color: #fff;
+    font-size: 12px;
+}
+
+/* Conteúdo */
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+}
+
+.categorias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.categorias a {
+    padding: 7px 14px;
+    border: 1.5px solid var(--borda);
+    border-radius: 20px;
+    color: var(--verde-escuro);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.categorias a.ativo {
+    background: var(--verde-escuro);
+    border-color: var(--verde-escuro);
+    color: #fff;
+}
+
+h2 {
+    margin: 28px 0 4px;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.subtitulo {
+    margin: 0 0 20px;
+    color: var(--cinza);
+}
+
+.filtros {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.filtros button {
+    padding: 8px 14px;
+    border: 1.5px solid var(--borda);
+    border-radius: 20px;
+    background: #fff;
+    color: var(--verde-escuro);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.filtros button.ativo {
+    background: var(--verde-claro);
+    border-color: var(--verde);
+}
+
+/* Cartões */
 
 .cartao {
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-top: 15px;
+    padding: 20px;
+    margin-bottom: 14px;
+    border: 1.5px solid var(--borda);
+    border-radius: 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.cartao button {
-    background: #779b91;
-    color: white;
+.cartao:hover {
+    border-color: var(--verde);
+    box-shadow: 0 4px 16px rgba(47, 64, 59, 0.08);
+}
+
+.modalidade {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: var(--verde-claro);
+    color: var(--verde-escuro);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.cartao h3 {
+    margin: 12px 0 2px;
+    font-size: 19px;
+}
+
+.instituicao {
+    margin: 0;
+    color: var(--cinza);
+}
+
+.info {
+    display: flex;
+    gap: 8px;
+    margin: 14px 0;
+}
+
+.info span {
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: #f4f6f5;
+    font-size: 14px;
+}
+
+.rodape {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--verde-claro);
+}
+
+.prazo {
+    margin: 0;
+    font-size: 13px;
+    color: var(--cinza);
+}
+
+.prazo strong {
+    display: block;
+    color: #111816;
+}
+
+.candidatar {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 20px;
+    background: var(--verde);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.candidatar:hover {
+    background: var(--verde-escuro);
+}
+
+/* Vazio */
+
+.vazio {
+    padding: 40px 20px;
+    border-radius: 18px;
+    background: #eef2f0;
+    text-align: center;
+}
+
+.vazio h3 {
+    margin: 0 0 6px;
+    color: var(--verde-escuro);
+}
+
+.vazio p {
+    margin: 0;
+    color: var(--cinza);
 }
 ``
