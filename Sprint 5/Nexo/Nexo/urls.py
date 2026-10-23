@@ -26,11 +26,15 @@ urlpatterns = [
     path('templates/PROJETOtela_informacoes_estudante.html', cadastro_estudante),
     path('templates/PROJETOtela_informacoes_recrutador.html', cadastro_recrutador),
     path('templates/PROJETOtela_informacoes_representante.html', cadastro_representante),
+
+    # Cadastro de aluno
+    path('cadastro-aluno/', cadastro_aluno, name='cadastro_aluno'),
+
     path('templates/Inicio.html', inicio),
     path('templates/Iniciacao-Cientifica.html', iniciacao_cientifica),
     path('templates/Estagio.html', estagio),
     path('templates/Liga-Academica.html', liga_academica),
     path('templates/tela-minha-oportunidades-canditaturas-ativas.html', minha_oportunidade_candidaturas_ativas),
     path('templates/tela-minha-oportunidades-favoritos.html', minha_oportunidade_favoritos),
-    path('templates/tela-minha-oportunidades-historico.html', minha_oportunidade_historico)
+    path('templates/tela-minha-oportunidades-historico.html', minha_oportunidade_historico),
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Instituicao, Curso, Oportunidade, Candidatura, Favorito
-from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm
+from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm
 # Create your views here.
 def home(request):
     return render(request, "tela-inicial.html")
@@ -81,5 +81,57 @@ def cadastro_representante(request):
     return render(
         request,
         "PROJETOtela_informacoes_representante.html",
+        {"form": form}
+    )
+    def cadastro_aluno(request):
+    if request.method == "POST":
+        form = CadastroAlunoForm(request.POST)
+
+        if form.is_valid():
+            dados = form.cleaned_data
+
+            # Aqui você poderá salvar o aluno no banco de dados.
+            # Não armazene a senha em texto puro.
+
+            return render(
+                request,
+                "cadastro_aluno.html",
+                {
+                    "form": CadastroAlunoForm(),
+                    "sucesso": True,
+                }
+            )
+    else:
+        form = CadastroAlunoForm()
+
+    return render(
+        request,
+        "cadastro_aluno.html",
+        {"form": form}
+    )
+    def cadastro_aluno(request):
+    if request.method == "POST":
+        form = CadastroAlunoForm(request.POST)
+
+        if form.is_valid():
+            dados = form.cleaned_data
+
+            # Aqui você poderá salvar o aluno no banco de dados.
+            # Não armazene a senha em texto puro.
+
+            return render(
+                request,
+                "cadastro_aluno.html",
+                {
+                    "form": CadastroAlunoForm(),
+                    "sucesso": True,
+                }
+            )
+    else:
+        form = CadastroAlunoForm()
+
+    return render(
+        request,
+        "cadastro_aluno.html",
         {"form": form}
     )

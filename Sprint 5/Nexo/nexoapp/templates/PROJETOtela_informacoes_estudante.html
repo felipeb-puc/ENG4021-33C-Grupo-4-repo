@@ -1,81 +1,127 @@
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar conta de estudante - NEXO</title>
-    <link rel="stylesheet" href="../static/css/PROJETOtela_informacoes_estudante.css">
+
+    {% load static %}
+    <link rel="stylesheet"
+          href="{% static 'css/PROJETOtela_informacoes_estudante.css' %}">
 </head>
 <body>
     <div class="container">
-        <a href="../templates/PROJETOtela_escolha_login.html" class="voltar">&larr; Trocar tipo de conta</a>
+
+        <a href="{% url 'criar_conta' %}" class="voltar">
+            &larr; Trocar tipo de conta
+        </a>
+
         <p class="titulo">CONTA DE ESTUDANTE</p>
+
         <h1>Criar sua conta de estudante</h1>
-        <p class="subtitulo">Com esses dados o NEXO já mostra apenas as oportunidades da sua universidade.</p>
-        <form>
+
+        <p class="subtitulo">
+            Com esses dados o NEXO já mostra apenas as oportunidades
+            da sua universidade.
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+
             <h3>Dados pessoais</h3>
+
             <div class="grid">
                 <div class="campo">
-                    <label>Nome completo</label>
-                    <input type="text" placeholder="Isabela Corrêa">
+                    <label for="{{ form.nome_completo.id_for_label }}">
+                        Nome completo
+                    </label>
+                    {{ form.nome_completo }}
+                    {{ form.nome_completo.errors }}
                 </div>
+
                 <div class="campo">
-                    <label>E-mail acadêmico</label>
-                    <input type="email" placeholder="isabela.correa@aluno.puc-rio.br">
+                    <label for="{{ form.email_academico.id_for_label }}">
+                        E-mail acadêmico
+                    </label>
+                    {{ form.email_academico }}
+                    {{ form.email_academico.errors }}
                 </div>
+
                 <div class="campo">
-                    <label>Senha</label>
-                    <input type="password" placeholder="Mínimo de 8 caracteres">
+                    <label for="{{ form.senha.id_for_label }}">
+                        Senha
+                    </label>
+                    {{ form.senha }}
+                    {{ form.senha.errors }}
                 </div>
+
                 <div class="campo">
-                    <label>Matrícula</label>
-                    <input type="text" placeholder="2410123">
+                    <label for="{{ form.matricula.id_for_label }}">
+                        Matrícula
+                    </label>
+                    {{ form.matricula }}
+                    {{ form.matricula.errors }}
                 </div>
             </div>
 
             <h3>Vida acadêmica</h3>
+
             <div class="grid">
                 <div class="campo">
-                    <label>Universidade</label>
-                    <select>
-                        {% for universidade in universidades %}
-                        <option>{{ universidade.nome }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="{{ form.universidade.id_for_label }}">
+                        Universidade
+                    </label>
+                    {{ form.universidade }}
+                    {{ form.universidade.errors }}
                 </div>
+
                 <div class="campo">
-                    <label>Curso</label>
-                    <select>
-                        <option>Selecione o curso</option>
-                        {% for curso in cursos %}
-                        <option>{{ curso.nome }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="{{ form.curso.id_for_label }}">
+                        Curso
+                    </label>
+                    {{ form.curso }}
+                    {{ form.curso.errors }}
                 </div>
+
                 <div class="campo">
-                    <label>Período atual</label>
-                    <select>
-                        <option>1º período</option>
-                    </select>
+                    <label for="{{ form.periodo_atual.id_for_label }}">
+                        Período atual
+                    </label>
+                    {{ form.periodo_atual }}
+                    {{ form.periodo_atual.errors }}
                 </div>
+
                 <div class="campo">
-                    <label>CR (opcional)</label>
-                    <input type="text" placeholder="8,4">
+                    <label for="{{ form.cr.id_for_label }}">
+                        CR (opcional)
+                    </label>
+                    {{ form.cr }}
+                    {{ form.cr.errors }}
                 </div>
             </div>
 
             <div class="checkbox-group">
-                <label>
-                    <input type="checkbox" checked> Quero aparecer em buscas de recrutadores
+                <label for="{{ form.aparecer_em_buscas.id_for_label }}">
+                    {{ form.aparecer_em_buscas }}
+                    Quero aparecer em buscas de recrutadores
                 </label>
-                <label>
-                    <input type="checkbox"> Aceito os termos de uso e a política de privacidade
+
+                <label for="{{ form.aceitar_termos.id_for_label }}">
+                    {{ form.aceitar_termos }}
+                    Aceito os termos de uso e a política de privacidade
                 </label>
+
+                {{ form.aceitar_termos.errors }}
             </div>
 
             <div class="acoes">
-                <button><a href="../templates/Inicio.html" type="submit" style="color:white">Criar conta &rarr;</a></button>
+                <button type="submit">
+                    Criar conta &rarr;
+                </button>
             </div>
+
         </form>
     </div>
-
 </body>
 </html>
