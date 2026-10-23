@@ -37,9 +37,9 @@
                     <label>Instituição</label>
                     <select>
                         <option>Selecione</option>
-                        <option>PUC-Rio</option>
-                        <option>UFRJ</option>
-                        <option>Departamento de Informática - PUC-Rio</option>
+                        {% for instituicao in instituicoes %}
+                        <option>{{ instituicao.nome }}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>

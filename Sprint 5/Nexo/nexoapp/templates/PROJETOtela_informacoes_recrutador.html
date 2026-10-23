@@ -37,9 +37,9 @@
                     <label>Empresa</label>
                     <select>
                         <option>Selecione</option>
-                        <option>Oportunity</option>
-                        <option>Viságio</option>
-                        <option>Nortec Industria</option>
+                        {% for empresa in empresas %}
+                        <option>{{ empresa.nome }}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>

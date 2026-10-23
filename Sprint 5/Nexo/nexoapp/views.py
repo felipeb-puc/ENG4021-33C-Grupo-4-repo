@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Instituicao, Curso, Oportunidade, Candidatura, Favorito
 
 # Create your views here.
 def home(request):
@@ -8,38 +9,45 @@ def criar_conta(request):
     return render(request, "PROJETOtela_escolha_login.html")
 
 def cadastro_estudante(request):
-    return render(request, "PROJETOtela_informacoes_estudante.html")
+    universidades = Instituicao.objects.filter(tipo="faculdade")
+    cursos = Curso.objects.all()
+    return render(request, "PROJETOtela_informacoes_estudante.html", {"universidades": universidades, "cursos": cursos})
 
 def cadastro_recrutador(request):
-    return render(request, "PROJETOtela_informacoes_recrutador.html")
+    empresas = Instituicao.objects.filter(tipo="empresa")
+    return render(request, "PROJETOtela_informacoes_recrutador.html", {"empresas": empresas})
 
 def cadastro_representante(request):
-    return render(request, "PROJETOtela_informacoes_representante.html")
+    instituicoes = Instituicao.objects.exclude(tipo="empresa")
+    return render(request, "PROJETOtela_informacoes_representante.html", {"instituicoes": instituicoes})
 
 def inicio(request):
-    return render(request, "Inicio.html")
+    oportunidades = Oportunidade.objects.order_by("prazo_inscricao")
+    favoritos = Favorito.objects.all()
+    candidaturas = Candidatura.objects.all()
+    return render(request, "Inicio.html", {"oportunidades": oportunidades, "favoritos": favoritos, "candidaturas": candidaturas})
 
 def iniciacao_cientifica(request):
-    return render(request, "Iniciacao-Cientifica.html")
+    oportunidades = Oportunidade.objects.filter(tipo="ic")
+    return render(request, "Iniciacao-Cientifica.html", {"oportunidades": oportunidades})
 
 def estagio(request):
-    return render(request, "estagio.html")
+    oportunidades = Oportunidade.objects.filter(tipo="estagio")
+    return render(request, "estagio.html", {"oportunidades": oportunidades})
 
 def liga_academica(request):
-    return render( request, "tela-liga-academica.html")
+    oportunidades = Oportunidade.objects.filter(tipo="liga")
+    return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades})
 
 def minha_oportunidade_candidaturas_ativas(request):
-    return render (request, "tela-minha-oportunidade-candidaturas-ativas.html")
+    candidaturas = Candidatura.objects.all()
+    return render(request, "tela-minha-oportunidades-canditaturas-ativas.html", {"candidaturas": candidaturas})
 
 def minha_oportunidade_favoritos(request):
-    return render (request, "minha-oportunidade-favoritos.html")
+    favoritos = Favorito.objects.all()
+    return render(request, "tela-minha-oportunidades-favoritos.html", {"favoritos": favoritos})
 
 def minha_oportunidade_historico(request):
-    return render (request, "minha-oportunidade-historico.html")
-
-def login(request):
-    return render(request, "tela-login.html")
-
-def busca(request):
-    return render(request, "tela-busca.html")
-
+    candidaturas = Candidatura.objects.all()
+    return render(request, "tela-minha-oportunidades-historico.html", {"candidaturas": candidaturas})
+    
