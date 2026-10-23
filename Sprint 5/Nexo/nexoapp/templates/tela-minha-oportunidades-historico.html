@@ -3,39 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas oportunidades - Nexo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Histórico - Nexo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="../static/css/tela-minha-oportunidades-historico.css" rel="stylesheet">
 </head>
 <body>
 
-    <div id="topo">
-        <img src="../static/imagens/logo.svg">
-        <a href="../templates/Inicio.html">Início</a>
-        <a href="/busca">Buscar</a>
-        <a href="/minhas-oportunidades" id="pagina-atual">Minhas oportunidades 6</a>
-        <span id="usuario">PUC IC</span>
-        <a href="../templates/tela-inicial.html">Recomeçar demonstração</a>
-        <a href="../templates/tela-inicial.html">Sair</a>
-    </div>
+    <header id="topo">
+        <img src="../static/imagens/logo.svg" alt="NEXO">
+        <span id="usuario" title="PUC-Rio">IC</span>
+        <a href="../templates/tela-inicial.html" class="sublinhado">Recomeçar</a>
+        <a href="../templates/tela-inicial.html" class="contorno">⇥ Sair</a>
 
-    <div id="conteudo">
+        <nav>
+            <a href="../templates/Inicio.html">Início</a>
+            <a href="../templates/tela-busca.html">⌕ Buscar</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" id="pagina-atual">Minhas oportunidades</a>
+        </nav>
+    </header>
+
+    <main id="conteudo">
         <h1>Minhas oportunidades</h1>
 
         <div id="abas">
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas 2</a>
-            <a href="../templates/tela-minha-oportunidades-favoritos.html">Favoritos 4</a>
-            <a href="../templates/tela-minha-oportunidades-historico.html" id="aba-atual">Histórico 2</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas <span class="contador">2</span></a>
+            <a href="../templates/tela-minha-oportunidades-favoritos.html">Favoritos <span class="contador">4</span></a>
+            <a href="../templates/tela-minha-oportunidades-historico.html" id="aba-atual">Histórico <span class="contador" id="num-historico">0</span></a>
         </div>
 
-        {% for candidatura in candidaturas %}
-        <div class="candidatura">
-            <span class="tipo-e-data">{{ candidatura.oportunidade.get_tipo_display }}  candidatura em {{ candidatura.data|date:"d/m/Y" }}</span>
-            <h2><a href="#">{{ candidatura.oportunidade.titulo }}</a></h2>
-            <p class="instituicao">{{ candidatura.oportunidade.instituicao.nome }}</p>
-        </div>
-        {% endfor %}
-    </div>
+        <div id="lista"></div>
+    </main>
+
+    <script>
+        // Dados de exemplo (troque pelos seus). Deixe [] para ver "Histórico vazio", igual ao site.
+        // tipo | título | instituição | data da candidatura | status: "A" aprovado, "R" recusado, "D" desistiu
+        const historico = [
+            ["Monitoria", "Monitoria de Programação", "Departamento de Informática", "02/09/2026", "A"],
+            ["Estágio", "Estágio em engenharia de projetos", "Construtora Horizonte", "10/08/2026", "R"]
+        ].map(([tipo, titulo, inst, data, status]) => ({ tipo, titulo, inst, data, status }));
+
+        const nomeStatus = { A: "Aprovado", R: "Recusado", D: "Desistiu" };
+
+        document.getElementById("num-historico").textContent = historico.length;
+
+        document.getElementById("lista").innerHTML = historico.length === 0
+            ? `<div class="vazio">
+                   <h3>Histórico vazio</h3>
+                   <p>Processos aprovados, recusados ou desistidos ficam guardados aqui.</p>
+               </div>`
+            : historico.map(o => `
+                <div class="candidatura">
+                    <div class="linha">
+                        <span class="tipo-e-data">${o.tipo} · candidatura em ${o.data}</span>
+                        <span class="status${o.status}">${nomeStatus[o.status]}</span>
+                    </div>
+                    <h2><a href="#">${o.titulo}</a></h2>
+                    <p class="instituicao">${o.inst}</p>
+                </div>`).join("");
+    </script>
 
 </body>
 </html>
