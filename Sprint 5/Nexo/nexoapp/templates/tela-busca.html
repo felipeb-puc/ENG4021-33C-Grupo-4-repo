@@ -4,118 +4,201 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar - Nexo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="../static/css/tela-busca.css" rel="stylesheet">
 </head>
 <body>
 
-    <div id="topo">
-        <div>
-            <img src="../static/imagens/logo.svg">
+    <header id="topo">
+        <div class="linha">
+            <img src="../static/imagens/logo.svg" alt="NEXO" class="logo">
+            <div class="usuario">
+                <span class="avatar">IC</span>
+                <a href="/" class="sublinhado">Recomeçar</a>
+                <a href="../templates/tela-inicial.html" class="contorno">⇥ Sair</a>
+            </div>
+        </div>
+        <nav>
             <a href="../templates/Inicio.html">Início</a>
-            <a href="../templates/tela-busca.html" class="pilula-verde">Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades 6</a>
-        </div>
-        <div>
-            <span>PUC</span>
-            <span class="pilula-verde">IC</span>
-            <a href="/">Recomeçar demonstração</a>
-            <a href="../templates/tela-inicial.html">Sair</a>
-        </div>
-    </div>
+            <a href="../templates/tela-busca.html" class="ativo">⌕ Buscar</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades</a>
+        </nav>
+    </header>
 
-    <div id="principal">
+    <main>
         <h1>Oportunidades abertas na PUC-Rio</h1>
         <p class="cinza">Você vê o que é da sua universidade e os estágios publicados para ela.</p>
 
-        <input type="text" id="busca" placeholder="Buscar por título, instituição, curso...">
+        <input type="search" id="busca" placeholder="Buscar por título, instituição, curso...">
 
-        <div id="tipos">
-            <a href="../templates/tela-busca.html" class="pilula-verde">Todas 16</a>
-            <a href="../templates/estagio.html" class="pilula">Estágio 4</a>
-            <a href="/" class="pilula">Monitoria 3</a>
-            <a href="../templates/Iniciacao-Cientifica.html" class="pilula">Iniciação científica 3</a>
-            <a href="../templates/tela-liga-academica.html" class="pilula">Liga acadêmica 3</a>
-            <a href="/" class="pilula">Equipe de competição 3</a>
-        </div>
+        <div id="tipos" class="pilulas"></div>
 
         <div id="corpo">
-        <div id="filtros">
-            <h2>Filtros</h2>
-            <form>
-                <label for="curso">Curso</label>
-                <select id="curso">
-                    <option>Qualquer curso</option>
-                    <option>Engenharia de Produção</option>
-                    <option>Engenharia da Computação</option>
-                    <option>Ciência da Computação</option>
-                    <option>Economia</option>
-                    <option>Administração</option>
-                    <option>Direito</option>
-                    <option>Engenharia Civil</option>
-                    <option>Engenharia Mecânica</option>
-                    <option>Matemática</option>
-                    <option>Física</option>
-                </select>
-
-                <label for="periodo">Estou no período</label>
-                <select id="periodo">
-                    <option>Qualquer período</option>
-                    <option>1º período</option>
-                    <option>2º período</option>
-                    <option>3º período</option>
-                    <option>4º período</option>
-                    <option>5º período</option>
-                    <option>6º período</option>
-                    <option>7º período</option>
-                    <option>8º período</option>
-                    <option>9º período</option>
-                    <option>10º período</option>
-                </select>
-                <p class="cinza">Esconde o que exige período mais avançado.</p>
-
-                <label>Modalidade</label>
-                <div>
-                    <input type="checkbox" id="presencial"> <label for="presencial">Presencial</label>
-                    <input type="checkbox" id="hibrido"> <label for="hibrido">Híbrido</label>
-                    <input type="checkbox" id="remoto"> <label for="remoto">Remoto</label>
+            <aside class="caixa">
+                <div class="linha">
+                    <h2 id="titulo-filtros">Filtros</h2>
+                    <button type="button" id="limpar">Limpar</button>
                 </div>
 
-                <div>
-                    <input type="checkbox" id="remuneradas"> <label for="remuneradas">Só remuneradas</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="abertas" checked> <label for="abertas">Só inscrições abertas</label>
-                </div>
-            </form>
-        </div>
-
-        <div id="resultados">
-            <div id="barra-resultados">
-                <p class="cinza">1 oportunidade</p>
-
-                <form>
-                    <select id="ordenar">
-                        <option>Recentes</option>
-                        <option>Encerrando</option>
-                        <option>Maior bolsa</option>
+                <form id="filtros">
+                    <label for="curso">Curso</label>
+                    <select id="curso">
+                        <option value="">Qualquer curso</option>
+                        <option>Engenharia de Produção</option>
+                        <option>Engenharia da Computação</option>
+                        <option>Ciência da Computação</option>
+                        <option>Economia</option>
+                        <option>Administração</option>
+                        <option>Direito</option>
+                        <option>Engenharia Civil</option>
+                        <option>Engenharia Mecânica</option>
+                        <option>Matemática</option>
+                        <option>Física</option>
                     </select>
-                </form>
-            </div>
 
-            <div class="oportunidade">
-                <span class="pilula-clara">Estágio</span>
-                <h2>Estágio em tecnologia e automação</h2>
-                <p class="cinza">Visagio</p>
-                <p>30h por semana</p>
-                <p>R$ 2.400 por mês</p>
-                <p>Híbrido</p>
-                <p class="cinza">Faltam 2 dias</p>
-                <a href="/">Ver -></a>
-            </div>
+                    <label for="periodo">Estou no período</label>
+                    <select id="periodo">
+                        <option value="">Qualquer período</option>
+                        <option value="1">1º período</option>
+                        <option value="2">2º período</option>
+                        <option value="3">3º período</option>
+                        <option value="4">4º período</option>
+                        <option value="5">5º período</option>
+                        <option value="6">6º período</option>
+                        <option value="7">7º período</option>
+                        <option value="8">8º período</option>
+                        <option value="9">9º período</option>
+                        <option value="10">10º período</option>
+                    </select>
+                    <p class="cinza dica">Esconde o que exige período mais avançado.</p>
+
+                    <label>Modalidade</label>
+                    <div class="pilulas modalidades">
+                        <input type="checkbox" id="m1" value="Presencial"><label for="m1">Presencial</label>
+                        <input type="checkbox" id="m2" value="Híbrido"><label for="m2">Híbrido</label>
+                        <input type="checkbox" id="m3" value="Remoto"><label for="m3">Remoto</label>
+                    </div>
+
+                    <label class="chave"><input type="checkbox" id="remuneradas"><span></span> Só remuneradas</label>
+                    <label class="chave"><input type="checkbox" id="abertas" checked><span></span> Só inscrições abertas</label>
+                </form>
+            </aside>
+
+            <section>
+                <div class="linha">
+                    <p class="cinza" id="contagem"></p>
+                    <select id="ordenar">
+                        <option value="recentes">Recentes</option>
+                        <option value="encerrando">Encerrando</option>
+                        <option value="bolsa">Maior bolsa</option>
+                    </select>
+                </div>
+                <div id="lista"></div>
+            </section>
         </div>
-        </div>
-    </div>
+    </main>
+
+    <script>
+        // Datas relativas a hoje: os prazos nunca vencem todos de uma vez
+        const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+        const dia = n => new Date(hoje.getTime() + n * 86400000);
+        const faltam = d => Math.round((d - hoje) / 86400000);
+
+        // tipo | título | instituição | cursos ([] = qualquer) | período mínimo | horas | bolsa | modalidade | prazo (dias) | publicado (dias atrás)
+        const dados = [
+            ["Estágio", "Estágio em tecnologia e automação", "Visagio", ["Engenharia de Produção", "Engenharia da Computação", "Ciência da Computação"], 5, 30, 2400, "Híbrido", 2, 1],
+            ["Estágio", "Estágio em análise de dados", "Consultoria Atlântica", ["Economia", "Administração", "Engenharia de Produção", "Matemática"], 4, 30, 2200, "Presencial", 12, 3],
+            ["Estágio", "Estágio jurídico em direito empresarial", "Mendes Advogados", ["Direito"], 6, 20, 1800, "Presencial", 20, 6],
+            ["Estágio", "Estágio em engenharia de projetos", "Construtora Horizonte", ["Engenharia Civil", "Engenharia Mecânica"], 6, 30, 2000, "Presencial", -3, 20],
+            ["Monitoria", "Monitoria de Cálculo I", "Departamento de Matemática", [], 3, 12, 700, "Presencial", 5, 2],
+            ["Monitoria", "Monitoria de Programação", "Departamento de Informática", ["Ciência da Computação", "Engenharia da Computação"], 3, 12, 700, "Híbrido", 9, 4],
+            ["Monitoria", "Monitoria de Física I", "Departamento de Física", [], 3, 10, 0, "Presencial", 15, 8],
+            ["Iniciação científica", "IC em robótica móvel", "Laboratório de Robótica", ["Engenharia Mecânica", "Engenharia da Computação"], 4, 20, 700, "Presencial", 18, 5],
+            ["Iniciação científica", "IC em economia comportamental", "Departamento de Economia", ["Economia"], 3, 15, 700, "Remoto", 25, 7],
+            ["Iniciação científica", "IC em materiais sustentáveis", "Departamento de Engenharia Civil", ["Engenharia Civil"], 5, 20, 0, "Presencial", -1, 15],
+            ["Liga acadêmica", "Liga de Mercado Financeiro", "PUC-Rio", [], 1, 6, 0, "Híbrido", 7, 2],
+            ["Liga acadêmica", "Liga de Empreendedorismo", "PUC-Rio", [], 1, 4, 0, "Presencial", 14, 9],
+            ["Liga acadêmica", "Liga de Direito Digital", "PUC-Rio", ["Direito"], 2, 4, 0, "Remoto", 10, 10],
+            ["Equipe de competição", "Equipe Baja SAE", "PUC-Rio", ["Engenharia Mecânica", "Engenharia de Produção"], 1, 10, 0, "Presencial", 8, 3],
+            ["Equipe de competição", "Equipe de Robótica", "PUC-Rio", ["Engenharia da Computação", "Engenharia Mecânica", "Ciência da Computação"], 1, 10, 0, "Presencial", 21, 11],
+            ["Equipe de competição", "Equipe de Maratona de Programação", "PUC-Rio", ["Ciência da Computação", "Engenharia da Computação", "Matemática"], 1, 6, 0, "Híbrido", 30, 12]
+        ].map(([tipo, titulo, inst, cursos, periodo, horas, bolsa, modalidade, prazo, publicado]) =>
+            ({ tipo, titulo, inst, cursos, periodo, horas, bolsa, modalidade, prazo: dia(prazo), publicado: dia(-publicado) }));
+
+        const TIPOS = ["Todas", "Estágio", "Monitoria", "Iniciação científica", "Liga acadêmica", "Equipe de competição"];
+        const $ = id => document.getElementById(id);
+        let tipoAtual = "Todas";
+
+        function escolherTipo(t) { tipoAtual = t; atualizar(); }
+
+        function atualizar() {
+            // Categorias
+            $("tipos").innerHTML = TIPOS.map(t => {
+                const n = t === "Todas" ? dados.length : dados.filter(o => o.tipo === t).length;
+                return `<button type="button" class="${t === tipoAtual ? "ativo" : ""}" onclick="escolherTipo('${t}')">${t} ${n}</button>`;
+            }).join("");
+
+            // Valores dos filtros
+            const texto = $("busca").value.trim().toLowerCase();
+            const curso = $("curso").value;
+            const periodo = Number($("periodo").value);
+            const modalidades = [...document.querySelectorAll(".modalidades input:checked")].map(c => c.value);
+            const remuneradas = $("remuneradas").checked;
+            const abertas = $("abertas").checked;
+
+            // "Filtros (n)" conta o que foi mudado em relação ao padrão
+            const ativos = (tipoAtual !== "Todas") + !!curso + !!periodo + modalidades.length + remuneradas + !abertas;
+            $("titulo-filtros").textContent = ativos ? `Filtros (${ativos})` : "Filtros";
+            $("limpar").hidden = !ativos;
+
+            // Filtrar
+            const lista = dados.filter(o =>
+                (tipoAtual === "Todas" || o.tipo === tipoAtual) &&
+                (!texto || [o.titulo, o.inst, o.tipo, ...o.cursos].join(" ").toLowerCase().includes(texto)) &&
+                (!curso || o.cursos.length === 0 || o.cursos.includes(curso)) &&
+                (!periodo || o.periodo <= periodo) &&
+                (modalidades.length === 0 || modalidades.includes(o.modalidade)) &&
+                (!remuneradas || o.bolsa > 0) &&
+                (!abertas || faltam(o.prazo) >= 0)
+            );
+
+            // Ordenar
+            const ordem = $("ordenar").value;
+            lista.sort((a, b) =>
+                ordem === "encerrando" ? a.prazo - b.prazo :
+                ordem === "bolsa" ? b.bolsa - a.bolsa :
+                b.publicado - a.publicado);
+
+            $("contagem").textContent = lista.length + (lista.length === 1 ? " oportunidade" : " oportunidades");
+
+            // Mostrar
+            $("lista").innerHTML = lista.length === 0
+                ? `<div class="vazio"><h3>Nada com esses filtros</h3><p>Tente tirar algum filtro ou mudar a busca.</p></div>`
+                : lista.map(o => {
+                    const d = faltam(o.prazo);
+                    const prazo = d < 0 ? "Inscrições encerradas" : d === 0 ? "Encerra hoje" : d === 1 ? "Falta 1 dia" : `Faltam ${d} dias`;
+                    const cor = d < 0 ? "encerrado" : d <= 7 ? "urgente" : "";
+                    const bolsa = o.bolsa ? `R$ ${o.bolsa.toLocaleString("pt-BR")} por mês` : "Voluntária";
+                    return `
+                        <article class="cartao">
+                            <span class="tag">${o.tipo}</span>
+                            <h3>${o.titulo}</h3>
+                            <p class="cinza">${o.inst}</p>
+                            <div class="info"><span>${o.horas}h por semana</span><span>${bolsa}</span><span>${o.modalidade}</span></div>
+                            <div class="linha rodape">
+                                <p class="prazo ${cor}">${prazo}</p>
+                                <a href="#" class="botao">Ver →</a>
+                            </div>
+                        </article>`;
+                }).join("");
+        }
+
+        $("busca").oninput = atualizar;
+        $("filtros").onchange = atualizar;
+        $("ordenar").onchange = atualizar;
+        $("limpar").onclick = () => { $("filtros").reset(); $("busca").value = ""; tipoAtual = "Todas"; atualizar(); };
+        atualizar();
+    </script>
 
 </body>
 </html>
