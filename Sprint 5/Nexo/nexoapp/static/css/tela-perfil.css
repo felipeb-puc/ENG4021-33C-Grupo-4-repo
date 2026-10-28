@@ -1,0 +1,33 @@
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.opcao input {
+  width: 18px;
+  margin: 0px;
+}
+
+.opcao label {
+  margin: 0px;
+}
+
+.duas-colunas {
+  display: flex;
+  gap: 16px;
+}
+
+.duas-colunas div {
+  flex: 1;
+}
+
+.experiencia {
+  border-left: 2px solid #c9d5d2;
+  padding-left: 14px;
+  margin-bottom: 16px;
+}
+
+.experiencia p {
+  margin: 0px;
+}

@@ -1,0 +1,20 @@
+#busca {
+  max-width: 420px;
+  margin-top: 12px;
+}
+
+#corpo {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-top: 16px;
+}
+
+#filtros {
+  width: 230px;
+  flex-shrink: 0;
+}
+
+#resultados {
+  flex: 1;
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Nexo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../static/css/geral.css" rel="stylesheet">
+    <link href="../static/css/tela-perfil.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="topo">
+        <div class="menu">
+            <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+            <a href="../templates/Inicio.html">Início</a>
+            <a href="../templates/tela-busca.html"><img class="ic" src="../static/imagens/icone-search.svg">Buscar</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades <span class="contador">6</span></a>
+        </div>
+        <div class="menu">
+            <span class="cinza">PUC</span>
+            <a href="../templates/tela-perfil.html" class="avatar">IC</a>
+            <a href="../templates/tela-inicial.html" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+        </div>
+    </div>
+
+    <div class="pagina-estreita">
+        <h1>Perfil e currículo</h1>
+        <div class="abas">
+            <a href="../templates/tela-perfil.html" class="ativo">Editar</a>
+            <a href="../templates/tela-curriculo-aluno.html">Como recrutadores veem</a>
+        </div>
+
+        <form action="../templates/tela-perfil.html">
+            <div class="caixa">
+                <div class="opcao">
+                    <input type="checkbox" id="talentos" checked>
+                    <label for="talentos">Aparecer no banco de talentos</label>
+                </div>
+                <p class="cinza">Ligado: recrutadores de empresas e representantes da PUC-Rio podem encontrar seu currículo em buscas.
+                    Desligado: só vê seu currículo quem recebeu uma candidatura sua.</p>
+            </div>
+
+            <div class="caixa">
+                <h2>Dados acadêmicos</h2>
+                <p class="cinza">PUC-Rio · Engenharia de Produção · matrícula 2410123. Universidade e curso vêm do cadastro e não são editáveis.</p>
+                <div class="duas-colunas">
+                    <div>
+                        <label for="periodo">Período</label>
+                        <select id="periodo">
+                            <option>4º período</option>
+                            <option selected>5º período</option>
+                            <option>6º período</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="cr">CR</label>
+                        <input type="text" id="cr" value="8,4">
+                    </div>
+                </div>
+                <label for="resumo">Resumo</label>
+                <textarea id="resumo" rows="4">Monitora de Cálculo e integrante da Liga de Empreendedorismo. Busca estágio em operações.</textarea>
+                <label for="areas">Áreas de interesse</label>
+                <input type="text" id="areas" value="Operações, Dados, Consultoria">
+                <label for="habilidades">Habilidades</label>
+                <input type="text" id="habilidades" value="Excel avançado, Power BI, SQL básico, Inglês fluente, Lean">
+            </div>
+
+            <div class="caixa">
+                <h2>Experiências e formação</h2>
+                <div class="experiencia">
+                    <p class="cinza">Acadêmica · 2026 — atual</p>
+                    <b>Monitora de Cálculo a Várias Variáveis</b>
+                    <p class="cinza">Departamento de Matemática</p>
+                </div>
+                <div class="experiencia">
+                    <p class="cinza">Acadêmica · 2025 — 2026</p>
+                    <b>Liga de Empreendedorismo — diretoria de projetos</b>
+                    <p class="cinza">Liga de Empreendedorismo</p>
+                </div>
+            </div>
+
+            <button type="submit" class="botao">Salvar perfil</button>
+        </form>
+    </div>
+
+</body>
+</html>

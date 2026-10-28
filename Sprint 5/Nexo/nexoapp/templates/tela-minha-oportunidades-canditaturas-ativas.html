@@ -3,95 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas oportunidades - Nexo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Candidaturas ativas - Nexo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../static/css/geral.css" rel="stylesheet">
     <link href="../static/css/tela-minha-oportunidades-canditaturas-ativas.css" rel="stylesheet">
 </head>
 <body>
 
-    <header id="topo">
-        <img src="../static/imagens/logo.svg" alt="NEXO">
-        <span id="usuario" title="PUC-Rio">IC</span>
-        <a href="../templates/tela-inicial.html" class="sublinhado">Recomeçar</a>
-        <a href="../templates/tela-inicial.html" class="contorno">⇥ Sair</a>
-
-        <nav>
+    <div id="topo">
+        <div class="menu">
+            <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
             <a href="../templates/Inicio.html">Início</a>
-            <a href="../templates/tela-busca.html">⌕ Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" id="pagina-atual">Minhas oportunidades</a>
-        </nav>
-    </header>
+            <a href="../templates/tela-busca.html"><img class="ic" src="../static/imagens/icone-search.svg">Buscar</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Minhas oportunidades <span class="contador">6</span></a>
+        </div>
+        <div class="menu">
+            <span class="cinza">PUC</span>
+            <a href="../templates/tela-perfil.html" class="avatar">IC</a>
+            <a href="../templates/tela-inicial.html" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+        </div>
+    </div>
 
-    <main id="conteudo">
+    <div class="pagina">
         <h1>Minhas oportunidades</h1>
+        <div class="abas">
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Candidaturas ativas <span class="contador">2</span></a>
+            <a href="../templates/tela-minha-oportunidades-favoritos.html">Favoritos <span class="contador">4</span></a>
+            <a href="../templates/tela-minha-oportunidades-historico.html">Histórico <span class="contador">2</span></a>
+        </div>
 
-        <div id="abas"></div>
+        <div class="caixa linha">
+            <div>
+                <p class="cinza">Estágio · candidatura em 09/09/2026</p>
+                <a href="../templates/tela-oportunidade.html" class="titulo">Estágio em análise de dados de operações</a>
+                <p class="cinza">Visagio</p>
+                <p>Entrevista em 18/09, 15h.</p>
+            </div>
+            <span class="etiqueta-verde"><img class="ic" src="../static/imagens/icone-calendar-branco.svg">Entrevista marcada</span>
+        </div>
 
-        <div id="lista"></div>
-    </main>
-
-    <script>
-        // Dados de exemplo (troque pelos seus). Deixe uma lista vazia [] para ver a mensagem de vazio.
-        const dados = {
-            candidaturas: [
-                { tipo: "Estágio", titulo: "Estágio em tecnologia e automação", inst: "Visagio", data: "20/10/2026", status: "Em análise" },
-                { tipo: "Iniciação científica", titulo: "IC em robótica móvel", inst: "Laboratório de Robótica", data: "15/10/2026", status: "Entrevista marcada" }
-            ],
-            favoritos: [
-                { tipo: "Estágio", titulo: "Estágio em análise de dados", inst: "Consultoria Atlântica", data: "Prazo 04/11/2026" },
-                { tipo: "Monitoria", titulo: "Monitoria de Cálculo I", inst: "Departamento de Matemática", data: "Prazo 28/10/2026" },
-                { tipo: "Liga acadêmica", titulo: "Liga de Mercado Financeiro", inst: "PUC-Rio", data: "Prazo 30/10/2026" },
-                { tipo: "Equipe de competição", titulo: "Equipe Baja SAE", inst: "PUC-Rio", data: "Prazo 31/10/2026" }
-            ],
-            historico: [
-                { tipo: "Monitoria", titulo: "Monitoria de Programação", inst: "Departamento de Informática", data: "02/09/2026", status: "Aprovada" },
-                { tipo: "Estágio", titulo: "Estágio em engenharia de projetos", inst: "Construtora Horizonte", data: "10/08/2026", status: "Não selecionada" }
-            ]
-        };
-
-        const abas = [
-            { id: "candidaturas", nome: "Candidaturas ativas", texto: "candidatura em", vazio: "Nenhuma candidatura em andamento", dica: "Quando você se candidatar, o status aparece aqui." },
-            { id: "favoritos", nome: "Favoritos", texto: "", vazio: "Nenhum favorito ainda", dica: "Toque no coração de uma oportunidade para salvá-la aqui." },
-            { id: "historico", nome: "Histórico", texto: "encerrada em", vazio: "Seu histórico está vazio", dica: "Candidaturas finalizadas aparecem aqui." }
-        ];
-
-        const corStatus = { "Aprovada": "aprovada", "Não selecionada": "recusada" };
-        const $ = id => document.getElementById(id);
-        let abaAtual = "candidaturas";
-
-        function escolherAba(id) { abaAtual = id; atualizar(); return false; }
-
-        function remover(i) { dados.favoritos.splice(i, 1); atualizar(); }
-
-        function atualizar() {
-            // Abas com contador
-            $("abas").innerHTML = abas.map(a =>
-                `<a href="#" ${a.id === abaAtual ? 'id="aba-atual"' : ""} onclick="return escolherAba('${a.id}')">
-                    ${a.nome} <span class="contador">${dados[a.id].length}</span>
-                </a>`).join("");
-
-            const aba = abas.find(a => a.id === abaAtual);
-            const itens = dados[abaAtual];
-
-            // Lista ou mensagem de vazio
-            $("lista").innerHTML = itens.length === 0
-                ? `<div class="vazio"><h3>${aba.vazio}</h3><p>${aba.dica}</p></div>`
-                : itens.map((o, i) => `
-                    <div class="candidatura">
-                        <div class="linha">
-                            <span class="tipo-e-data">${o.tipo} · ${aba.texto} ${o.data}</span>
-                            ${abaAtual === "favoritos"
-                                ? `<button type="button" class="desfavoritar" title="Remover dos favoritos" onclick="remover(${i})">♥</button>`
-                                : ""}
-                        </div>
-                        <h2><a href="#">${o.titulo}</a></h2>
-                        <p class="instituicao">${o.inst}</p>
-                        ${o.status ? `<span class="status ${corStatus[o.status] || ""}">${o.status}</span>` : ""}
-                    </div>`).join("");
-        }
-
-        atualizar();
-    </script>
+        <div class="caixa linha">
+            <div>
+                <p class="cinza">Iniciação científica · candidatura em 09/09/2026</p>
+                <a href="../templates/tela-oportunidade.html" class="titulo">Visão computacional para inspeção industrial</a>
+                <p class="cinza">Departamento de Informática</p>
+            </div>
+            <span class="etiqueta"><img class="ic" src="../static/imagens/icone-clock.svg">Em análise</span>
+        </div>
+    </div>
 
 </body>
 </html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoria - Nexo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../static/css/geral.css" rel="stylesheet">
+    <link href="../static/css/tela-monitoria.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="topo">
+        <div class="menu">
+            <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+            <a href="../templates/Inicio.html">Início</a>
+            <a href="../templates/tela-busca.html" class="ativo"><img class="ic" src="../static/imagens/icone-search-branco.svg">Buscar</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades <span class="contador">6</span></a>
+        </div>
+        <div class="menu">
+            <span class="cinza">PUC</span>
+            <a href="../templates/tela-perfil.html" class="avatar">IC</a>
+            <a href="../templates/tela-inicial.html" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+        </div>
+    </div>
+
+    <div class="pagina">
+        <h1>Oportunidades abertas na PUC-Rio</h1>
+        <p class="cinza">Você vê o que é da sua universidade e os estágios publicados para ela.</p>
+
+        <input type="search" id="busca" class="com-lupa" placeholder="Buscar por título, instituição, curso...">
+
+        <div>
+            <a href="../templates/tela-busca.html" class="pilula">Todas</a>
+            <a href="../templates/estagio.html" class="pilula">Estágio</a>
+            <a href="../templates/tela-monitoria.html" class="pilula ativo">Monitoria</a>
+            <a href="../templates/Iniciacao-Cientifica.html" class="pilula">Iniciação científica</a>
+            <a href="../templates/tela-liga-academica.html" class="pilula">Liga acadêmica</a>
+            <a href="../templates/tela-equipe-competicao.html" class="pilula">Equipe de competição</a>
+        </div>
+
+        <div id="corpo">
+            <div id="filtros" class="caixa">
+                <h2>Filtros</h2>
+                <label for="curso">Curso</label>
+                <select id="curso">
+                    <option>Qualquer curso</option>
+                    <option>Engenharia de Produção</option>
+                    <option>Ciência da Computação</option>
+                    <option>Economia</option>
+                </select>
+                <label for="periodo">Estou no período</label>
+                <select id="periodo">
+                    <option>Qualquer período</option>
+                    <option>1º período</option>
+                    <option>5º período</option>
+                    <option>8º período</option>
+                </select>
+                <label>Modalidade</label>
+                <span class="pilula">Presencial</span>
+                <span class="pilula">Híbrido</span>
+                <span class="pilula">Remoto</span>
+            </div>
+
+            <div id="resultados">
+                <p class="cinza">3 oportunidades</p>
+                <div class="grade">
+                    <div class="cartao">
+                        <div><span class="etiqueta">Monitoria</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
+                        <h2>Monitoria de Cálculo a Várias Variáveis</h2>
+                        <p class="cinza">Departamento de Matemática</p>
+                        <p><img class="ic" src="../static/imagens/icone-clock.svg">12h por semana</p>
+                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 600 por mês</p>
+                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
+                        <div class="linha rodape">
+                            <span class="cinza">Inscrições até 06/11/2026</span>
+                            <a href="../templates/tela-oportunidade.html">Ver →</a>
+                        </div>
+                    </div>
+                    <div class="cartao">
+                        <div><span class="etiqueta">Monitoria</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
+                        <h2>Monitoria de Programação I</h2>
+                        <p class="cinza">Departamento de Informática</p>
+                        <p><img class="ic" src="../static/imagens/icone-clock.svg">8h por semana</p>
+                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 450 por mês</p>
+                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
+                        <div class="linha rodape">
+                            <span class="cinza">Inscrições até 10/11/2026</span>
+                            <a href="../templates/tela-oportunidade.html">Ver →</a>
+                        </div>
+                    </div>
+                    <div class="cartao">
+                        <div><span class="etiqueta">Monitoria</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
+                        <h2>Monitoria de Microeconomia</h2>
+                        <p class="cinza">Departamento de Economia</p>
+                        <p><img class="ic" src="../static/imagens/icone-clock.svg">10h por semana</p>
+                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 500 por mês</p>
+                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
+                        <div class="linha rodape">
+                            <span class="cinza">Inscrições até 14/11/2026</span>
+                            <a href="../templates/tela-oportunidade.html">Ver →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,127 +1,108 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar conta de estudante - NEXO</title>
-
     {% load static %}
-    <link rel="stylesheet"
-          href="{% static 'css/PROJETOtela_informacoes_estudante.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+    <link href="{% static 'css/PROJETOtela_informacoes_estudante.css' %}" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
 
-        <a href="{% url 'criar_conta' %}" class="voltar">
-            &larr; Trocar tipo de conta
-        </a>
-
-        <p class="titulo">CONTA DE ESTUDANTE</p>
-
-        <h1>Criar sua conta de estudante</h1>
-
-        <p class="subtitulo">
-            Com esses dados o NEXO já mostra apenas as oportunidades
-            da sua universidade.
-        </p>
-
-        <form method="POST">
-            {% csrf_token %}
-
-            <h3>Dados pessoais</h3>
-
-            <div class="grid">
-                <div class="campo">
-                    <label for="{{ form.nome_completo.id_for_label }}">
-                        Nome completo
-                    </label>
-                    {{ form.nome_completo }}
-                    {{ form.nome_completo.errors }}
-                </div>
-
-                <div class="campo">
-                    <label for="{{ form.email_academico.id_for_label }}">
-                        E-mail acadêmico
-                    </label>
-                    {{ form.email_academico }}
-                    {{ form.email_academico.errors }}
-                </div>
-
-                <div class="campo">
-                    <label for="{{ form.senha.id_for_label }}">
-                        Senha
-                    </label>
-                    {{ form.senha }}
-                    {{ form.senha.errors }}
-                </div>
-
-                <div class="campo">
-                    <label for="{{ form.matricula.id_for_label }}">
-                        Matrícula
-                    </label>
-                    {{ form.matricula }}
-                    {{ form.matricula.errors }}
-                </div>
-            </div>
-
-            <h3>Vida acadêmica</h3>
-
-            <div class="grid">
-                <div class="campo">
-                    <label for="{{ form.universidade.id_for_label }}">
-                        Universidade
-                    </label>
-                    {{ form.universidade }}
-                    {{ form.universidade.errors }}
-                </div>
-
-                <div class="campo">
-                    <label for="{{ form.curso.id_for_label }}">
-                        Curso
-                    </label>
-                    {{ form.curso }}
-                    {{ form.curso.errors }}
-                </div>
-
-                <div class="campo">
-                    <label for="{{ form.periodo_atual.id_for_label }}">
-                        Período atual
-                    </label>
-                    {{ form.periodo_atual }}
-                    {{ form.periodo_atual.errors }}
-                </div>
-
-                <div class="campo">
-                    <label for="{{ form.cr.id_for_label }}">
-                        CR (opcional)
-                    </label>
-                    {{ form.cr }}
-                    {{ form.cr.errors }}
-                </div>
-            </div>
-
-            <div class="checkbox-group">
-                <label for="{{ form.aparecer_em_buscas.id_for_label }}">
-                    {{ form.aparecer_em_buscas }}
-                    Quero aparecer em buscas de recrutadores
-                </label>
-
-                <label for="{{ form.aceitar_termos.id_for_label }}">
-                    {{ form.aceitar_termos }}
-                    Aceito os termos de uso e a política de privacidade
-                </label>
-
-                {{ form.aceitar_termos.errors }}
-            </div>
-
-            <div class="acoes">
-                <button type="submit">
-                    Criar conta &rarr;
-                </button>
-            </div>
-
-        </form>
+    <div id="topo">
+        <div class="menu">
+            <a href="/templates/tela-inicial.html" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}"></a>
+        </div>
+        <div class="menu">
+            <a href="/templates/tela-login.html">Entrar</a>
+            <a href="{% url 'criar_conta' %}" class="ativo">Criar conta →</a>
+        </div>
     </div>
+
+    <div id="cadastro">
+        <div id="formulario">
+            <a href="{% url 'criar_conta' %}" class="cinza">← Trocar tipo de conta</a>
+            <p class="texto-acima-do-titulo">CONTA DE ESTUDANTE</p>
+            <h1>Criar sua conta de estudante</h1>
+            <p class="cinza">Com esses dados o NEXO já mostra apenas as oportunidades que a sua universidade
+                alcança e que combinam com seu curso e período.</p>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <h2>Dados pessoais</h2>
+                <div class="campos">
+                    <div>
+                        <label for="{{ form.nome_completo.id_for_label }}">Nome completo</label>
+                        {{ form.nome_completo }}
+                        {{ form.nome_completo.errors }}
+                    </div>
+                    <div>
+                        <label for="{{ form.email_academico.id_for_label }}">E-mail acadêmico</label>
+                        {{ form.email_academico }}
+                        {{ form.email_academico.errors }}
+                    </div>
+                    <div>
+                        <label for="{{ form.senha.id_for_label }}">Senha</label>
+                        {{ form.senha }}
+                        {{ form.senha.errors }}
+                    </div>
+                    <div>
+                        <label for="{{ form.matricula.id_for_label }}">Matrícula</label>
+                        {{ form.matricula }}
+                        {{ form.matricula.errors }}
+                    </div>
+                </div>
+
+                <h2>Vida acadêmica</h2>
+                <p class="cinza">A universidade define tudo que você vê na plataforma e não pode ser trocada depois.</p>
+                <div class="campos">
+                    <div>
+                        <label for="{{ form.universidade.id_for_label }}">Universidade</label>
+                        {{ form.universidade }}
+                        {{ form.universidade.errors }}
+                    </div>
+                    <div>
+                        <label for="{{ form.curso.id_for_label }}">Curso</label>
+                        {{ form.curso }}
+                        {{ form.curso.errors }}
+                    </div>
+                    <div>
+                        <label for="{{ form.periodo_atual.id_for_label }}">Período atual</label>
+                        {{ form.periodo_atual }}
+                        {{ form.periodo_atual.errors }}
+                    </div>
+                    <div>
+                        <label for="{{ form.cr.id_for_label }}">CR (opcional)</label>
+                        {{ form.cr }}
+                        {{ form.cr.errors }}
+                    </div>
+                </div>
+
+                <div class="opcao">
+                    {{ form.aparecer_em_buscas }}
+                    <label for="{{ form.aparecer_em_buscas.id_for_label }}">Quero aparecer em buscas de recrutadores</label>
+                </div>
+                <div class="opcao">
+                    {{ form.aceitar_termos }}
+                    <label for="{{ form.aceitar_termos.id_for_label }}">Aceito os termos de uso e a política de privacidade</label>
+                </div>
+                {{ form.aceitar_termos.errors }}
+
+                <button type="submit" class="botao">Criar conta →</button>
+            </form>
+        </div>
+
+        <div id="lateral">
+            <img src="{% static 'imagens/02-cadastro-estudante-grupo-estudo.jpg' %}">
+            <h2>O que vem depois</h2>
+            <p><b>1. Escolher a universidade</b><br>Você vê só o que é da sua instituição.</p>
+            <p><b>2. Completar o currículo</b><br>Formação, monitorias, ligas e habilidades.</p>
+            <p><b>3. Candidatar-se em um clique</b><br>Sem repetir dados a cada anúncio.</p>
+        </div>
+    </div>
+
 </body>
 </html>

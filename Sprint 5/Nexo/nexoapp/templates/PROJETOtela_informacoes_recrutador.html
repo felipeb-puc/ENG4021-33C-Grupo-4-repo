@@ -1,59 +1,82 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar conta de recrutador - NEXO</title>
-    <link rel="stylesheet" href="../static/css/PROJETOtela_informacoes_recrutador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../static/css/geral.css" rel="stylesheet">
+    <link href="../static/css/PROJETOtela_informacoes_recrutador.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <a href="../templates/PROJETOtela_escolha_login.html" class="voltar">&larr; Trocar tipo de conta</a>
-        <p class="titulo">CONTA DE RECRUTADOR</p>
-        <h1>Criar sua conta de recrutador</h1>
-        <p class="subtitulo">Depois de verificada, sua empresa publica vagas de estágio e busca candidatos por universidade, curso, período e CR.</p>
-        <form>
-            <h3>Seus dados</h3>
-            <div class="grid">
-                <div class="campo">
-                    <label>Nome completo</label>
-                    <input type="text" placeholder="Camila Duarte">
-                </div>
-                <div class="campo">
-                    <label>E-mail corporativo</label>
-                    <input type="email" placeholder="camila.duarte@empresa.com">
-                </div>
-                <div class="campo">
-                    <label>Cargo ou função</label>
-                    <input type="text" placeholder="Gerente de RH">
-                </div>
-                <div class="campo">
-                    <label>Senha</label>
-                    <input type="password" placeholder="Mínimo de 8 caracteres">
-                </div>
-            </div>
 
-            <h3>Empresa</h3>
-            <div style="max-width: 240px;">
-                <div class="campo">
-                    <label>Empresa</label>
-                    <select>
-                        <option>Selecione</option>
-                        {% for empresa in empresas %}
-                        <option>{{ empresa.nome }}</option>
-                        {% endfor %}
-                    </select>
+    <div id="topo">
+        <div class="menu">
+            <a href="../templates/tela-inicial.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+        </div>
+        <div class="menu">
+            <a href="../templates/tela-login.html">Entrar</a>
+            <a href="../templates/PROJETOtela_escolha_login.html" class="ativo">Criar conta →</a>
+        </div>
+    </div>
+
+    <div id="cadastro">
+        <div id="formulario">
+            <a href="../templates/PROJETOtela_escolha_login.html" class="cinza">← Trocar tipo de conta</a>
+            <p class="texto-acima-do-titulo">CONTA DE RECRUTADOR</p>
+            <h1>Criar sua conta de recrutador</h1>
+            <p class="cinza">Depois de verificada, sua empresa publica vagas de estágio e busca candidatos por universidade, curso, período e CR.</p>
+
+            <form action="../templates/tela-painel.html">
+                <h2>Seus dados</h2>
+                <div class="campos">
+                    <div>
+                        <label for="nome">Nome completo</label>
+                        <input type="text" id="nome" placeholder="Camila Duarte">
+                    </div>
+                    <div>
+                        <label for="email">camila.duarte@empresa.com_CONTA DE RECRUTADOR</label>
+                        <input type="email" id="email" placeholder="camila.duarte@empresa.com">
+                    </div>
+                    <div>
+                        <label for="cargo">Cargo ou função</label>
+                        <input type="text" id="cargo" placeholder="Gerente de RH">
+                    </div>
+                    <div>
+                        <label for="senha">Senha</label>
+                        <input type="password" id="senha" placeholder="Mínimo de 8 caracteres">
+                    </div>
                 </div>
-            </div>
 
-            <div class="checkbox-group">
-                <label>
-                    <input type="checkbox" checked> Aceito os termos de uso e a política de privacidade.
-                </label>
-            </div>
+                <h2>Empresa</h2>
+                <div class="campos">
+                    <div>
+                        <label for="instituicao">Empresa</label>
+                        <select id="instituicao">
+                            <option>Selecione</option>
+                            {% for empresa in empresas %}
+                            <option>{{ empresa.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
 
-            <div class="acoes">
-                <button><a href="../templates/Inicio.html" type="submit" style="color:white">Criar conta &rarr;</a></button>
-            </div>
-        </form>
+                <div class="opcao">
+                    <input type="checkbox" id="termos" checked>
+                    <label for="termos">Aceito os termos de uso e a política de privacidade.</label>
+                </div>
+
+                <button type="submit" class="botao">Criar conta →</button>
+            </form>
+        </div>
+
+        <div id="lateral">
+            <img src="../static/imagens/03-cadastro-recrutador-entrevista.jpg">
+            <h2>O que vem depois</h2>
+            <p><b>1. Verificação da conta</b><br>A equipe do NEXO confere o cadastro antes da primeira publicação.</p>
+            <p><b>2. Publicar estágios</b><br>Para uma ou várias universidades, com os campos obrigatórios.</p>
+            <p><b>3. Acompanhar candidaturas</b><br>Status de cada candidato em um só painel.</p>
+        </div>
     </div>
 
 </body>

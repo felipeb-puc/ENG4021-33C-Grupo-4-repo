@@ -1,0 +1,17 @@
+#candidaturas {
+  margin-top: 20px;
+}
+
+.caixa h2 {
+  margin-top: 24px;
+}
+
+.experiencia {
+  border-left: 2px solid #c9d5d2;
+  padding-left: 14px;
+  margin-bottom: 18px;
+}
+
+.experiencia p {
+  margin: 0px 0px 2px 0px;
+}

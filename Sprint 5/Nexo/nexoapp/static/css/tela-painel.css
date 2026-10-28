@@ -1,0 +1,38 @@
+#numeros {
+  display: flex;
+  gap: 36px;
+  margin-top: 24px;
+}
+
+.numero {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d433d;
+  margin: 0px;
+}
+
+.titulo {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0c110f;
+  margin: 8px 0px 4px 0px;
+}
+
+.acoes {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.inscritos {
+  text-align: center;
+}
+
+.inscritos b {
+  font-size: 20px;
+  color: #2d433d;
+}
+
+.inscritos p {
+  margin: 0px;
+}
