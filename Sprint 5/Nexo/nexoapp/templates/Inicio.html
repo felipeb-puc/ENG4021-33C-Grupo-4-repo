@@ -12,15 +12,15 @@
 
     <div id="topo">
         <div class="menu">
-            <a href="#" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
-            <a href="#" class="ativo">Início</a>
-            <a href="#"><img class="ic" src="../static/imagens/icone-search.svg">Buscar</a>
-            <a href="#">Minhas oportunidades <span class="contador">6</span></a>
+            <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+            <a href="../templates/Inicio.html" class="ativo">Início</a>
+            <a href="../templates/tela-busca.html"><img class="ic" src="../static/imagens/icone-search.svg">Buscar</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades <span class="contador">6</span></a>
         </div>
         <div class="menu">
             <span class="cinza">PUC</span>
-            <a href="#" class="avatar">IC</a>
-            <a href="#" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+            <a href="../templates/tela-perfil.html" class="avatar">IC</a>
+            <a href="../templates/tela-inicial.html" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
         </div>
     </div>
 
@@ -39,16 +39,16 @@
         </div>
 
         <div id="categorias">
-            <a href="#" class="categoria">Monitoria</a>
-            <a href="#" class="categoria">Iniciação científica</a>
-            <a href="#" class="categoria">Liga acadêmica</a>
-            <a href="#" class="categoria">Estágio</a>
-            <a href="#" class="categoria">Equipe de competição</a>
+            <a href="../templates/tela-monitoria.html" class="categoria">Monitoria</a>
+            <a href="../templates/Iniciacao-Cientifica.html" class="categoria">Iniciação científica</a>
+            <a href="../templates/tela-liga-academica.html" class="categoria">Liga acadêmica</a>
+            <a href="../templates/Estagio.html" class="categoria">Estágio</a>
+            <a href="../templates/tela-equipe-competicao.html" class="categoria">Equipe de competição</a>
         </div>
 
         <div class="linha">
             <h2>Encerrando primeiro</h2>
-            <a href="#">Ver todas →</a>
+            <a href="../templates/tela-busca.html">Ver todas →</a>
         </div>
         <p class="cinza">Oportunidades da PUC-Rio com inscrição mais próxima do fim.</p>
 
@@ -63,7 +63,7 @@
                 <p><img class="ic" src="../static/imagens/icone-building-2.svg">{{ oportunidade.get_modalidade_display }}</p>
                 <div class="linha rodape">
                     <span class="cinza">Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
-                    <a href="#">Ver →</a>
+                    <a href="../templates/tela-oportunidade.html">Ver →</a>
                 </div>
             </div>
             {% endfor %}

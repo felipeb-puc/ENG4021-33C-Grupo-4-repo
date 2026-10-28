@@ -13,23 +13,23 @@
 
     <div id="topo">
         <div class="menu">
-            <a href="#" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}"></a>
+            <a href="../templates/tela-inicial.html" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}"></a>
         </div>
         <div class="menu">
-            <a href="#">Entrar</a>
-            <a href="#" class="ativo">Criar conta →</a>
+            <a href="../templates/tela-login.html">Entrar</a>
+            <a href="../templates/PROJETOtela_escolha_login.html" class="ativo">Criar conta →</a>
         </div>
     </div>
 
     <div id="cadastro">
         <div id="formulario">
-            <a href="#" class="cinza">← Trocar tipo de conta</a>
+            <a href="../templates/PROJETOtela_escolha_login.html" class="cinza">← Trocar tipo de conta</a>
             <p class="texto-acima-do-titulo">CONTA DE ESTUDANTE</p>
             <h1>Criar sua conta de estudante</h1>
             <p class="cinza">Com esses dados o NEXO já mostra apenas as oportunidades que a sua universidade
                 alcança e que combinam com seu curso e período.</p>
 
-            <form method="POST">
+            <form action="../templates/Inicio.html" method="POST">
                 {% csrf_token %}
 
                 <h2>Dados pessoais</h2>
