@@ -12,11 +12,11 @@
 
     <div id="topo">
         <div class="menu">
-            <a href="#" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+            <a href="../templates/tela-inicial.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
         </div>
         <div class="menu">
-            <a href="#">Entrar</a>
-            <a href="#" class="ativo">Criar conta →</a>
+            <a href="../templates/tela-login.html">Entrar</a>
+            <a href="../templates/PROJETOtela_escolha_login.html" class="ativo">Criar conta →</a>
         </div>
     </div>
 
@@ -25,7 +25,7 @@
         <h1>Entrar no NEXO</h1>
         <p class="cinza">Use o e-mail cadastrado na sua conta.</p>
 
-        <form class="caixa">
+        <form class="caixa" action="../templates/Inicio.html" method="get">
             <label for="email">E-mail</label>
             <input type="email" id="email" class="com-icone" placeholder="seu.email@universidade.br">
             <label for="senha">Senha</label>
@@ -34,7 +34,7 @@
         </form>
 
 
-        <p class="cinza">Não tem conta? <a href="#">Criar agora</a></p>
+        <p class="cinza">Não tem conta? <a href="../templates/PROJETOtela_escolha_login.html">Criar agora</a></p>
     </div>
 
 </body>
