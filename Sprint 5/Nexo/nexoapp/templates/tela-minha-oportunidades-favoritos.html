@@ -4,92 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Favoritos - Nexo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../static/css/geral.css" rel="stylesheet">
     <link href="../static/css/tela-minha-oportunidades-favoritos.css" rel="stylesheet">
 </head>
 <body>
 
-    <header id="topo">
-        <img src="../static/imagens/logo.svg" alt="NEXO">
-        <span id="usuario" title="PUC-Rio">IC</span>
-        <a href="../templates/tela-inicial.html" class="sublinhado">Recomeçar</a>
-        <a href="../templates/tela-inicial.html" class="contorno">⇥ Sair</a>
-
-        <nav>
+    <div id="topo">
+        <div class="menu">
+            <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
             <a href="../templates/Inicio.html">Início</a>
-            <a href="../templates/tela-busca.html">⌕ Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" id="pagina-atual">Minhas oportunidades</a>
-        </nav>
-    </header>
+            <a href="../templates/tela-busca.html"><img class="ic" src="../static/imagens/icone-search.svg">Buscar</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Minhas oportunidades <span class="contador">6</span></a>
+        </div>
+        <div class="menu">
+            <span class="cinza">PUC</span>
+            <a href="../templates/tela-perfil.html" class="avatar">IC</a>
+            <a href="../templates/tela-inicial.html" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+        </div>
+    </div>
 
-    <main id="conteudo">
+    <div class="pagina">
         <h1>Minhas oportunidades</h1>
-
-        <div id="abas">
+        <div class="abas">
             <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas <span class="contador">2</span></a>
-            <a href="../templates/tela-minha-oportunidades-favoritos.html" id="aba-atual">Favoritos <span class="contador" id="num-favoritos">0</span></a>
+            <a href="../templates/tela-minha-oportunidades-favoritos.html" class="ativo">Favoritos <span class="contador">4</span></a>
             <a href="../templates/tela-minha-oportunidades-historico.html">Histórico <span class="contador">2</span></a>
         </div>
-
-        <div id="lista"></div>
-    </main>
-
-    <script>
-        const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
-        const dia = n => new Date(hoje.getTime() + n * 86400000);
-        const faltam = d => Math.round((d - hoje) / 86400000);
-
-        // Dados de exemplo (troque pelos seus). Deixe [] para ver a mensagem de vazio, igual ao site.
-        // tipo | título | instituição | horas | bolsa | modalidade | prazo (dias a partir de hoje)
-        const favoritos = [
-            ["Estágio", "Estágio em análise de dados", "Consultoria Atlântica", 30, 2200, "Presencial", 12],
-            ["Monitoria", "Monitoria de Cálculo I", "Departamento de Matemática", 12, 700, "Presencial", 5],
-            ["Liga acadêmica", "Liga de Mercado Financeiro", "PUC-Rio", 6, 0, "Híbrido", 7],
-            ["Equipe de competição", "Equipe Baja SAE", "PUC-Rio", 10, 0, "Presencial", 8]
-        ].map(([tipo, titulo, inst, horas, bolsa, modalidade, prazo]) =>
-            ({ tipo, titulo, inst, horas, bolsa, modalidade, prazo: dia(prazo) }));
-
-        const $ = id => document.getElementById(id);
-
-        function remover(i) { favoritos.splice(i, 1); atualizar(); }
-
-        function atualizar() {
-            $("num-favoritos").textContent = favoritos.length;
-
-            $("lista").innerHTML = favoritos.length === 0
-                ? `<div class="vazio">
-                       <h3>Nenhuma oportunidade salva</h3>
-                       <p>Use o marcador nos cards para guardar o que quer ver depois.</p>
-                   </div>`
-                : favoritos.map((o, i) => {
-                    const d = faltam(o.prazo);
-                    const cor = d < 0 ? "encerrado" : d <= 7 ? "urgente" : "";
-                    const bolsa = o.bolsa ? `R$ ${o.bolsa.toLocaleString("pt-BR")} por mês` : "Voluntária";
-                    return `
-                        <div class="favorito">
-                            <div class="linha">
-                                <span class="tipo">${o.tipo}</span>
-                                <button type="button" class="marcador" title="Remover dos favoritos" onclick="remover(${i})">🔖</button>
-                            </div>
-                            <h2><a href="#">${o.titulo}</a></h2>
-                            <p class="instituicao">${o.inst}</p>
-                            <ul>
-                                <li>${o.horas}h por semana</li>
-                                <li>${bolsa}</li>
-                                <li>${o.modalidade}</li>
-                            </ul>
-                            <div class="linha rodape">
-                                <span class="prazo ${cor}">
-                                    ${d < 0 ? "Inscrições encerradas" : "Inscrições até"} <strong>${o.prazo.toLocaleDateString("pt-BR")}</strong>
-                                </span>
-                                <a href="#" class="botao">Ver →</a>
-                            </div>
-                        </div>`;
-                }).join("");
-        }
-
-        atualizar();
-    </script>
+        <div class="grade">
+            <div class="cartao">
+                <div><span class="etiqueta">Estágio</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
+                <h2>Estágio em análise de dados de operações</h2>
+                <p class="cinza">Visagio</p>
+                <p><img class="ic" src="../static/imagens/icone-clock.svg">30h por semana</p>
+                <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 2.200 por mês</p>
+                <p><img class="ic" src="../static/imagens/icone-building-2.svg">Híbrido</p>
+                <div class="linha rodape">
+                    <span class="cinza">Inscrições até 09/11/2026</span>
+                    <a href="../templates/tela-oportunidade.html">Ver →</a>
+                </div>
+            </div>
+            <div class="cartao">
+                <div><span class="etiqueta">Monitoria</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
+                <h2>Monitoria de Cálculo a Várias Variáveis</h2>
+                <p class="cinza">Departamento de Matemática</p>
+                <p><img class="ic" src="../static/imagens/icone-clock.svg">12h por semana</p>
+                <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 600 por mês</p>
+                <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
+                <div class="linha rodape">
+                    <span class="cinza">Inscrições até 06/11/2026</span>
+                    <a href="../templates/tela-oportunidade.html">Ver →</a>
+                </div>
+            </div>
+            <div class="cartao">
+                <div><span class="etiqueta">Liga acadêmica</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
+                <h2>Processo seletivo 2026.2</h2>
+                <p class="cinza">Liga de Empreendedorismo</p>
+                <p><img class="ic" src="../static/imagens/icone-clock.svg">6h por semana</p>
+                <p><img class="ic" src="../static/imagens/icone-wallet.svg">Voluntária, com certificado</p>
+                <p><img class="ic" src="../static/imagens/icone-building-2.svg">Híbrido</p>
+                <div class="linha rodape">
+                    <span class="cinza">Inscrições até 12/11/2026</span>
+                    <a href="../templates/tela-oportunidade.html">Ver →</a>
+                </div>
+            </div>
+            <div class="cartao">
+                <div><span class="etiqueta">Equipe de competição</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
+                <h2>Visão computacional do robô autônomo</h2>
+                <p class="cinza">Equipe de Robótica</p>
+                <p><img class="ic" src="../static/imagens/icone-clock.svg">8h por semana</p>
+                <p><img class="ic" src="../static/imagens/icone-wallet.svg">Voluntária, com certificado</p>
+                <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
+                <div class="linha rodape">
+                    <span class="cinza">Inscrições até 03/11/2026</span>
+                    <a href="../templates/tela-oportunidade.html">Ver →</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

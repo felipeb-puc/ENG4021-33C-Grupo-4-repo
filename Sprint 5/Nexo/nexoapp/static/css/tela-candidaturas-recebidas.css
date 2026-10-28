@@ -1,0 +1,23 @@
+#filtros {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0px 12px;
+  padding-bottom: 8px;
+}
+
+.titulo {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #3a564f;
+  margin-bottom: 4px;
+}
+
+.caixa p {
+  margin: 0px 0px 4px 0px;
+}
+
+.status {
+  width: 180px;
+  margin: 0px;
+}

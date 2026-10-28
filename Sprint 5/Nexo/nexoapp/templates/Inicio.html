@@ -5,65 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Início - Nexo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../static/css/geral.css" rel="stylesheet">
     <link href="../static/css/Inicio.css" rel="stylesheet">
 </head>
-
-
 <body>
-    <div class="secao linha">
-        <div>
-            <img class="logo" src="../static/imagens/logo.svg">
-            <a href="#" class="pilula verde">Início</a>
-            <a href="../templates/tela-busca.html">Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades 6</a>
+
+    <div id="topo">
+        <div class="menu">
+            <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+            <a href="../templates/Inicio.html" class="ativo">Início</a>
+            <a href="../templates/tela-busca.html"><img class="ic" src="../static/imagens/icone-search.svg">Buscar</a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades <span class="contador">6</span></a>
         </div>
-        <div>
-            <span>PUC</span>
-            <span class="pilula verde">IC</span>
-            <a href="#">Recomeçar demonstração</a>
-            <a href="../templates/tela-inicial.html" class="pilula">Sair</a>
+        <div class="menu">
+            <span class="cinza">PUC</span>
+            <a href="../templates/tela-perfil.html" class="avatar">IC</a>
+            <a href="../templates/tela-inicial.html" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
         </div>
     </div>
 
-
-    <div class="secao linha">
-        <div>
-            <h1>Bem-vinda de volta, Isabela</h1>
-            <h6 class="cinza">Engenharia de Produção · 5º período · PUC</h6>
-            <div class="lado-a-lado">
-                <div><h4>{{ oportunidades|length }}</h4><h5 class="cinza">oportunidades abertas para você</h5></div>
-                <div><h4>{{ favoritos|length }}</h4><h5 class="cinza">salvas para depois</h5></div>
-                <div><h4>{{ candidaturas|length }}</h4><h5 class="cinza">candidaturas em andamento</h5></div>
+    <div class="pagina">
+        <div id="boas-vindas" class="linha">
+            <div>
+                <h1>Bem-vinda de volta, Isabela</h1>
+                <p class="cinza">Engenharia de Produção · 5º período · PUC</p>
+                <div id="numeros">
+                    <div><p class="numero">{{ oportunidades|length }}</p><p class="cinza">oportunidades abertas para você</p></div>
+                    <div><p class="numero">{{ favoritos|length }}</p><p class="cinza">salvas para depois</p></div>
+                    <div><p class="numero">{{ candidaturas|length }}</p><p class="cinza">candidaturas em andamento</p></div>
+                </div>
             </div>
+            <img src="../static/imagens/06-home-estudante-grupo-sorrindo-COxBKa2z.jpg">
         </div>
-        <img class="imagem" src="../static/imagens/06-home-estudante-grupo-sorrindo-COxBKa2z.jpg">
-    </div>
 
+        <div id="categorias">
+            <a href="../templates/tela-monitoria.html" class="categoria">Monitoria</a>
+            <a href="../templates/Iniciacao-Cientifica.html" class="categoria">Iniciação científica</a>
+            <a href="../templates/tela-liga-academica.html" class="categoria">Liga acadêmica</a>
+            <a href="../templates/estagio.html" class="categoria">Estágio</a>
+            <a href="../templates/tela-equipe-competicao.html" class="categoria">Equipe de competição</a>
+        </div>
 
-    <div class="secao">
-        <a href="#" class="pilula">Monitoria 3</a>
-        <a href="../templates/Iniciação-Cientifica.html" class="pilula">Iniciação científica 3</a>
-        <a href="#" class="pilula">Liga acadêmica 3</a>
-        <a href="#" class="pilula">Estágio 4</a>
-        <a href="#" class="pilula">Equipe de competição 3</a>
-    </div>
-
-
-    <div class="secao">
-        <h2>Encerrando primeiro</h2>
+        <div class="linha">
+            <h2>Encerrando primeiro</h2>
+            <a href="../templates/tela-busca.html">Ver todas →</a>
+        </div>
         <p class="cinza">Oportunidades da PUC-Rio com inscrição mais próxima do fim.</p>
-        <div class="lado-a-lado">
 
+        <div class="grade">
             {% for oportunidade in oportunidades %}
-            <div class="caixa">
-                <span class="pilula claro">{{ oportunidade.get_tipo_display }}</span>
-                <h3>{{ oportunidade.titulo }}</h3>
+            <div class="cartao">
+                <div><span class="etiqueta">{{ oportunidade.get_tipo_display }}</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
+                <h2>{{ oportunidade.titulo }}</h2>
                 <p class="cinza">{{ oportunidade.instituicao.nome }}</p>
-                <p>{{ oportunidade.carga_horaria }}h por semana, R$ {{ oportunidade.remuneracao }} por mês, {{ oportunidade.get_modalidade_display }}</p>
-                <a href="#">Ver -></a>
+                <p><img class="ic" src="../static/imagens/icone-clock.svg">{{ oportunidade.carga_horaria }}h por semana</p>
+                <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ {{ oportunidade.remuneracao }} por mês</p>
+                <p><img class="ic" src="../static/imagens/icone-building-2.svg">{{ oportunidade.get_modalidade_display }}</p>
+                <div class="linha rodape">
+                    <span class="cinza">Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
+                    <a href="../templates/tela-oportunidade.html">Ver →</a>
+                </div>
             </div>
             {% endfor %}
         </div>
     </div>
+
 </body>
 </html>

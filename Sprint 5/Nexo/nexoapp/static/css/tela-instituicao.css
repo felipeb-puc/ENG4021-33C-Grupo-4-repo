@@ -1,0 +1,21 @@
+#cabecalho {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+#cabecalho img {
+  width: 76px;
+  height: 76px;
+  border: 1px solid #dde4e2;
+  border-radius: 50%;
+}
+
+h2 {
+  margin-top: 32px;
+}
+
+li {
+  margin-bottom: 8px;
+}

@@ -1,0 +1,8 @@
+.duas-colunas {
+  display: flex;
+  gap: 16px;
+}
+
+.duas-colunas div {
+  flex: 1;
+}

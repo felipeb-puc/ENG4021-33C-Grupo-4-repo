@@ -4,89 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar - Nexo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../static/css/geral.css" rel="stylesheet">
     <link href="../static/css/tela-login.css" rel="stylesheet">
 </head>
 <body>
 
-    <header id="topo">
-        <img src="../static/imagens/logoNEXO.png" alt="NEXO">
-        <a href="../templates/tela-login.html" class="link-entrar">Entrar</a>
-        <a href="../templates/PROJETOtela_escolha_login.html" class="botao-pilula">Criar conta →</a>
-    </header>
+    <div id="topo">
+        <div class="menu">
+            <a href="../templates/tela-inicial.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+        </div>
+        <div class="menu">
+            <a href="../templates/tela-login.html">Entrar</a>
+            <a href="../templates/PROJETOtela_escolha_login.html" class="ativo">Criar conta →</a>
+        </div>
+    </div>
 
-    <main id="login">
-        <img src="../static/imagens/logoNEXO.png" alt="NEXO" class="logo-grande">
-
+    <div id="centro">
+        <img id="logo-grande" src="../static/imagens/logoNEXO.png">
         <h1>Entrar no NEXO</h1>
-        <p id="subtitulo">Use o e-mail cadastrado na sua conta.</p>
+        <p class="cinza">Use o e-mail cadastrado na sua conta.</p>
 
-        <form id="form-login" class="caixa" novalidate>
+        <form class="caixa" action="../templates/Inicio.html">
             <label for="email">E-mail</label>
-            <div class="campo-icone">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-                <input type="email" id="email" placeholder="seu.email@universidade.br" autocomplete="email">
-            </div>
-
+            <input type="email" id="email" class="com-icone" placeholder="seu.email@universidade.br">
             <label for="senha">Senha</label>
-            <input type="password" id="senha" placeholder="Sua senha" autocomplete="current-password">
-
-            <p id="erro" hidden></p>
-
-            <button type="submit">Entrar →</button>
+            <input type="password" id="senha" placeholder="Sua senha">
+            <button type="submit" class="botao">Entrar →</button>
         </form>
 
-        <h2 id="titulo-contas">Contas de demonstração</h2>
-        <div id="contas"></div>
 
-        <p id="sem-conta">Não tem conta? <a href="../templates/PROJETOtela_escolha_login.html">Criar agora</a></p>
-    </main>
-
-    <script>
-        // Ícones em SVG
-        const icones = {
-            estudante: '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/>',
-            empresa: '<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/>',
-            instituicao: '<path d="M3 9l9-5 9 5"/><path d="M5 10v8M9 10v8M15 10v8M19 10v8M3 20h18"/>',
-            pessoa: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 5-6 8-6s7 2 8 6"/>'
-        };
-
-        // Contas de demonstração: "destino" é a página que abre ao clicar (troque pelas suas)
-        const contas = [
-            { titulo: "Estudante", texto: "Isabela Corrêa · Engenharia de Produção, 5º período · PUC-Rio", icone: "estudante", destino: "../templates/Inicio.html" },
-            { titulo: "Recrutadora", texto: "Camila Duarte · Gente e gestão · Visagio (empresa verificada)", icone: "empresa", destino: "#" },
-            { titulo: "Representante acadêmico", texto: "Prof. Rafael Amorim · Departamento de Informática · PUC-Rio", icone: "instituicao", destino: "#" },
-            { titulo: "Recrutador aguardando verificação", texto: "Rodrigo Paes · Opportunity · ainda não pode publicar", icone: "pessoa", destino: "#" },
-            { titulo: "Administração NEXO", texto: "Aprova contas de empresas e instituições", icone: "pessoa", destino: "#" }
-        ];
-
-        document.getElementById("contas").innerHTML = contas.map(c => `
-            <a href="${c.destino}" class="conta">
-                <span class="icone"><svg viewBox="0 0 24 24" aria-hidden="true">${icones[c.icone]}</svg></span>
-                <span class="texto">
-                    <strong>${c.titulo}</strong>
-                    <span>${c.texto}</span>
-                </span>
-                <span class="seta">→</span>
-            </a>`).join("");
-
-        // Validação (protótipo: confere se está preenchido, não verifica senha de verdade)
-        document.getElementById("form-login").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const email = document.getElementById("email").value.trim();
-            const senha = document.getElementById("senha").value;
-            const erro = document.getElementById("erro");
-
-            let mensagem = "";
-            if (!email || !senha) mensagem = "Preencha o e-mail e a senha.";
-            else if (!/^\S+@\S+\.\S+$/.test(email)) mensagem = "Digite um e-mail válido.";
-
-            erro.textContent = mensagem;
-            erro.hidden = !mensagem;
-
-            if (!mensagem) window.location.href = "../templates/Inicio.html";
-        });
-    </script>
+        <p class="cinza">Não tem conta? <a href="../templates/PROJETOtela_escolha_login.html">Criar agora</a></p>
+    </div>
 
 </body>
 </html>

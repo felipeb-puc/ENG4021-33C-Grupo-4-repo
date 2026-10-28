@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicar oportunidade - Nexo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../static/css/geral.css" rel="stylesheet">
+    <link href="../static/css/tela-nova-oportunidade.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="topo">
+        <div class="menu">
+            <a href="../templates/tela-painel.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+            <span class="papel">RECRUTADOR</span>
+            <a href="../templates/tela-painel.html">Visão geral</a>
+            <a href="../templates/tela-candidaturas-recebidas.html">Candidaturas</a>
+            <a href="../templates/tela-banco-talentos.html">Buscar candidatos</a>
+            <a href="../templates/tela-instituicao.html">Perfil da instituição</a>
+        </div>
+        <div class="menu">
+            <span class="cinza">Visagio</span>
+            <a href="../templates/tela-instituicao.html" class="avatar escuro">CD</a>
+            <a href="../templates/tela-inicial.html" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+        </div>
+    </div>
+
+    <div class="pagina-estreita">
+        <h1>Publicar oportunidade</h1>
+        <p class="cinza">Como empresa, você publica estágios e escolhe para quais universidades.</p>
+
+        <form action="../templates/tela-painel.html">
+            <div class="caixa">
+                <h2>1. O que é</h2>
+                <label for="tipo">Tipo</label>
+                <select id="tipo">
+                    <option>Estágio</option>
+                </select>
+                <p class="cinza">Empresa publica apenas estágio.</p>
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo">
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" rows="4"></textarea>
+                <label for="requisitos">Pré-requisitos</label>
+                <textarea id="requisitos" rows="3"></textarea>
+                <p class="cinza">Um por linha.</p>
+            </div>
+
+            <div class="caixa">
+                <h2>2. Condições</h2>
+                <div class="duas-colunas">
+                    <div>
+                        <label for="carga">Carga horária semanal (h)</label>
+                        <input type="number" id="carga">
+                    </div>
+                    <div>
+                        <label for="prazo">Prazo de inscrição</label>
+                        <input type="date" id="prazo">
+                    </div>
+                </div>
+                <div class="duas-colunas">
+                    <div>
+                        <label for="bolsa">Valor da bolsa (R$ por mês)</label>
+                        <input type="number" id="bolsa">
+                    </div>
+                    <div>
+                        <label for="modalidade">Modalidade</label>
+                        <select id="modalidade">
+                            <option>Presencial</option>
+                            <option>Híbrido</option>
+                            <option>Remoto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="duas-colunas">
+                    <div>
+                        <label for="cidade">Cidade</label>
+                        <input type="text" id="cidade">
+                    </div>
+                    <div>
+                        <label for="vagas">Número de vagas</label>
+                        <input type="number" id="vagas">
+                    </div>
+                </div>
+            </div>
+
+            <div class="caixa">
+                <h2>3. Alcance e contato</h2>
+                <label for="universidades">Universidades-alvo</label>
+                <select id="universidades">
+                    <option>Todas</option>
+                    <option>PUC-Rio</option>
+                    <option>UFRJ</option>
+                    <option>UERJ</option>
+                </select>
+                <label for="responsavel">Responsável pela vaga</label>
+                <input type="text" id="responsavel">
+                <label for="contato">E-mail de contato</label>
+                <input type="email" id="contato">
+            </div>
+
+            <div class="linha">
+                <a href="../templates/tela-painel.html">Cancelar</a>
+                <button type="submit" class="botao">Publicar</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
