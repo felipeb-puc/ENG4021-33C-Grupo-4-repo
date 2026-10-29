@@ -27,10 +27,9 @@ urlpatterns = [
     path('templates/PROJETOtela_informacoes_recrutador.html', cadastro_recrutador),
     path('templates/PROJETOtela_informacoes_representante.html', cadastro_representante),
 
-    # Cadastro de aluno
+    
     path('cadastro-aluno/', cadastro_aluno, name='cadastro_aluno'),
 
-    # Login e logout
     path('templates/tela-login.html', entrar, name='login'),
     path('logout/', sair, name='logout'),
 
