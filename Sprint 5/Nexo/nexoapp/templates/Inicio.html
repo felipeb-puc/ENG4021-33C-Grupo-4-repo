@@ -15,7 +15,7 @@
             <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
             <a href="../templates/Inicio.html" class="ativo">Início</a>
             <a href="../templates/tela-busca.html"><img class="ic" src="../static/imagens/icone-search.svg">Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades <span class="contador">6</span></a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
         </div>
         <div class="menu">
             <span class="cinza">PUC</span>
@@ -27,8 +27,10 @@
     <div class="pagina">
         <div id="boas-vindas" class="linha">
             <div>
-                <h1>Bem-vinda de volta, Isabela</h1>
-                <p class="cinza">Engenharia de Produção · 5º período · PUC</p>
+                <h1>Olá, {{ user.first_name|default:user.username }}</h1>
+                {% if user.aluno %}
+                <p class="cinza">{{ user.aluno.curso.nome }} · {{ user.aluno.periodo }}º período · {{ user.aluno.instituicao.nome }}</p>
+                {% endif %}
                 <div id="numeros">
                     <div><p class="numero">{{ oportunidades|length }}</p><p class="cinza">oportunidades abertas para você</p></div>
                     <div><p class="numero">{{ favoritos|length }}</p><p class="cinza">salvas para depois</p></div>

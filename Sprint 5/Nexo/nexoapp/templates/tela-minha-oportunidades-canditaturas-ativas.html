@@ -15,7 +15,7 @@
             <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
             <a href="../templates/Inicio.html">Início</a>
             <a href="../templates/tela-busca.html"><img class="ic" src="../static/imagens/icone-search.svg">Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Minhas oportunidades <span class="contador">6</span></a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
         </div>
         <div class="menu">
             <span class="cinza">PUC</span>
@@ -27,29 +27,20 @@
     <div class="pagina">
         <h1>Minhas oportunidades</h1>
         <div class="abas">
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Candidaturas ativas <span class="contador">2</span></a>
-            <a href="../templates/tela-minha-oportunidades-favoritos.html">Favoritos <span class="contador">4</span></a>
-            <a href="../templates/tela-minha-oportunidades-historico.html">Histórico <span class="contador">2</span></a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Candidaturas ativas <span class="contador">{{ candidaturas|length }}</span></a>
+            <a href="../templates/tela-minha-oportunidades-favoritos.html">Favoritos <span class="contador">{{ favoritos|length }}</span></a>
+            <a href="../templates/tela-minha-oportunidades-historico.html">Histórico <span class="contador">{{ candidaturas|length }}</span></a>
         </div>
 
+        {% for candidatura in candidaturas %}
         <div class="caixa linha">
             <div>
-                <p class="cinza">Estágio · candidatura em 09/09/2026</p>
-                <a href="../templates/tela-oportunidade.html" class="titulo">Estágio em análise de dados de operações</a>
-                <p class="cinza">Visagio</p>
-                <p>Entrevista em 18/09, 15h.</p>
+                <p class="cinza">{{ candidatura.oportunidade.get_tipo_display }} · candidatura em {{ candidatura.data|date:"d/m/Y" }}</p>
+                <a href="../templates/tela-oportunidade.html" class="titulo">{{ candidatura.oportunidade.titulo }}</a>
+                <p class="cinza">{{ candidatura.oportunidade.instituicao.nome }}</p>
             </div>
-            <span class="etiqueta-verde"><img class="ic" src="../static/imagens/icone-calendar-branco.svg">Entrevista marcada</span>
         </div>
-
-        <div class="caixa linha">
-            <div>
-                <p class="cinza">Iniciação científica · candidatura em 09/09/2026</p>
-                <a href="../templates/tela-oportunidade.html" class="titulo">Visão computacional para inspeção industrial</a>
-                <p class="cinza">Departamento de Informática</p>
-            </div>
-            <span class="etiqueta"><img class="ic" src="../static/imagens/icone-clock.svg">Em análise</span>
-        </div>
+        {% endfor %}
     </div>
 
 </body>

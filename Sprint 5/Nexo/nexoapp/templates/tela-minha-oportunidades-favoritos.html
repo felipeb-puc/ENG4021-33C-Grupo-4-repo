@@ -15,7 +15,7 @@
             <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
             <a href="../templates/Inicio.html">Início</a>
             <a href="../templates/tela-busca.html"><img class="ic" src="../static/imagens/icone-search.svg">Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Minhas oportunidades <span class="contador">6</span></a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
         </div>
         <div class="menu">
             <span class="cinza">PUC</span>
@@ -27,59 +27,25 @@
     <div class="pagina">
         <h1>Minhas oportunidades</h1>
         <div class="abas">
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas <span class="contador">2</span></a>
-            <a href="../templates/tela-minha-oportunidades-favoritos.html" class="ativo">Favoritos <span class="contador">4</span></a>
-            <a href="../templates/tela-minha-oportunidades-historico.html">Histórico <span class="contador">2</span></a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas <span class="contador">{{ candidaturas|length }}</span></a>
+            <a href="../templates/tela-minha-oportunidades-favoritos.html" class="ativo">Favoritos <span class="contador">{{ favoritos|length }}</span></a>
+            <a href="../templates/tela-minha-oportunidades-historico.html">Histórico <span class="contador">{{ candidaturas|length }}</span></a>
         </div>
         <div class="grade">
+            {% for favorito in favoritos %}
             <div class="cartao">
-                <div><span class="etiqueta">Estágio</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                <h2>Estágio em análise de dados de operações</h2>
-                <p class="cinza">Visagio</p>
-                <p><img class="ic" src="../static/imagens/icone-clock.svg">30h por semana</p>
-                <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 2.200 por mês</p>
-                <p><img class="ic" src="../static/imagens/icone-building-2.svg">Híbrido</p>
+                <div><span class="etiqueta">{{ favorito.oportunidade.get_tipo_display }}</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
+                <h2>{{ favorito.oportunidade.titulo }}</h2>
+                <p class="cinza">{{ favorito.oportunidade.instituicao.nome }}</p>
+                <p><img class="ic" src="../static/imagens/icone-clock.svg">{{ favorito.oportunidade.carga_horaria }}h por semana</p>
+                <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ {{ favorito.oportunidade.remuneracao }} por mês</p>
+                <p><img class="ic" src="../static/imagens/icone-building-2.svg">{{ favorito.oportunidade.get_modalidade_display }}</p>
                 <div class="linha rodape">
-                    <span class="cinza">Inscrições até 09/11/2026</span>
+                    <span class="cinza">Inscrições até {{ favorito.oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
                     <a href="../templates/tela-oportunidade.html">Ver →</a>
                 </div>
             </div>
-            <div class="cartao">
-                <div><span class="etiqueta">Monitoria</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                <h2>Monitoria de Cálculo a Várias Variáveis</h2>
-                <p class="cinza">Departamento de Matemática</p>
-                <p><img class="ic" src="../static/imagens/icone-clock.svg">12h por semana</p>
-                <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 600 por mês</p>
-                <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
-                <div class="linha rodape">
-                    <span class="cinza">Inscrições até 06/11/2026</span>
-                    <a href="../templates/tela-oportunidade.html">Ver →</a>
-                </div>
-            </div>
-            <div class="cartao">
-                <div><span class="etiqueta">Liga acadêmica</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                <h2>Processo seletivo 2026.2</h2>
-                <p class="cinza">Liga de Empreendedorismo</p>
-                <p><img class="ic" src="../static/imagens/icone-clock.svg">6h por semana</p>
-                <p><img class="ic" src="../static/imagens/icone-wallet.svg">Voluntária, com certificado</p>
-                <p><img class="ic" src="../static/imagens/icone-building-2.svg">Híbrido</p>
-                <div class="linha rodape">
-                    <span class="cinza">Inscrições até 12/11/2026</span>
-                    <a href="../templates/tela-oportunidade.html">Ver →</a>
-                </div>
-            </div>
-            <div class="cartao">
-                <div><span class="etiqueta">Equipe de competição</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                <h2>Visão computacional do robô autônomo</h2>
-                <p class="cinza">Equipe de Robótica</p>
-                <p><img class="ic" src="../static/imagens/icone-clock.svg">8h por semana</p>
-                <p><img class="ic" src="../static/imagens/icone-wallet.svg">Voluntária, com certificado</p>
-                <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
-                <div class="linha rodape">
-                    <span class="cinza">Inscrições até 03/11/2026</span>
-                    <a href="../templates/tela-oportunidade.html">Ver →</a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
