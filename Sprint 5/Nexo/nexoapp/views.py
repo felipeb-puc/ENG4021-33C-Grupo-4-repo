@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from .models import Instituicao, Oportunidade, Candidatura, Favorito
 from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm
 # Create your views here.
@@ -42,31 +43,38 @@ def cadastro_aluno(request):
         {"form": form},
     )
 
+@login_required(login_url='login')
 def inicio(request):
     oportunidades = Oportunidade.objects.order_by("prazo_inscricao")
-    favoritos = Favorito.objects.all()
-    candidaturas = Candidatura.objects.all()
+    favoritos = Favorito.objects.filter(aluno__user=request.user)
+    candidaturas = Candidatura.objects.filter(aluno__user=request.user)
     return render(request, "Inicio.html", {"oportunidades": oportunidades, "favoritos": favoritos, "candidaturas": candidaturas})
 
+@login_required(login_url='login')
 def minha_oportunidade_favoritos(request):
-    favoritos = Favorito.objects.all()
-    return render(request, "tela-minha-oportunidades-favoritos.html", {"favoritos": favoritos})
+    favoritos = Favorito.objects.filter(aluno__user=request.user)
+    candidaturas = Candidatura.objects.filter(aluno__user=request.user)
+    return render(request, "tela-minha-oportunidades-favoritos.html", {"favoritos": favoritos, "candidaturas": candidaturas})
 
 def iniciacao_cientifica(request):
     oportunidades = Oportunidade.objects.filter(tipo="ic")
     return render(request, "Iniciacao-Cientifica.html", {"oportunidades": oportunidades})
 
+@login_required(login_url='login')
 def minha_oportunidade_historico(request):
-    candidaturas = Candidatura.objects.all()
-    return render(request, "tela-minha-oportunidades-historico.html", {"candidaturas": candidaturas})
+    candidaturas = Candidatura.objects.filter(aluno__user=request.user)
+    favoritos = Favorito.objects.filter(aluno__user=request.user)
+    return render(request, "tela-minha-oportunidades-historico.html", {"candidaturas": candidaturas, "favoritos": favoritos})
 
 def estagio(request):
     oportunidades = Oportunidade.objects.filter(tipo="estagio")
     return render(request, "estagio.html", {"oportunidades": oportunidades})
 
+@login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):
-    candidaturas = Candidatura.objects.all()
-    return render(request, "tela-minha-oportunidades-canditaturas-ativas.html", {"candidaturas": candidaturas})
+    candidaturas = Candidatura.objects.filter(aluno__user=request.user)
+    favoritos = Favorito.objects.filter(aluno__user=request.user)
+    return render(request, "tela-minha-oportunidades-canditaturas-ativas.html", {"candidaturas": candidaturas, "favoritos": favoritos})
 
 def liga_academica(request):
     oportunidades = Oportunidade.objects.filter(tipo="liga")

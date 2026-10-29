@@ -15,7 +15,7 @@
             <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
             <a href="../templates/Inicio.html">Início</a>
             <a href="../templates/tela-busca.html" class="ativo"><img class="ic" src="../static/imagens/icone-search-branco.svg">Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades <span class="contador">6</span></a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
         </div>
         <div class="menu">
             <span class="cinza">PUC</span>
@@ -63,44 +63,22 @@
             </div>
 
             <div id="resultados">
-                <p class="cinza">3 oportunidades</p>
+                <p class="cinza">{{ oportunidades|length }} oportunidades</p>
                 <div class="grade">
+                    {% for oportunidade in oportunidades %}
                     <div class="cartao">
-                        <div><span class="etiqueta">Liga acadêmica</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                        <h2>Processo seletivo 2026.2</h2>
-                        <p class="cinza">Liga de Empreendedorismo</p>
-                        <p><img class="ic" src="../static/imagens/icone-clock.svg">6h por semana</p>
-                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">Voluntária, com certificado</p>
-                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Híbrido</p>
+                        <div><span class="etiqueta">{{ oportunidade.get_tipo_display }}</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
+                        <h2>{{ oportunidade.titulo }}</h2>
+                        <p class="cinza">{{ oportunidade.instituicao.nome }}</p>
+                        <p><img class="ic" src="../static/imagens/icone-clock.svg">{{ oportunidade.carga_horaria }}h por semana</p>
+                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ {{ oportunidade.remuneracao }} por mês</p>
+                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">{{ oportunidade.get_modalidade_display }}</p>
                         <div class="linha rodape">
-                            <span class="cinza">Inscrições até 12/11/2026</span>
+                            <span class="cinza">Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
                             <a href="../templates/tela-oportunidade.html">Ver →</a>
                         </div>
                     </div>
-                    <div class="cartao">
-                        <div><span class="etiqueta">Liga acadêmica</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                        <h2>Processo seletivo de trainees</h2>
-                        <p class="cinza">Liga de Mercado Financeiro</p>
-                        <p><img class="ic" src="../static/imagens/icone-clock.svg">6h por semana</p>
-                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">Voluntária, com certificado</p>
-                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Híbrido</p>
-                        <div class="linha rodape">
-                            <span class="cinza">Inscrições até 15/11/2026</span>
-                            <a href="../templates/tela-oportunidade.html">Ver →</a>
-                        </div>
-                    </div>
-                    <div class="cartao">
-                        <div><span class="etiqueta">Liga acadêmica</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                        <h2>Núcleo de projetos</h2>
-                        <p class="cinza">Liga de Inteligência Artificial</p>
-                        <p><img class="ic" src="../static/imagens/icone-clock.svg">8h por semana</p>
-                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">Voluntária, com certificado</p>
-                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Híbrido</p>
-                        <div class="linha rodape">
-                            <span class="cinza">Inscrições até 18/11/2026</span>
-                            <a href="../templates/tela-oportunidade.html">Ver →</a>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
