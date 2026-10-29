@@ -1,128 +1,246 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Buscar candidatos - Nexo</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
-    <link href="../static/css/tela-banco-talentos.css" rel="stylesheet">
+    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tela-banco-talentos.css' %}" rel="stylesheet">
 </head>
 <body>
 
     <div id="topo">
         <div class="menu">
-            <a href="../templates/tela-painel.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+
+            <a href="{% url 'tela_painel' %}" class="logo">
+                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
+            </a>
+
             <span class="papel">RECRUTADOR</span>
-            <a href="../templates/tela-painel.html">Visão geral</a>
-            <a href="../templates/tela-candidaturas-recebidas.html">Candidaturas</a>
-            <a href="../templates/tela-banco-talentos.html" class="ativo">Buscar candidatos</a>
-            <a href="../templates/tela-instituicao.html">Perfil da instituição</a>
+
+            <a href="{% url 'tela_painel' %}">
+                Visão geral
+            </a>
+
+            <a href="{% url 'tela_candidaturas_recebidas' %}">
+                Candidaturas
+            </a>
+
+            <a href="{% url 'tela_banco_talentos' %}" class="ativo">
+                Buscar candidatos
+            </a>
+
+            <a href="../templates/tela-instituicao.html">
+                Perfil da instituição
+            </a>
+
         </div>
+
         <div class="menu">
-            <span class="cinza">Visagio</span>
-            <a href="../templates/tela-instituicao.html" class="avatar escuro">CD</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+
+            <span class="cinza">{{ instituicao }}</span>
+
+            <a href="../templates/tela-instituicao.html" class="avatar escuro">
+                {{ iniciais }}
+            </a>
+
+            <a href="{% url 'logout' %}" class="botao-contorno">
+                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
+                Sair
+            </a>
+
         </div>
     </div>
 
     <div class="pagina">
+
         <h1>Buscar candidatos</h1>
-        <p class="cinza">Alunos de todas as universidades que optaram por aparecer em buscas.</p>
+
+        <p class="cinza">
+            Alunos de todas as universidades que optaram por aparecer em buscas.
+        </p>
 
         <div class="caixa" id="filtros">
+
             <div>
                 <label for="nome">Nome ou habilidade</label>
                 <input type="search" id="nome" class="com-lupa">
             </div>
+
             <div>
                 <label for="universidade">Universidade</label>
-                <select id="universidade"><option>Todas</option><option>PUC-Rio</option><option>UFRJ</option><option>UERJ</option></select>
+                <select id="universidade">
+                    <option value="">Todas</option>
+                    <option value="PUC-Rio">PUC-Rio</option>
+                    <option value="UFRJ">UFRJ</option>
+                    <option value="UERJ">UERJ</option>
+                </select>
             </div>
+
             <div>
                 <label for="curso">Curso</label>
-                <select id="curso"><option>Todos</option><option>Engenharia de Produção</option><option>Economia</option></select>
+                <select id="curso">
+                    <option value="">Todos</option>
+                    <option value="Engenharia da Computação">Engenharia da Computação</option>
+                    <option value="Engenharia de Produção">Engenharia de Produção</option>
+                    <option value="Economia">Economia</option>
+                </select>
             </div>
+
             <div>
                 <label for="periodo">A partir do período</label>
-                <select id="periodo"><option>Qualquer</option><option>5º período</option></select>
+                <select id="periodo">
+                    <option value="">Qualquer</option>
+                    <option value="5">5º período</option>
+                    <option value="6">6º período</option>
+                    <option value="7">7º período</option>
+                </select>
             </div>
+
             <div>
                 <label for="cr">CR mínimo</label>
-                <input type="text" id="cr">
+                <input type="number" id="cr" min="0" max="10" step="0.1">
             </div>
+
         </div>
 
-        <p class="cinza">6 alunos · ordenados por CR</p>
-        <div class="grade">
+        <p class="cinza">
+            <span id="contador">{{ candidatos|length }}</span>
+            alunos · ordenados por CR
+        </p>
 
-            <div class="cartao">
-                <div class="linha">
-                    <b>Lucas Moreira</b>
-                    <span class="cr">CR 8.9</span>
-                </div>
-                <p class="cinza">PUC · Engenharia da Computação · 6º</p>
-                <p>Python · C · Machine learning · Git</p>
-                <div><span class="etiqueta">Dados</span><span class="etiqueta">Tecnologia</span></div>
-                <a href="../templates/tela-oportunidade.html" class="rodape">Ver currículo</a>
-            </div>
+        <div class="grade" id="lista-candidatos">
 
-            <div class="cartao">
-                <div class="linha">
-                    <b>Juliana Peixoto</b>
-                    <span class="cr">CR 8.6</span>
-                </div>
-                <p class="cinza">UFRJ · Engenharia de Produção · 6º</p>
-                <p>Python · Pesquisa operacional · SQL</p>
-                <div><span class="etiqueta">Operações</span><span class="etiqueta">Logística</span></div>
-                <a href="../templates/tela-oportunidade.html" class="rodape">Ver currículo</a>
-            </div>
+            {% for candidato in candidatos %}
 
-            <div class="cartao">
-                <div class="linha">
-                    <b>Isabela Corrêa</b>
-                    <span class="cr">CR 8.4</span>
-                </div>
-                <p class="cinza">PUC · Engenharia de Produção · 5º</p>
-                <p>Excel avançado · Power BI · SQL básico · Inglês fluente</p>
-                <div><span class="etiqueta">Operações</span><span class="etiqueta">Dados</span><span class="etiqueta">Consultoria</span></div>
-                <a href="../templates/tela-oportunidade.html" class="rodape">Ver currículo</a>
-            </div>
+                <div class="cartao candidato"
+                     data-nome="{{ candidato.nome|lower }}"
+                     data-habilidades="{{ candidato.habilidades|join:' '|lower }}"
+                     data-universidade="{{ candidato.universidade }}"
+                     data-curso="{{ candidato.curso }}"
+                     data-periodo="{{ candidato.periodo }}"
+                     data-cr="{{ candidato.cr }}">
 
-            <div class="cartao">
-                <div class="linha">
-                    <b>Rafael Sampaio</b>
-                    <span class="cr">CR 8.1</span>
-                </div>
-                <p class="cinza">PUC · Engenharia de Produção · 7º</p>
-                <p>Lean · Power BI · Seis Sigma</p>
-                <div><span class="etiqueta">Indústria</span><span class="etiqueta">Operações</span></div>
-                <a href="../templates/tela-oportunidade.html" class="rodape">Ver currículo</a>
-            </div>
+                    <div class="linha">
+                        <b>{{ candidato.nome }}</b>
+                        <span class="cr">CR {{ candidato.cr }}</span>
+                    </div>
 
-            <div class="cartao">
-                <div class="linha">
-                    <b>Carolina Diniz</b>
-                    <span class="cr">CR 8.0</span>
-                </div>
-                <p class="cinza">UERJ · Economia · 5º</p>
-                <p>Excel avançado · R</p>
-                <div><span class="etiqueta">Finanças</span></div>
-                <a href="../templates/tela-oportunidade.html" class="rodape">Ver currículo</a>
-            </div>
+                    <p class="cinza">
+                        {{ candidato.universidade }}
+                        · {{ candidato.curso }}
+                        · {{ candidato.periodo }}º
+                    </p>
 
-            <div class="cartao">
-                <div class="linha">
-                    <b>Beatriz Farias</b>
-                    <span class="cr">CR 7.8</span>
+                    <p>
+                        {% for habilidade in candidato.habilidades %}
+                            {{ habilidade }}{% if not forloop.last %} · {% endif %}
+                        {% endfor %}
+                    </p>
+
+                    <div>
+                        {% for area in candidato.areas %}
+                            <span class="etiqueta">{{ area }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <a href="../templates/tela-curriculo-aluno.html"
+                       class="rodape">
+                        Ver currículo
+                    </a>
+
                 </div>
-                <p class="cinza">PUC · Economia · 4º</p>
-                <p>SQL · Análise de dados · Excel avançado</p>
-                <div><span class="etiqueta">Dados</span><span class="etiqueta">Finanças</span></div>
-                <a href="../templates/tela-oportunidade.html" class="rodape">Ver currículo</a>
-            </div>
+
+            {% empty %}
+
+                <p class="cinza">
+                    Nenhum candidato disponível para busca.
+                </p>
+
+            {% endfor %}
+
         </div>
+
+        <p id="sem-resultados" class="cinza" hidden>
+            Nenhum candidato encontrado com esses filtros.
+        </p>
+
     </div>
+
+    <script>
+        const campoNome = document.getElementById("nome");
+        const campoUniversidade = document.getElementById("universidade");
+        const campoCurso = document.getElementById("curso");
+        const campoPeriodo = document.getElementById("periodo");
+        const campoCR = document.getElementById("cr");
+
+        const candidatos = document.querySelectorAll(".candidato");
+        const contador = document.getElementById("contador");
+        const semResultados = document.getElementById("sem-resultados");
+
+        function filtrarCandidatos() {
+            const termo = campoNome.value.trim().toLowerCase();
+            const universidade = campoUniversidade.value;
+            const curso = campoCurso.value;
+            const periodoMinimo = campoPeriodo.value;
+            const crMinimo = campoCR.value === ""
+                ? null
+                : Number(campoCR.value);
+
+            let quantidade = 0;
+
+            candidatos.forEach(function(candidato) {
+                const nome = candidato.dataset.nome;
+                const habilidades = candidato.dataset.habilidades;
+                const nomeUniversidade = candidato.dataset.universidade;
+                const nomeCurso = candidato.dataset.curso;
+                const periodo = Number(candidato.dataset.periodo);
+                const cr = Number(candidato.dataset.cr);
+
+                const correspondeNome =
+                    nome.includes(termo) || habilidades.includes(termo);
+
+                const correspondeUniversidade =
+                    !universidade || nomeUniversidade === universidade;
+
+                const correspondeCurso =
+                    !curso || nomeCurso === curso;
+
+                const correspondePeriodo =
+                    !periodoMinimo || periodo >= Number(periodoMinimo);
+
+                const correspondeCR =
+                    crMinimo === null || cr >= crMinimo;
+
+                const mostrar =
+                    correspondeNome &&
+                    correspondeUniversidade &&
+                    correspondeCurso &&
+                    correspondePeriodo &&
+                    correspondeCR;
+
+                candidato.hidden = !mostrar;
+
+                if (mostrar) {
+                    quantidade++;
+                }
+            });
+
+            contador.textContent = quantidade;
+            semResultados.hidden = quantidade !== 0;
+        }
+
+        campoNome.addEventListener("input", filtrarCandidatos);
+        campoUniversidade.addEventListener("change", filtrarCandidatos);
+        campoCurso.addEventListener("change", filtrarCandidatos);
+        campoPeriodo.addEventListener("change", filtrarCandidatos);
+        campoCR.addEventListener("input", filtrarCandidatos);
+    </script>
 
 </body>
 </html>
