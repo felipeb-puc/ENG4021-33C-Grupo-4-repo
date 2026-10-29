@@ -13,6 +13,10 @@ def criar_conta(request):
 def cadastro_estudante(request):
     return cadastro_aluno(request)
 
+def tela_curriculo_aluno(request):
+    return render(request, 'tela-curriculo-aluno.html')
+
+
 def cadastro_recrutador(request):
     empresas = Instituicao.objects.filter(tipo="empresa")
     return render(request, "PROJETOtela_informacoes_recrutador.html", {"empresas": empresas})
