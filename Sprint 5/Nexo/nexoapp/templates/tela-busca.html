@@ -1,146 +1,308 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Buscar - Nexo</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
-    <link href="../static/css/tela-busca.css" rel="stylesheet">
+    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tela-busca.css' %}" rel="stylesheet">
 </head>
 <body>
 
     <div id="topo">
         <div class="menu">
-            <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
-            <a href="../templates/Inicio.html">Início</a>
-            <a href="../templates/tela-busca.html" class="ativo"><img class="ic" src="../static/imagens/icone-search-branco.svg">Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
+
+            <a href="/templates/Inicio.html" class="logo">
+                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
+            </a>
+
+            <a href="/templates/Inicio.html">Início</a>
+
+            <a href="{% url 'tela_busca' %}" class="ativo">
+                <img class="ic" src="{% static 'imagens/icone-search-branco.svg' %}" alt="">
+                Buscar
+            </a>
+
+            <a href="/templates/tela-minha-oportunidades-canditaturas-ativas.html">
+                Minhas oportunidades
+                {% if user.aluno %}
+                    <span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>
+                {% endif %}
+            </a>
+
         </div>
+
         <div class="menu">
-            <span class="cinza">PUC</span>
-            <a href="../templates/tela-perfil.html" class="avatar">IC</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+
+            <span class="cinza">{{ universidade }}</span>
+
+            <a href="/templates/tela-perfil.html" class="avatar">
+                {{ iniciais }}
+            </a>
+
+            <a href="{% url 'logout' %}" class="botao-contorno">
+                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
+                Sair
+            </a>
+
         </div>
     </div>
 
     <div class="pagina">
-        <h1>Oportunidades abertas na PUC-Rio</h1>
-        <p class="cinza">Você vê o que é da sua universidade e os estágios publicados para ela.</p>
 
-        <input type="search" id="busca" class="com-lupa" placeholder="Buscar por título, instituição, curso...">
+        <h1>Oportunidades abertas na {{ universidade }}</h1>
 
-        <div>
-            <a href="../templates/tela-busca.html" class="pilula ativo">Todas</a>
-            <a href="../templates/Estagio.html" class="pilula">Estágio</a>
-            <a href="../templates/tela-monitoria.html" class="pilula">Monitoria</a>
-            <a href="../templates/Iniciacao-Cientifica.html" class="pilula">Iniciação científica</a>
-            <a href="../templates/tela-liga-academica.html" class="pilula">Liga acadêmica</a>
-            <a href="../templates/tela-equipe-competicao.html" class="pilula">Equipe de competição</a>
+        <p class="cinza">
+            Você vê o que é da sua universidade e os estágios publicados para ela.
+        </p>
+
+        <input
+            type="search"
+            id="busca"
+            class="com-lupa"
+            placeholder="Buscar por título, instituição, curso..."
+            aria-label="Buscar oportunidades"
+        >
+
+        <div id="categorias">
+            <a href="{% url 'tela_busca' %}" class="pilula ativo">Todas</a>
+            <a href="/templates/Estagio.html" class="pilula">Estágio</a>
+            <a href="/templates/tela-monitoria.html" class="pilula">Monitoria</a>
+            <a href="/templates/Iniciacao-Cientifica.html" class="pilula">Iniciação científica</a>
+            <a href="/templates/tela-liga-academica.html" class="pilula">Liga acadêmica</a>
+            <a href="/templates/tela-equipe-competicao.html" class="pilula">Equipe de competição</a>
         </div>
 
         <div id="corpo">
+
             <div id="filtros" class="caixa">
+
                 <h2>Filtros</h2>
+
                 <label for="curso">Curso</label>
                 <select id="curso">
-                    <option>Qualquer curso</option>
-                    <option>Engenharia de Produção</option>
-                    <option>Ciência da Computação</option>
-                    <option>Economia</option>
+                    <option value="">Qualquer curso</option>
+                    <option value="Engenharia de Produção">Engenharia de Produção</option>
+                    <option value="Ciência da Computação">Ciência da Computação</option>
+                    <option value="Economia">Economia</option>
                 </select>
+
                 <label for="periodo">Estou no período</label>
                 <select id="periodo">
-                    <option>Qualquer período</option>
-                    <option>1º período</option>
-                    <option>5º período</option>
-                    <option>8º período</option>
+                    <option value="">Qualquer período</option>
+                    <option value="1">1º período ou posterior</option>
+                    <option value="5">5º período ou posterior</option>
+                    <option value="8">8º período ou posterior</option>
                 </select>
+
                 <label>Modalidade</label>
-                <span class="pilula">Presencial</span>
-                <span class="pilula">Híbrido</span>
-                <span class="pilula">Remoto</span>
+
+                <div id="modalidades">
+                    <label class="pilula">
+                        <input type="checkbox" value="Presencial">
+                        Presencial
+                    </label>
+
+                    <label class="pilula">
+                        <input type="checkbox" value="Híbrido">
+                        Híbrido
+                    </label>
+
+                    <label class="pilula">
+                        <input type="checkbox" value="Remoto">
+                        Remoto
+                    </label>
+                </div>
+
+                <button type="button" id="limpar-filtros" class="botao-contorno">
+                    Limpar filtros
+                </button>
+
             </div>
 
             <div id="resultados">
-                <p class="cinza">6 oportunidades</p>
-                <div class="grade">
-                    <div class="cartao">
-                        <div><span class="etiqueta">Monitoria</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                        <h2>Monitoria de Cálculo a Várias Variáveis</h2>
-                        <p class="cinza">Departamento de Matemática</p>
-                        <p><img class="ic" src="../static/imagens/icone-clock.svg">12h por semana</p>
-                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 600 por mês</p>
-                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
-                        <div class="linha rodape">
-                            <span class="cinza">Inscrições até 06/11/2026</span>
-                            <a href="../templates/tela-oportunidade.html">Ver →</a>
+
+                <p class="cinza">
+                    <span id="contador">{{ total_oportunidades }}</span>
+                    oportunidades
+                </p>
+
+                <div class="grade" id="lista-oportunidades">
+
+                    {% for oportunidade in oportunidades %}
+
+                        <div
+                            class="cartao oportunidade"
+                            data-titulo="{{ oportunidade.titulo|lower }}"
+                            data-instituicao="{{ oportunidade.instituicao|lower }}"
+                            data-tipo="{{ oportunidade.tipo }}"
+                            data-curso="{{ oportunidade.curso }}"
+                            data-periodo="{{ oportunidade.periodo }}"
+                            data-modalidade="{{ oportunidade.modalidade }}"
+                        >
+
+                            <div>
+                                <span class="etiqueta">{{ oportunidade.tipo }}</span>
+
+                                <img
+                                    class="salvar"
+                                    src="{% static 'imagens/icone-bookmark.svg' %}"
+                                    alt="Salvar oportunidade"
+                                    title="Salvar oportunidade"
+                                >
+                            </div>
+
+                            <h2>{{ oportunidade.titulo }}</h2>
+
+                            <p class="cinza">{{ oportunidade.instituicao }}</p>
+
+                            <p>
+                                <img class="ic" src="{% static 'imagens/icone-clock.svg' %}" alt="">
+                                {{ oportunidade.horas }}
+                            </p>
+
+                            <p>
+                                <img class="ic" src="{% static 'imagens/icone-wallet.svg' %}" alt="">
+                                {{ oportunidade.remuneracao }}
+                            </p>
+
+                            <p>
+                                <img class="ic" src="{% static 'imagens/icone-building-2.svg' %}" alt="">
+                                {{ oportunidade.modalidade }}
+                            </p>
+
+                            <div class="linha rodape">
+                                <span class="cinza">
+                                    Inscrições até {{ oportunidade.data_limite }}
+                                </span>
+
+                                <a href="/templates/tela-oportunidade.html">
+                                    Ver →
+                                </a>
+                            </div>
+
                         </div>
-                    </div>
-                    <div class="cartao">
-                        <div><span class="etiqueta">Estágio</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                        <h2>Estágio em análise de dados de operações</h2>
-                        <p class="cinza">Visagio</p>
-                        <p><img class="ic" src="../static/imagens/icone-clock.svg">30h por semana</p>
-                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 2.200 por mês</p>
-                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Híbrido</p>
-                        <div class="linha rodape">
-                            <span class="cinza">Inscrições até 09/11/2026</span>
-                            <a href="../templates/tela-oportunidade.html">Ver →</a>
-                        </div>
-                    </div>
-                    <div class="cartao">
-                        <div><span class="etiqueta">Liga acadêmica</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                        <h2>Processo seletivo 2026.2</h2>
-                        <p class="cinza">Liga de Empreendedorismo</p>
-                        <p><img class="ic" src="../static/imagens/icone-clock.svg">6h por semana</p>
-                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">Voluntária, com certificado</p>
-                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Híbrido</p>
-                        <div class="linha rodape">
-                            <span class="cinza">Inscrições até 12/11/2026</span>
-                            <a href="../templates/tela-oportunidade.html">Ver →</a>
-                        </div>
-                    </div>
-                    <div class="cartao">
-                        <div><span class="etiqueta">Equipe de competição</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                        <h2>Visão computacional do robô autônomo</h2>
-                        <p class="cinza">Equipe de Robótica</p>
-                        <p><img class="ic" src="../static/imagens/icone-clock.svg">8h por semana</p>
-                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">Voluntária, com certificado</p>
-                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
-                        <div class="linha rodape">
-                            <span class="cinza">Inscrições até 03/11/2026</span>
-                            <a href="../templates/tela-oportunidade.html">Ver →</a>
-                        </div>
-                    </div>
-                    <div class="cartao">
-                        <div><span class="etiqueta">Iniciação científica</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                        <h2>Visão computacional para inspeção industrial</h2>
-                        <p class="cinza">Departamento de Informática</p>
-                        <p><img class="ic" src="../static/imagens/icone-clock.svg">20h por semana</p>
-                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 700 por mês</p>
-                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
-                        <div class="linha rodape">
-                            <span class="cinza">Inscrições até 20/11/2026</span>
-                            <a href="../templates/tela-oportunidade.html">Ver →</a>
-                        </div>
-                    </div>
-                    <div class="cartao">
-                        <div><span class="etiqueta">Monitoria</span><img class="salvar" src="../static/imagens/icone-bookmark.svg"></div>
-                        <h2>Monitoria de Programação I</h2>
-                        <p class="cinza">Departamento de Informática</p>
-                        <p><img class="ic" src="../static/imagens/icone-clock.svg">8h por semana</p>
-                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">R$ 450 por mês</p>
-                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">Presencial</p>
-                        <div class="linha rodape">
-                            <span class="cinza">Inscrições até 10/11/2026</span>
-                            <a href="../templates/tela-oportunidade.html">Ver →</a>
-                        </div>
-                    </div>
+
+                    {% empty %}
+
+                        <p class="cinza">
+                            Nenhuma oportunidade disponível no momento.
+                        </p>
+
+                    {% endfor %}
+
                 </div>
+
+                <p id="sem-resultados" class="cinza" hidden>
+                    Nenhuma oportunidade encontrada com esses filtros.
+                </p>
+
             </div>
+
         </div>
+
     </div>
+
+    <script>
+        const busca = document.getElementById("busca");
+        const curso = document.getElementById("curso");
+        const periodo = document.getElementById("periodo");
+
+        const modalidades = document.querySelectorAll(
+            '#modalidades input[type="checkbox"]'
+        );
+
+        const oportunidades = document.querySelectorAll(".oportunidade");
+        const contador = document.getElementById("contador");
+        const semResultados = document.getElementById("sem-resultados");
+        const limparFiltros = document.getElementById("limpar-filtros");
+
+        function filtrarOportunidades() {
+            const termo = busca.value.trim().toLowerCase();
+            const cursoSelecionado = curso.value;
+            const periodoSelecionado = periodo.value;
+
+            const modalidadesSelecionadas = Array.from(modalidades)
+                .filter(function(item) {
+                    return item.checked;
+                })
+                .map(function(item) {
+                    return item.value;
+                });
+
+            let quantidade = 0;
+
+            oportunidades.forEach(function(oportunidade) {
+                const titulo = oportunidade.dataset.titulo;
+                const instituicao = oportunidade.dataset.instituicao;
+                const tipo = oportunidade.dataset.tipo;
+                const cursoOportunidade = oportunidade.dataset.curso;
+                const periodoOportunidade = Number(
+                    oportunidade.dataset.periodo
+                );
+                const modalidade = oportunidade.dataset.modalidade;
+
+                const correspondeBusca =
+                    titulo.includes(termo) ||
+                    instituicao.includes(termo) ||
+                    cursoOportunidade.toLowerCase().includes(termo) ||
+                    tipo.toLowerCase().includes(termo);
+
+                const correspondeCurso =
+                    !cursoSelecionado ||
+                    cursoOportunidade === cursoSelecionado;
+
+                const correspondePeriodo =
+                    !periodoSelecionado ||
+                    periodoOportunidade <= Number(periodoSelecionado);
+
+                const correspondeModalidade =
+                    modalidadesSelecionadas.length === 0 ||
+                    modalidadesSelecionadas.includes(modalidade);
+
+                const mostrar =
+                    correspondeBusca &&
+                    correspondeCurso &&
+                    correspondePeriodo &&
+                    correspondeModalidade;
+
+                oportunidade.hidden = !mostrar;
+
+                if (mostrar) {
+                    quantidade++;
+                }
+            });
+
+            contador.textContent = quantidade;
+            semResultados.hidden = quantidade !== 0;
+        }
+
+        busca.addEventListener("input", filtrarOportunidades);
+        curso.addEventListener("change", filtrarOportunidades);
+        periodo.addEventListener("change", filtrarOportunidades);
+
+        modalidades.forEach(function(modalidade) {
+            modalidade.addEventListener("change", filtrarOportunidades);
+        });
+
+        limparFiltros.addEventListener("click", function() {
+            busca.value = "";
+            curso.value = "";
+            periodo.value = "";
+
+            modalidades.forEach(function(modalidade) {
+                modalidade.checked = false;
+            });
+
+            filtrarOportunidades();
+        });
+    </script>
 
 </body>
 </html>
+
