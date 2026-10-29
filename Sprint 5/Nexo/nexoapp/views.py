@@ -113,6 +113,38 @@ def cadastro_representante(request):
         {"form": form}
     )
 
+@login_required
+def tela_admin(request):
+    contas = [
+        {
+            "nome": "Rodrigo Paes",
+            "instituicao": "Opportunity",
+            "tipo": "Recrutador",
+            "data_cadastro": "10/09/2026",
+            "verificada": False,
+        },
+        {
+            "nome": "Camila Duarte",
+            "instituicao": "Visagio",
+            "tipo": "Recrutador",
+            "data_cadastro": None,
+            "verificada": True,
+        },
+        {
+            "nome": "Prof. Rafael Amorim",
+            "instituicao": "Departamento de Informática",
+            "tipo": "Representante acadêmico",
+            "data_cadastro": None,
+            "verificada": True,
+        },
+    ]
+
+    context = {
+        "contas": contas,
+    }
+
+    return render(request, "tela-admin.html", context)
+
 
 def entrar(request):
     if request.method == "POST":
