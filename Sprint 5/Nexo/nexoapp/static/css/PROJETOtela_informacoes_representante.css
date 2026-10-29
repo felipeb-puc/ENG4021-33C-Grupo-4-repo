@@ -72,3 +72,27 @@
 #lateral b {
   color: #eef2f1;
 }
+
+@media (max-width: 900px) {
+  #cadastro {
+    flex-direction: column;
+  }
+
+  #lateral {
+    width: auto;
+  }
+
+  #formulario {
+    padding: 24px 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  #formulario h1 {
+    font-size: 26px;
+  }
+
+  .campos {
+    grid-template-columns: 1fr;
+  }
+}

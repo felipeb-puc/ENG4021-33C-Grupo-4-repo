@@ -6,3 +6,10 @@
 .duas-colunas div {
   flex: 1;
 }
+
+@media (max-width: 600px) {
+  .duas-colunas {
+    flex-direction: column;
+    gap: 0px;
+  }
+}

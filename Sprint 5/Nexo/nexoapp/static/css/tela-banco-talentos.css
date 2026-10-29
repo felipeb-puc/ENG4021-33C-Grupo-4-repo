@@ -30,3 +30,9 @@
   border-top: none;
   font-weight: 600;
 }
+
+@media (max-width: 900px) {
+  #filtros {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}

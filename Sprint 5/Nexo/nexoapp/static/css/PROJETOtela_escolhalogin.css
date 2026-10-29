@@ -49,3 +49,15 @@
 .icone img {
   width: 21px;
 }
+
+@media (max-width: 900px) {
+  #opcoes {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  #cabecalho h1 {
+    font-size: 26px;
+  }
+}

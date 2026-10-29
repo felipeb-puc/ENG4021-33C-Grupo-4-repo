@@ -25,11 +25,15 @@
         <h1>Entrar no NEXO</h1>
         <p class="cinza">Use o e-mail cadastrado na sua conta.</p>
 
-        <form class="caixa" action="../templates/Inicio.html" method="get">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" class="com-icone" placeholder="seu.email@universidade.br">
-            <label for="senha">Senha</label>
-            <input type="password" id="senha" placeholder="Sua senha">
+        <form class="caixa" method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <label for="{{ form.email.id_for_label }}">E-mail</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+            <label for="{{ form.senha.id_for_label }}">Senha</label>
+            {{ form.senha }}
+            {{ form.senha.errors }}
             <button type="submit" class="botao">Entrar →</button>
         </form>
 
