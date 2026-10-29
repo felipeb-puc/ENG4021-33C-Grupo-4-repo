@@ -91,3 +91,53 @@
   height: 18px;
   margin-right: 10px;
 }
+
+@media (max-width: 900px) {
+  #principal {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #principal img {
+    width: 100%;
+  }
+
+  #texto-principal h1 {
+    font-size: 40px;
+  }
+
+  #publicos {
+    flex-wrap: wrap;
+  }
+
+  #publicos .caixa {
+    flex: 1 1 200px;
+  }
+}
+
+@media (max-width: 600px) {
+  #texto-principal h1 {
+    font-size: 32px;
+  }
+
+  #publicos {
+    flex-direction: column;
+  }
+
+  #publicos .caixa {
+    flex: none;
+  }
+
+  #campos-obrigatorios h2 {
+    font-size: 28px;
+  }
+
+  #campos-obrigatorios ul {
+    columns: 1;
+  }
+
+  #botoes a {
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+}

@@ -36,3 +36,14 @@
 .inscritos p {
   margin: 0px;
 }
+
+@media (max-width: 600px) {
+  #numeros {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .acoes {
+    flex-wrap: wrap;
+  }
+}

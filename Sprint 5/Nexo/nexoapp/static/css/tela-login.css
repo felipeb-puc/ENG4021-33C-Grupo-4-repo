@@ -26,3 +26,10 @@
   background-size: 16px;
   padding-left: 38px;
 }
+
+@media (max-width: 600px) {
+  #centro {
+    width: auto;
+    padding: 32px 16px;
+  }
+}

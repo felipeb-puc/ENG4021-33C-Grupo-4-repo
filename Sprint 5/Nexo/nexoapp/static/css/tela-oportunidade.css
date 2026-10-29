@@ -50,3 +50,24 @@
   text-align: center;
   margin-bottom: 10px;
 }
+
+@media (max-width: 900px) {
+  #corpo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #lateral {
+    width: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  #cabecalho {
+    flex-wrap: wrap;
+  }
+
+  #fichas {
+    grid-template-columns: 1fr;
+  }
+}

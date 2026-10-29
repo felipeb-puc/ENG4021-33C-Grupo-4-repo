@@ -182,3 +182,22 @@ class CadastroAlunoForm(forms.Form):
         label="Aceito os termos de uso e a política de privacidade",
         required=True,
     )
+
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(
+        label="E-mail",
+        widget=forms.EmailInput(attrs={
+            "placeholder": "seu.email@universidade.br",
+            "autocomplete": "email",
+            "class": "com-icone",
+        })
+    )
+
+    senha = forms.CharField(
+        label="Senha",
+        widget=forms.PasswordInput(attrs={
+            "placeholder": "Sua senha",
+            "autocomplete": "current-password",
+        })
+    )

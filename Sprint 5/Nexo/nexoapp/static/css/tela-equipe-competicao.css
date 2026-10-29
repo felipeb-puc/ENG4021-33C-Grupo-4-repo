@@ -18,3 +18,14 @@
 #resultados {
   flex: 1;
 }
+
+@media (max-width: 600px) {
+  #corpo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #filtros {
+    width: auto;
+  }
+}

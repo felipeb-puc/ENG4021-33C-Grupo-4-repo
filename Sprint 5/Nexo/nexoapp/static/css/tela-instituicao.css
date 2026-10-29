@@ -19,3 +19,9 @@ h2 {
 li {
   margin-bottom: 8px;
 }
+
+@media (max-width: 600px) {
+  #cabecalho {
+    flex-wrap: wrap;
+  }
+}

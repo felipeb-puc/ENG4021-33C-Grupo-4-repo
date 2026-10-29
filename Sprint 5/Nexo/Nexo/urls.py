@@ -30,6 +30,10 @@ urlpatterns = [
     # Cadastro de aluno
     path('cadastro-aluno/', cadastro_aluno, name='cadastro_aluno'),
 
+    # Login e logout
+    path('templates/tela-login.html', entrar, name='login'),
+    path('logout/', sair, name='logout'),
+
     path('templates/Inicio.html', inicio),
     path('templates/Iniciacao-Cientifica.html', iniciacao_cientifica),
     path('templates/Estagio.html', estagio),

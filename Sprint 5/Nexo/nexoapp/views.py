@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
 from .models import Instituicao, Oportunidade, Candidatura, Favorito
-from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm
+from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm
 # Create your views here.
 def home(request):
     return render(request, "tela-inicial.html")
@@ -103,3 +104,26 @@ def cadastro_representante(request):
         "PROJETOtela_informacoes_representante.html",
         {"form": form}
     )
+
+
+def entrar(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            senha = form.cleaned_data["senha"]
+            usuario = authenticate(request, username=email, password=senha)
+            if usuario is not None:
+                login(request, usuario)
+                return redirect("/templates/Inicio.html")
+            else:
+                form.add_error(None, "E-mail ou senha incorretos.")
+    else:
+        form = LoginForm()
+
+    return render(request, "tela-login.html", {"form": form})
+
+
+def sair(request):
+    logout(request)
+    return redirect("/")
