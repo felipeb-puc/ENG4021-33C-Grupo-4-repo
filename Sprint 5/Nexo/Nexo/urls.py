@@ -41,4 +41,7 @@ urlpatterns = [
     path('templates/tela-minha-oportunidades-canditaturas-ativas.html', minha_oportunidade_candidaturas_ativas),
     path('templates/tela-minha-oportunidades-favoritos.html', minha_oportunidade_favoritos),
     path('templates/tela-minha-oportunidades-historico.html', minha_oportunidade_historico),
+    path('templates/tela-busca.html',tela_busca,name='tela_busca'),
+    path('templates/tela-banco-talentos.html',tela_banco_talentos,name='tela_banco_talentos'),
+    path('templates/tela-candidaturas-recebidas.html',tela_candidaturas_recebidas, name='tela_candidaturas_recebidas'),
 ]
