@@ -1,54 +1,98 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Administração - Nexo</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
-    <link href="../static/css/tela-admin.css" rel="stylesheet">
+    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tela-admin.css' %}" rel="stylesheet">
 </head>
 <body>
 
     <div id="topo">
         <div class="menu">
-            <a href="../templates/tela-painel.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+
+            <a href="{% url 'tela_painel' %}" class="logo">
+                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
+            </a>
+
             <span class="papel">ADMINISTRAÇÃO</span>
-            <a href="../templates/tela-oportunidade.html" class="ativo">Verificação de contas</a>
+
+            <a href="{% url 'tela_admin' %}" class="ativo">
+                Verificação de contas
+            </a>
+
         </div>
+
         <div class="menu">
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+            <a href="{% url 'logout' %}" class="botao-contorno">
+                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
+                Sair
+            </a>
         </div>
     </div>
 
     <div class="pagina-estreita">
+
         <h1>Verificação de contas</h1>
-        <p class="cinza">Empresas e instituições só publicam depois de aprovadas.</p>
 
-        <div class="caixa linha">
-            <div>
-                <b>Rodrigo Paes · Opportunity</b>
-                <p class="cinza">Recrutador · cadastrado em 10/09/2026</p>
-            </div>
-            <a href="../templates/tela-admin.html" class="botao">Aprovar</a>
-        </div>
+        <p class="cinza">
+            Empresas e instituições só publicam depois de aprovadas.
+        </p>
 
-        <div class="caixa linha">
-            <div>
-                <b>Camila Duarte · Visagio</b>
-                <p class="cinza">Recrutador</p>
-            </div>
-            <span class="etiqueta-verde"><img class="ic" src="../static/imagens/icone-circle-check-branco.svg">Verificada</span>
-        </div>
+        {% for conta in contas %}
 
-        <div class="caixa linha">
-            <div>
-                <b>Prof. Rafael Amorim · Departamento de Informática</b>
-                <p class="cinza">Representante acadêmico</p>
+            <div class="caixa linha">
+
+                <div>
+                    <b>{{ conta.nome }} · {{ conta.instituicao }}</b>
+
+                    <p class="cinza">
+                        {{ conta.tipo }}
+                        {% if conta.data_cadastro %}
+                            · cadastrado em {{ conta.data_cadastro }}
+                        {% endif %}
+                    </p>
+                </div>
+
+                {% if conta.verificada %}
+
+                    <span class="etiqueta-verde">
+                        <img
+                            class="ic"
+                            src="{% static 'imagens/icone-circle-check-branco.svg' %}"
+                            alt=""
+                        >
+                        Verificada
+                    </span>
+
+                {% else %}
+
+                    <a href="{% url 'tela_admin' %}" class="botao">
+                        Aprovar
+                    </a>
+
+                {% endif %}
+
             </div>
-            <span class="etiqueta-verde"><img class="ic" src="../static/imagens/icone-circle-check-branco.svg">Verificada</span>
-        </div>
+
+        {% empty %}
+
+            <div class="caixa">
+                <p class="cinza">
+                    Nenhuma conta cadastrada para verificação.
+                </p>
+            </div>
+
+        {% endfor %}
+
     </div>
 
 </body>
 </html>
+
