@@ -1,3 +1,4 @@
+from datetime import date
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -481,6 +482,25 @@ def busca(request):
     oportunidades = Oportunidade.objects.all()
     if q:
         oportunidades = oportunidades.filter(titulo__icontains=q)
+    curso = request.GET.get("curso", "")
+    if curso:
+        oportunidades = oportunidades.filter(curso_id=curso)
+
+    periodo = request.GET.get("periodo", "")
+    if periodo.isdigit():
+        oportunidades = oportunidades.filter(periodo_minimo__lte=int(periodo))
+
+    modalidades = request.GET.getlist("modalidade")
+    if modalidades:
+        oportunidades = oportunidades.filter(modalidade__in=modalidades)
+
+    so_remuneradas = request.GET.get("remuneradas") == "1"
+    if so_remuneradas:
+        oportunidades = oportunidades.filter(remuneracao__gt=0)
+
+    so_abertas = request.GET.get("abertas") == "1"
+    if so_abertas:
+        oportunidades = oportunidades.filter(prazo_inscricao__gte=date.today())
         
     if ordem == "recentes":
         oportunidades = oportunidades.order_by("-id")
@@ -495,6 +515,12 @@ def busca(request):
         "total_oportunidades": oportunidades.count(),
         "q": q,
         "ordem": ordem,
+        "cursos": Curso.objects.order_by("nome"),
+        "curso_selecionado": curso,
+        "periodo_selecionado": periodo,
+        "modalidades_selecionadas": modalidades,
+        "so_remuneradas": so_remuneradas,
+        "so_abertas": so_abertas,
     })
 
 @login_required(login_url='login')
