@@ -1,88 +1,224 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Currículo - Nexo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
-    <link href="../static/css/tela-curriculo-aluno.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/geral.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tela-curriculo-aluno.css' %}">
 </head>
+
 <body>
 
+    <!-- Menu superior -->
     <div id="topo">
+
         <div class="menu">
-            <a href="../templates/tela-painel.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+
+            <a href="{% url 'tela_painel' %}" class="logo">
+                <img src="{% static 'imagens/logoNEXO.png' %}"
+                     alt="Logo Nexo">
+            </a>
+
             <span class="papel">RECRUTADOR</span>
-            <a href="../templates/tela-painel.html">Visão geral</a>
-            <a href="../templates/tela-candidaturas-recebidas.html">Candidaturas</a>
-            <a href="../templates/tela-banco-talentos.html" class="ativo">Buscar candidatos</a>
-            <a href="../templates/tela-instituicao.html">Perfil da instituição</a>
+
+            <a href="{% url 'tela_painel' %}">
+                Visão geral
+            </a>
+
+            <a href="{% url 'tela_candidaturas_recebidas' %}">
+                Candidaturas
+            </a>
+
+            <a href="{% url 'tela_banco_talentos' %}" class="ativo">
+                Buscar candidatos
+            </a>
+
+            <a href="{% url 'tela_instituicao' %}">
+                Perfil da instituição
+            </a>
+
         </div>
+
         <div class="menu">
+
             <span class="cinza">Visagio</span>
-            <a href="../templates/tela-instituicao.html" class="avatar escuro">CD</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+
+            <a href="{% url 'tela_instituicao' %}"
+               class="avatar escuro">
+                CD
+            </a>
+
+            <a href="{% url 'logout' %}" class="botao-contorno">
+                <img class="ic"
+                     src="{% static 'imagens/icone-log-out.svg' %}"
+                     alt="">
+                Sair
+            </a>
+
         </div>
+
     </div>
 
-    <div class="pagina-estreita">
-        <a href="../templates/tela-banco-talentos.html" class="cinza">← Voltar</a>
+    <!-- Conteúdo principal -->
+    <main class="pagina-estreita">
 
-        <div class="caixa-cinza linha" id="candidaturas">
+        <a href="{% url 'tela_banco_talentos' %}" class="cinza">
+            ← Voltar
+        </a>
+
+        <!-- Informações da candidatura -->
+        <section class="caixa-cinza linha" id="candidaturas">
+
             <div>
                 <b>Candidaturas às suas oportunidades</b>
-                <p class="cinza">Estágio em análise de dados de operações · 09/09/2026</p>
+
+                <p class="cinza">
+                    Estágio em análise de dados de operações · 09/09/2026
+                </p>
             </div>
-            <span class="etiqueta-verde"><img class="ic" src="../static/imagens/icone-calendar-branco.svg">Entrevista marcada</span>
-        </div>
 
-        <div class="caixa">
+            <span class="etiqueta-verde">
+                <img class="ic"
+                     src="{% static 'imagens/icone-calendar-branco.svg' %}"
+                     alt="">
+                Entrevista marcada
+            </span>
+
+        </section>
+
+        <!-- Currículo da candidata -->
+        <section class="caixa">
+
             <h1>Isabela Corrêa</h1>
-            <p class="cinza">Engenharia de Produção · 5º período · PUC-Rio</p>
-            <span class="etiqueta-verde">CR 8.4</span>
-            <span class="etiqueta"><img class="ic" src="../static/imagens/icone-mail.svg">isabela.correa@aluno.puc-rio.br</span>
-            <p>Monitora de Cálculo e integrante da Liga de Empreendedorismo. Busca estágio em operações.</p>
 
+            <p class="cinza">
+                Engenharia de Produção · 5º período · PUC-Rio
+            </p>
+
+            <span class="etiqueta-verde">
+                CR 8.4
+            </span>
+
+            <span class="etiqueta">
+                <img class="ic"
+                     src="{% static 'imagens/icone-mail.svg' %}"
+                     alt="">
+                isabela.correa@aluno.puc-rio.br
+            </span>
+
+            <p>
+                Monitora de Cálculo e integrante da Liga de
+                Empreendedorismo. Busca estágio em operações.
+            </p>
+
+            <!-- Áreas de interesse -->
             <h2>Áreas de interesse</h2>
+
             <span class="pilula">Operações</span>
             <span class="pilula">Dados</span>
             <span class="pilula">Consultoria</span>
 
+            <!-- Habilidades -->
             <h2>Habilidades</h2>
+
             <span class="pilula">Excel avançado</span>
             <span class="pilula">Power BI</span>
             <span class="pilula">SQL básico</span>
             <span class="pilula">Inglês fluente</span>
             <span class="pilula">Lean</span>
 
+            <!-- Experiências e formação -->
             <h2>Experiências e formação</h2>
+
             <div class="experiencia">
-                <p class="cinza">Acadêmica · 2026 — atual</p>
+
+                <p class="cinza">
+                    Acadêmica · 2026 — atual
+                </p>
+
                 <b>Monitora de Cálculo a Várias Variáveis</b>
-                <p class="cinza">Departamento de Matemática</p>
-                <p>Plantão de dúvidas e correção de listas para duas turmas do diurno, 12h por semana.</p>
+
+                <p class="cinza">
+                    Departamento de Matemática
+                </p>
+
+                <p>
+                    Plantão de dúvidas e correção de listas para duas
+                    turmas do diurno, 12h por semana.
+                </p>
+
             </div>
+
             <div class="experiencia">
-                <p class="cinza">Acadêmica · 2025 — 2026</p>
-                <b>Liga de Empreendedorismo — diretoria de projetos</b>
-                <p class="cinza">Liga de Empreendedorismo</p>
-                <p>Condução de dois projetos de consultoria com empresas parceiras do Rio.</p>
+
+                <p class="cinza">
+                    Acadêmica · 2025 — 2026
+                </p>
+
+                <b>
+                    Liga de Empreendedorismo — diretoria de projetos
+                </b>
+
+                <p class="cinza">
+                    Liga de Empreendedorismo
+                </p>
+
+                <p>
+                    Condução de dois projetos de consultoria com
+                    empresas parceiras do Rio.
+                </p>
+
             </div>
+
             <div class="experiencia">
-                <p class="cinza">Formação · 2024 — atual</p>
+
+                <p class="cinza">
+                    Formação · 2024 — atual
+                </p>
+
                 <b>Engenharia de Produção — PUC-Rio</b>
-                <p class="cinza">PUC-Rio</p>
-                <p>5º período, ingresso em 2024.1.</p>
+
+                <p class="cinza">
+                    PUC-Rio
+                </p>
+
+                <p>
+                    5º período, ingresso em 2024.1.
+                </p>
+
             </div>
+
             <div class="experiencia">
-                <p class="cinza">Profissional · 2023 — 2024</p>
+
+                <p class="cinza">
+                    Profissional · 2023 — 2024
+                </p>
+
                 <b>Jovem aprendiz</b>
-                <p class="cinza">Opportunity</p>
-                <p>Apoio na rotina de conciliação e nos relatórios da área de operações.</p>
+
+                <p class="cinza">
+                    Opportunity
+                </p>
+
+                <p>
+                    Apoio na rotina de conciliação e nos relatórios
+                    da área de operações.
+                </p>
+
             </div>
-        </div>
-    </div>
+
+        </section>
+
+    </main>
 
 </body>
 </html>
+
