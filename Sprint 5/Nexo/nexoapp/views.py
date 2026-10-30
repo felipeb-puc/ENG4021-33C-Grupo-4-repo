@@ -167,3 +167,15 @@ def entrar(request):
 def sair(request):
     logout(request)
     return redirect("/")
+
+@login_required(login_url='login')
+def busca(request):
+    q = request.GET.get("q", "")
+    oportunidades = Oportunidade.objects.all()
+    if q:
+        oportunidades = oportunidades.filter(titulo__icontains=q)
+    return render(request, "tela-busca.html", {
+        "oportunidades": oportunidades,
+        "total_oportunidades": oportunidades.count(),
+        "q": q,
+    })
