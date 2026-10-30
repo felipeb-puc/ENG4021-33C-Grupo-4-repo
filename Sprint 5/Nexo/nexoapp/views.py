@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db import IntegrityError, transaction
 from .models import (
     Instituicao,
     Curso,
@@ -25,80 +24,37 @@ def criar_conta(request):
 def cadastro_estudante(request):
     return cadastro_aluno(request)
 
-def tela_curriculo_aluno(request):
-    return render(request, 'tela-curriculo-aluno.html')
-
-
-def tela_equipe_competicao(request):
-    return render(request, 'tela-equipe-competicao.html')
-
-
-def tela_monitoria(request):
-    return render(request, 'tela-monitoria.html')
-
-
-def tela_nova_oportunidade(request):
-    return render(request, 'tela-nova-oportunidade.html')
-
-
-def tela_oportunidade(request):
-    return render(request, 'tela-oportunidade.html')
-
-
-def tela_perfil(request):
-    return render(request, 'tela-perfil.html')    
-
-def _render_cadastro_conta(request, form, template, field_name, queryset):
-    form.fields["empresa"].choices = [("", "Selecione")] + [
-        (str(instituicao.pk), instituicao.nome) for instituicao in queryset
-    ]
-    return render(request, template, {
-        "form": form,
-        field_name: queryset,
-    })
-
 def cadastro_aluno(request):
     if request.method == "POST":
         form = CadastroAlunoForm(request.POST)
         if form.is_valid():
             dados = form.cleaned_data
             email = dados["email_academico"].strip().lower()
-            if User.objects.filter(email__iexact=email).exists() or User.objects.filter(username__iexact=email).exists():
-                form.add_error("email_academico", "Já existe uma conta cadastrada com este e-mail.")
-            else:
-                curso_label = dict(CadastroAlunoForm.CURSOS)[dados["curso"]]
-                try:
-                    with transaction.atomic():
-                        usuario = User.objects.create_user(
-                            username=email,
-                            email=email,
-                            first_name=dados["nome_completo"].strip(),
-                            password=dados["senha"],
-                        )
-                        instituicao, _ = Instituicao.objects.get_or_create(
-                            tipo="faculdade",
-                            nome=dados["universidade"],
-                            defaults={"sede": ""},
-                        )
-                        curso, _ = Curso.objects.get_or_create(nome=curso_label)
-                        Aluno.objects.create(
-                            user=usuario,
-                            instituicao=instituicao,
-                            curso=curso,
-                            matricula=dados["matricula"],
-                            periodo=int(dados["periodo_atual"]),
-                            curriculo="",
-                            cr=dados["cr"],
-                            aparecer_em_buscas=dados["aparecer_em_buscas"],
-                        )
-                except IntegrityError:
-                    form.add_error(
-                        "email_academico",
-                        "Não foi possível criar a conta com este e-mail. Verifique se já existe um cadastro.",
-                    )
-                else:
-                    messages.success(request, "Conta de estudante criada. Faça login para continuar.")
-                    return redirect("login")
+            usuario = User.objects.create_user(
+                username=email,
+                email=email,
+                first_name=dados["nome_completo"].strip(),
+                password=dados["senha"],
+            )
+            instituicao, _ = Instituicao.objects.get_or_create(
+                tipo="faculdade",
+                nome=dados["universidade"],
+                defaults={"sede": ""},
+            )
+            nome_curso = dict(CadastroAlunoForm.CURSOS)[dados["curso"]]
+            curso, _ = Curso.objects.get_or_create(nome=nome_curso)
+            Aluno.objects.create(
+                user=usuario,
+                instituicao=instituicao,
+                curso=curso,
+                matricula=dados["matricula"],
+                periodo=int(dados["periodo_atual"]),
+                curriculo="",
+                cr=dados["cr"],
+                aparecer_em_buscas=dados["aparecer_em_buscas"],
+            )
+            messages.success(request, "Conta de estudante criada. Faça login para continuar.")
+            return redirect("login")
     else:
         form = CadastroAlunoForm()
 
@@ -147,44 +103,31 @@ def liga_academica(request):
     
 def cadastro_recrutador(request):
     empresas = Instituicao.objects.filter(tipo="empresa")
-    if request.method == "POST":
-        form = CadastroRecrutadorForm(request.POST)
-        form.fields["empresa"].choices = [("", "Selecione")] + [
-            (str(empresa.pk), empresa.nome) for empresa in empresas
-        ]
-        if form.is_valid():
-            dados = form.cleaned_data
-            email = dados["email"].strip().lower()
-            if User.objects.filter(email__iexact=email).exists() or User.objects.filter(username__iexact=email).exists():
-                form.add_error("email", "Já existe uma conta cadastrada com este e-mail.")
-            else:
-                try:
-                    with transaction.atomic():
-                        usuario = User.objects.create_user(
-                            username=email,
-                            email=email,
-                            first_name=dados["nome"].strip(),
-                            password=dados["senha"],
-                        )
-                        Recrutador.objects.create(
-                            user=usuario,
-                            empresa=Instituicao.objects.get(pk=dados["empresa"], tipo="empresa"),
-                            cargo=dados["cargo"].strip(),
-                        )
-                except IntegrityError:
-                    form.add_error(
-                        "email",
-                        "Não foi possível criar a conta com este e-mail. Verifique se já existe um cadastro.",
-                    )
-                else:
-                    messages.success(request, "Conta de recrutador criada. Faça login para continuar.")
-                    return redirect("login")
-    else:
-        form = CadastroRecrutadorForm()
+    form = CadastroRecrutadorForm(request.POST or None)
+    form.fields["empresa"].choices = [("", "Selecione")] + [
+        (str(empresa.pk), empresa.nome) for empresa in empresas
+    ]
+    if request.method == "POST" and form.is_valid():
+        dados = form.cleaned_data
+        email = dados["email"].strip().lower()
+        usuario = User.objects.create_user(
+            username=email,
+            email=email,
+            first_name=dados["nome"].strip(),
+            password=dados["senha"],
+        )
+        Recrutador.objects.create(
+            user=usuario,
+            empresa=Instituicao.objects.get(pk=dados["empresa"]),
+            cargo=dados["cargo"].strip(),
+        )
+        messages.success(request, "Conta de recrutador criada. Faça login para continuar.")
+        return redirect("login")
 
-    return _render_cadastro_conta(
-        request, form, "PROJETOtela_informacoes_recrutador.html", "empresas", empresas
-    )
+    return render(request, "PROJETOtela_informacoes_recrutador.html", {
+        "form": form,
+        "empresas": empresas,
+    })
 
 
 
@@ -275,51 +218,32 @@ def tela_busca(request):
     return render(request, "tela-busca.html", context)
 def cadastro_representante(request):
     instituicoes = Instituicao.objects.exclude(tipo="empresa")
-    if request.method == "POST":
-        form = CadastroRepresentanteForm(request.POST)
-        form.fields["empresa"].choices = [("", "Selecione")] + [
-            (str(instituicao.pk), instituicao.nome) for instituicao in instituicoes
-        ]
-        if form.is_valid():
-            dados = form.cleaned_data
-            email = dados["email"].strip().lower()
-            if User.objects.filter(email__iexact=email).exists() or User.objects.filter(username__iexact=email).exists():
-                form.add_error("email", "Já existe uma conta cadastrada com este e-mail.")
-            else:
-                try:
-                    with transaction.atomic():
-                        usuario = User.objects.create_user(
-                            username=email,
-                            email=email,
-                            first_name=dados["nome"].strip(),
-                            password=dados["senha"],
-                        )
-                        Representante.objects.create(
-                            user=usuario,
-                            instituicao=Instituicao.objects.get(
-                                pk=dados["empresa"],
-                                tipo__in=["faculdade", "equipe", "liga"],
-                            ),
-                            cargo=dados["cargo"].strip(),
-                        )
-                except IntegrityError:
-                    form.add_error(
-                        "email",
-                        "Não foi possível criar a conta com este e-mail. Verifique se já existe um cadastro.",
-                    )
-                else:
-                    messages.success(request, "Conta de representante criada. Faça login para continuar.")
-                    return redirect("login")
-    else:
-        form = CadastroRepresentanteForm()
+    form = CadastroRepresentanteForm(request.POST or None)
+    form.fields["empresa"].choices = [("", "Selecione")] + [
+        (str(instituicao.pk), instituicao.nome) for instituicao in instituicoes
+    ]
 
-    return _render_cadastro_conta(
-        request,
-        form,
-        "PROJETOtela_informacoes_representante.html",
-        "instituicoes",
-        instituicoes,
-    )
+    if request.method == "POST" and form.is_valid():
+        dados = form.cleaned_data
+        email = dados["email"].strip().lower()
+        usuario = User.objects.create_user(
+            username=email,
+            email=email,
+            first_name=dados["nome"].strip(),
+            password=dados["senha"],
+        )
+        Representante.objects.create(
+            user=usuario,
+            instituicao=Instituicao.objects.get(pk=dados["empresa"]),
+            cargo=dados["cargo"].strip(),
+        )
+        messages.success(request, "Conta de representante criada. Faça login para continuar.")
+        return redirect("login")
+
+    return render(request, "PROJETOtela_informacoes_representante.html", {
+        "form": form,
+        "instituicoes": instituicoes,
+    })
   
 @login_required
 def tela_banco_talentos(request):
