@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Instituicao, Oportunidade, Candidatura, Favorito
+from .models import Instituicao, Aluno, Oportunidade, Candidatura, Favorito
 from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm
 # Create your views here.
 def home(request):
@@ -180,3 +180,21 @@ def busca(request):
         "total_oportunidades": oportunidades.count(),
         "q": q,
     })
+
+@login_required(login_url='login')
+def candidatar(request, oportunidade_id):
+    if request.method == "POST":
+        aluno = get_object_or_404(Aluno, user=request.user)
+        oportunidade = get_object_or_404(Oportunidade, id=oportunidade_id)
+        Candidatura.objects.get_or_create(aluno=aluno, oportunidade=oportunidade)
+        messages.success(request, "Candidatura enviada!")
+    return redirect("/templates/tela-minha-oportunidades-canditaturas-ativas.html")
+
+
+@login_required(login_url='login')
+def remover_favorito(request, favorito_id):
+    if request.method == "POST":
+        favorito = get_object_or_404(Favorito, id=favorito_id, aluno__user=request.user)
+        favorito.delete()
+        messages.success(request, "Favorito removido.")
+    return redirect("/templates/tela-minha-oportunidades-favoritos.html")
