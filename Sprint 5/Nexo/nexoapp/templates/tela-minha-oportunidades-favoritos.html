@@ -44,6 +44,16 @@
                     <span class="cinza">Inscrições até {{ favorito.oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
                     <a href="../templates/tela-oportunidade.html">Ver →</a>
                 </div>
+                                <div class="linha">
+                    <form method="POST" action="{% url 'candidatar' favorito.oportunidade.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="botao">Candidatar-se</button>
+                    </form>
+                    <form method="POST" action="{% url 'remover_favorito' favorito.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-contorno">Remover favorito</button>
+                    </form>
+                </div>
             </div>
             {% endfor %}
         </div>
