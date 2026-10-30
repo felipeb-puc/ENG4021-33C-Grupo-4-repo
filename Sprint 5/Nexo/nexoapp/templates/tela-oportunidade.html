@@ -1,81 +1,178 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oportunidade - Nexo</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
-    <link href="../static/css/tela-oportunidade.css" rel="stylesheet">
+    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tela-oportunidade.css' %}" rel="stylesheet">
 </head>
 <body>
 
     <div id="topo">
         <div class="menu">
-            <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
-            <a href="../templates/Inicio.html">Início</a>
-            <a href="../templates/tela-busca.html" class="ativo"><img class="ic" src="../static/imagens/icone-search-branco.svg">Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
+            <a href="{% url 'tela_painel' %}" class="logo">
+                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
+            </a>
+
+            <a href="{% url 'tela_painel' %}">Início</a>
+
+            <a href="{% url 'tela_busca' %}" class="ativo">
+                <img class="ic" src="{% static 'imagens/icone-search-branco.svg' %}" alt="">
+                Buscar
+            </a>
+
+            <a href="{% url 'tela_minha_oportunidades' %}">
+                Minhas oportunidades
+                {% if user.aluno %}
+                    <span class="contador">
+                        {{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}
+                    </span>
+                {% endif %}
+            </a>
         </div>
+
         <div class="menu">
             <span class="cinza">PUC</span>
-            <a href="../templates/tela-perfil.html" class="avatar">IC</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+
+            <a href="{% url 'tela_perfil' %}" class="avatar">IC</a>
+
+            <a href="{% url 'logout' %}" class="botao-contorno">
+                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
+                Sair
+            </a>
         </div>
     </div>
 
     <div class="pagina">
-        <a href="../templates/tela-busca.html" class="cinza">← Voltar para a busca</a>
+
+        <a href="{% url 'tela_busca' %}" class="cinza">
+            ← Voltar para a busca
+        </a>
 
         <div id="cabecalho">
-            <img src="../static/imagens/pucrio.png">
+            <img src="{% static 'imagens/pucrio.png' %}" alt="PUC-Rio">
+
             <div>
                 <span class="etiqueta">Monitoria</span>
+
                 <h1>Monitoria de Cálculo a Várias Variáveis</h1>
-                <a href="../templates/tela-oportunidade.html" class="cinza">Departamento de Matemática</a>
+
+                <a href="{% url 'tela_oportunidade' %}" class="cinza">
+                    Departamento de Matemática
+                </a>
             </div>
         </div>
 
         <div id="corpo">
+
             <div id="conteudo">
+
                 <div id="fichas">
-                    <div class="caixa-cinza"><p class="cinza"><img class="ic" src="../static/imagens/icone-clock.svg">Carga horária</p><b>12h por semana</b></div>
-                    <div class="caixa-cinza"><p class="cinza"><img class="ic" src="../static/imagens/icone-wallet.svg">Bolsa</p><b>R$ 600 por mês</b></div>
-                    <div class="caixa-cinza"><p class="cinza"><img class="ic" src="../static/imagens/icone-building-2.svg">Modalidade</p><b>Presencial · Rio de Janeiro, RJ</b></div>
-                    <div class="caixa-cinza"><p class="cinza"><img class="ic" src="../static/imagens/icone-calendar.svg">Prazo de inscrição</p><b>06/11/2026</b></div>
-                    <div class="caixa-cinza"><p class="cinza"><img class="ic" src="../static/imagens/icone-graduation-cap.svg">Curso-alvo</p><b>Engenharia de Produção, Engenharia da Computação, Engenharia Civil, Matemática</b></div>
-                    <div class="caixa-cinza"><p class="cinza"><img class="ic" src="../static/imagens/icone-list-checks.svg">Exigências</p><b>A partir do 3º período · CR mínimo 7.0</b></div>
+
+                    <div class="caixa-cinza">
+                        <p class="cinza">
+                            <img class="ic" src="{% static 'imagens/icone-clock.svg' %}" alt="">
+                            Carga horária
+                        </p>
+                        <b>12h por semana</b>
+                    </div>
+
+                    <div class="caixa-cinza">
+                        <p class="cinza">
+                            <img class="ic" src="{% static 'imagens/icone-wallet.svg' %}" alt="">
+                            Bolsa
+                        </p>
+                        <b>R$ 600 por mês</b>
+                    </div>
+
+                    <div class="caixa-cinza">
+                        <p class="cinza">
+                            <img class="ic" src="{% static 'imagens/icone-building-2.svg' %}" alt="">
+                            Modalidade
+                        </p>
+                        <b>Presencial · Rio de Janeiro, RJ</b>
+                    </div>
+
+                    <div class="caixa-cinza">
+                        <p class="cinza">
+                            <img class="ic" src="{% static 'imagens/icone-calendar.svg' %}" alt="">
+                            Prazo de inscrição
+                        </p>
+                        <b>06/11/2026</b>
+                    </div>
+
+                    <div class="caixa-cinza">
+                        <p class="cinza">
+                            <img class="ic" src="{% static 'imagens/icone-graduation-cap.svg' %}" alt="">
+                            Curso-alvo
+                        </p>
+                        <b>
+                            Engenharia de Produção, Engenharia da Computação,
+                            Engenharia Civil, Matemática
+                        </b>
+                    </div>
+
+                    <div class="caixa-cinza">
+                        <p class="cinza">
+                            <img class="ic" src="{% static 'imagens/icone-list-checks.svg' %}" alt="">
+                            Exigências
+                        </p>
+                        <b>A partir do 3º período · CR mínimo 7.0</b>
+                    </div>
+
                 </div>
 
                 <h2>Descrição</h2>
-                <p>Apoio às listas de exercícios e plantão de dúvidas duas vezes por semana, para as turmas do
-                    diurno. A monitoria inclui participação na reunião semanal de acompanhamento com a professora responsável.</p>
+
+                <p>
+                    Apoio às listas de exercícios e plantão de dúvidas duas vezes por semana,
+                    para as turmas do diurno. A monitoria inclui participação na reunião
+                    semanal de acompanhamento com a professora responsável.
+                </p>
 
                 <h2>Pré-requisitos</h2>
+
                 <ul>
                     <li>Aprovação em Cálculo a Várias Variáveis com nota mínima 7,0</li>
                     <li>Disponibilidade às terças e quintas à tarde</li>
                 </ul>
 
                 <h2>O que oferece</h2>
+
                 <ul>
                     <li>Bolsa mensal de R$ 600</li>
                     <li>Certificado de monitoria</li>
                 </ul>
+
             </div>
 
             <div id="lateral">
+
                 <div class="caixa">
-                    <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="botao">Candidatar-se</a>
-                    <a href="../templates/tela-minha-oportunidades-favoritos.html" class="botao-contorno"><img class="ic" src="../static/imagens/icone-bookmark.svg">Salvar para depois</a>
+                    <a href="{% url 'tela_minha_oportunidades' %}" class="botao">
+                        Candidatar-se
+                    </a>
+
+                    <a href="{% url 'tela_favoritos' %}" class="botao-contorno">
+                        <img class="ic" src="{% static 'imagens/icone-bookmark.svg' %}" alt="">
+                        Salvar para depois
+                    </a>
+
                     <p class="cinza">2 vagas</p>
                 </div>
+
                 <div class="caixa">
                     <p class="cinza">Responsável pela vaga</p>
                     <b>Profa. Ana Ribeiro</b>
                     <p class="cinza">ana.ribeiro@puc-rio.br</p>
                     <p class="cinza">Publicada em 01/09/2026</p>
                 </div>
+
             </div>
         </div>
     </div>

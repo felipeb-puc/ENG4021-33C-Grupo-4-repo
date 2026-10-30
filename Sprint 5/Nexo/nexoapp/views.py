@@ -477,13 +477,24 @@ def sair(request):
 @login_required(login_url='login')
 def busca(request):
     q = request.GET.get("q", "")
+    ordem = request.GET.get("ordem", "encerrando")
     oportunidades = Oportunidade.objects.all()
     if q:
         oportunidades = oportunidades.filter(titulo__icontains=q)
+        
+    if ordem == "recentes":
+        oportunidades = oportunidades.order_by("-id")
+    elif ordem == "maior_bolsa":
+        oportunidades = oportunidades.order_by("-remuneracao")
+    else:
+        ordem = "encerrando"
+        oportunidades = oportunidades.order_by("prazo_inscricao")
+        
     return render(request, "tela-busca.html", {
         "oportunidades": oportunidades,
         "total_oportunidades": oportunidades.count(),
         "q": q,
+        "ordem": ordem,
     })
 
 @login_required(login_url='login')
