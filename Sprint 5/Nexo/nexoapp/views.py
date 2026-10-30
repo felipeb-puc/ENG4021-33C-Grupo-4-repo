@@ -25,6 +25,29 @@ def criar_conta(request):
 def cadastro_estudante(request):
     return cadastro_aluno(request)
 
+def tela_curriculo_aluno(request):
+    return render(request, 'tela-curriculo-aluno.html')
+
+
+def tela_equipe_competicao(request):
+    return render(request, 'tela-equipe-competicao.html')
+
+
+def tela_monitoria(request):
+    return render(request, 'tela-monitoria.html')
+
+
+def tela_nova_oportunidade(request):
+    return render(request, 'tela-nova-oportunidade.html')
+
+
+def tela_oportunidade(request):
+    return render(request, 'tela-oportunidade.html')
+
+
+def tela_perfil(request):
+    return render(request, 'tela-perfil.html')    
+
 def _render_cadastro_conta(request, form, template, field_name, queryset):
     form.fields["empresa"].choices = [("", "Selecione")] + [
         (str(instituicao.pk), instituicao.nome) for instituicao in queryset
