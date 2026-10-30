@@ -113,6 +113,44 @@ def cadastro_representante(request):
         "PROJETOtela_informacoes_representante.html",
         {"form": form}
     )
+    @login_required
+def tela_painel(request):
+    oportunidades = [
+        {
+            "id": 1,
+            "tipo": "Estágio",
+            "status": "Aberta",
+            "titulo": "Estágio em tecnologia e automação",
+            "data_limite": "20/11/2026",
+            "data_publicacao": "08/09/2026",
+            "inscritos": 0,
+        },
+        {
+            "id": 2,
+            "tipo": "Estágio",
+            "status": "Aberta",
+            "titulo": "Estágio em análise de dados de operações",
+            "data_limite": "09/11/2026",
+            "data_publicacao": "01/09/2026",
+            "inscritos": 5,
+        },
+    ]
+
+    context = {
+        "instituicao": "Visagio",
+        "iniciais": "CD",
+        "oportunidades": oportunidades,
+        "total_abertas": len(oportunidades),
+        "total_candidaturas": sum(
+            oportunidade["inscritos"]
+            for oportunidade in oportunidades
+        ),
+        "aguardando_analise": 1,
+        "total_rascunhos": 0,
+        "total_encerradas": 0,
+    }
+
+    return render(request, "tela-painel.html", context)
 
 @login_required
 def tela_admin(request):
