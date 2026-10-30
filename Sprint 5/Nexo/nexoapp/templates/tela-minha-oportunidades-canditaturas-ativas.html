@@ -25,6 +25,9 @@
     </div>
 
     <div class="pagina">
+                {% for mensagem in messages %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
         <h1>Minhas oportunidades</h1>
         <div class="abas">
             <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Candidaturas ativas <span class="contador">{{ candidaturas|length }}</span></a>

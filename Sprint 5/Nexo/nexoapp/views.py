@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Instituicao, Oportunidade, Candidatura, Favorito
+from .models import Instituicao, Aluno, Oportunidade, Candidatura, Favorito
 from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm
 # Create your views here.
 def home(request):
@@ -97,6 +98,92 @@ def cadastro_recrutador(request):
     )
 
 
+
+@login_required
+def tela_busca(request):
+    oportunidades = [
+        {
+            "id": 1,
+            "tipo": "Monitoria",
+            "titulo": "Monitoria de Cálculo a Várias Variáveis",
+            "instituicao": "Departamento de Matemática",
+            "horas": "12h por semana",
+            "remuneracao": "R$ 600 por mês",
+            "modalidade": "Presencial",
+            "data_limite": "06/11/2026",
+            "curso": "Engenharia de Produção",
+            "periodo": 1,
+        },
+        {
+            "id": 2,
+            "tipo": "Estágio",
+            "titulo": "Estágio em análise de dados de operações",
+            "instituicao": "Visagio",
+            "horas": "30h por semana",
+            "remuneracao": "R$ 2.200 por mês",
+            "modalidade": "Híbrido",
+            "data_limite": "09/11/2026",
+            "curso": "Engenharia de Produção",
+            "periodo": 5,
+        },
+        {
+            "id": 3,
+            "tipo": "Liga acadêmica",
+            "titulo": "Processo seletivo 2026.2",
+            "instituicao": "Liga de Empreendedorismo",
+            "horas": "6h por semana",
+            "remuneracao": "Voluntária, com certificado",
+            "modalidade": "Híbrido",
+            "data_limite": "12/11/2026",
+            "curso": "Economia",
+            "periodo": 1,
+        },
+        {
+            "id": 4,
+            "tipo": "Equipe de competição",
+            "titulo": "Visão computacional do robô autônomo",
+            "instituicao": "Equipe de Robótica",
+            "horas": "8h por semana",
+            "remuneracao": "Voluntária, com certificado",
+            "modalidade": "Presencial",
+            "data_limite": "03/11/2026",
+            "curso": "Ciência da Computação",
+            "periodo": 1,
+        },
+        {
+            "id": 5,
+            "tipo": "Iniciação científica",
+            "titulo": "Visão computacional para inspeção industrial",
+            "instituicao": "Departamento de Informática",
+            "horas": "20h por semana",
+            "remuneracao": "R$ 700 por mês",
+            "modalidade": "Presencial",
+            "data_limite": "20/11/2026",
+            "curso": "Ciência da Computação",
+            "periodo": 5,
+        },
+        {
+            "id": 6,
+            "tipo": "Monitoria",
+            "titulo": "Monitoria de Programação I",
+            "instituicao": "Departamento de Informática",
+            "horas": "8h por semana",
+            "remuneracao": "R$ 450 por mês",
+            "modalidade": "Presencial",
+            "data_limite": "10/11/2026",
+            "curso": "Ciência da Computação",
+            "periodo": 1,
+        },
+    ]
+
+    context = {
+        "oportunidades": oportunidades,
+        "total_oportunidades": len(oportunidades),
+        "universidade": "PUC-Rio",
+        "iniciais": "IC",
+    }
+
+    return render(request, "tela-busca.html", context)
 def cadastro_representante(request):
     if request.method == "POST":
         form = CadastroRepresentanteForm(request.POST)
@@ -112,7 +199,180 @@ def cadastro_representante(request):
         "PROJETOtela_informacoes_representante.html",
         {"form": form}
     )
+  
+@login_required
+def tela_banco_talentos(request):
+    candidatos = [
+        {
+            "nome": "Lucas Moreira",
+            "cr": 8.9,
+            "universidade": "PUC-Rio",
+            "curso": "Engenharia da Computação",
+            "periodo": 6,
+            "habilidades": ["Python", "C", "Machine learning", "Git"],
+            "areas": ["Dados", "Tecnologia"],
+        },
+        {
+            "nome": "Juliana Peixoto",
+            "cr": 8.6,
+            "universidade": "UFRJ",
+            "curso": "Engenharia de Produção",
+            "periodo": 6,
+            "habilidades": [
+                "Python",
+                "Pesquisa operacional",
+                "SQL",
+            ],
+            "areas": ["Operações", "Logística"],
+        },
+        {
+            "nome": "Isabela Corrêa",
+            "cr": 8.4,
+            "universidade": "PUC-Rio",
+            "curso": "Engenharia de Produção",
+            "periodo": 5,
+            "habilidades": [
+                "Excel avançado",
+                "Power BI",
+                "SQL básico",
+                "Inglês fluente",
+            ],
+            "areas": ["Operações", "Dados", "Consultoria"],
+        },
+        {
+            "nome": "Rafael Sampaio",
+            "cr": 8.1,
+            "universidade": "PUC-Rio",
+            "curso": "Engenharia de Produção",
+            "periodo": 7,
+            "habilidades": ["Lean", "Power BI", "Seis Sigma"],
+            "areas": ["Indústria", "Operações"],
+        },
+        {
+            "nome": "Carolina Diniz",
+            "cr": 8.0,
+            "universidade": "UERJ",
+            "curso": "Economia",
+            "periodo": 5,
+            "habilidades": ["Excel avançado", "R"],
+            "areas": ["Finanças"],
+        },
+        {
+            "nome": "Beatriz Farias",
+            "cr": 7.8,
+            "universidade": "PUC-Rio",
+            "curso": "Economia",
+            "periodo": 4,
+            "habilidades": [
+                "SQL",
+                "Análise de dados",
+                "Excel avançado",
+            ],
+            "areas": ["Dados", "Finanças"],
+        },
+    ]
 
+    candidatos = sorted(
+        candidatos,
+        key=lambda candidato: candidato["cr"],
+        reverse=True,
+    )
+
+    context = {
+        "instituicao": "Visagio",
+        "iniciais": "CD",
+        "candidatos": candidatos,
+    }
+    @login_required
+def tela_painel(request):
+    oportunidades = [
+        {
+            "id": 1,
+            "tipo": "Estágio",
+            "status": "Aberta",
+            "titulo": "Estágio em tecnologia e automação",
+            "data_limite": "20/11/2026",
+            "data_publicacao": "08/09/2026",
+            "inscritos": 0,
+        },
+        {
+            "id": 2,
+            "tipo": "Estágio",
+            "status": "Aberta",
+            "titulo": "Estágio em análise de dados de operações",
+            "data_limite": "09/11/2026",
+            "data_publicacao": "01/09/2026",
+            "inscritos": 5,
+        },
+    ]
+
+    context = {
+        "instituicao": "Visagio",
+        "iniciais": "CD",
+        "oportunidades": oportunidades,
+        "total_abertas": len(oportunidades),
+        "total_candidaturas": sum(
+            oportunidade["inscritos"]
+            for oportunidade in oportunidades
+        ),
+        "aguardando_analise": 1,
+        "total_rascunhos": 0,
+        "total_encerradas": 0,
+    }
+
+    return render(request, "tela-painel.html", context)
+
+    return render(
+        request,
+        "tela-banco-talentos.html",
+        context,
+    )
+@login_required
+def tela_candidaturas_recebidas(request):
+    candidaturas = [
+        {
+            "nome": "Juliana Peixoto",
+            "universidade": "UFRJ",
+            "curso": "Engenharia de Produção",
+            "periodo": 6,
+            "cr": 8.6,
+            "oportunidade": "Estágio em análise de dados de operações",
+            "data": "03/09/2026",
+            "status": "Em análise",
+        },
+        {
+            "nome": "Isabela Corrêa",
+            "universidade": "PUC-Rio",
+            "curso": "Engenharia de Produção",
+            "periodo": 5,
+            "cr": 8.4,
+            "oportunidade": "Estágio em análise de dados de operações",
+            "data": "09/09/2026",
+            "status": "Entrevista marcada",
+        },
+        {
+            "nome": "Rafael Sampaio",
+            "universidade": "PUC-Rio",
+            "curso": "Engenharia de Produção",
+            "periodo": 7,
+            "cr": 8.1,
+            "oportunidade": "Estágio em análise de dados de operações",
+            "data": "05/09/2026",
+            "status": "Em análise",
+        },
+    ]
+
+    context = {
+        "instituicao": "Visagio",
+        "iniciais": "CD",
+        "candidaturas": candidaturas,
+    }
+
+    return render(
+        request,
+        "tela-candidaturas-recebidas.html",
+        context
+    )    
 @login_required
 def tela_admin(request):
     contas = [
@@ -157,7 +417,7 @@ def entrar(request):
                 login(request, usuario)
                 return redirect("/templates/Inicio.html")
             else:
-                form.add_error(None, "E-mail ou senha incorretos.")
+                messages.error(request, "Login inválido: e-mail ou senha incorretos.")
     else:
         form = LoginForm()
 
@@ -167,3 +427,33 @@ def entrar(request):
 def sair(request):
     logout(request)
     return redirect("/")
+
+@login_required(login_url='login')
+def busca(request):
+    q = request.GET.get("q", "")
+    oportunidades = Oportunidade.objects.all()
+    if q:
+        oportunidades = oportunidades.filter(titulo__icontains=q)
+    return render(request, "tela-busca.html", {
+        "oportunidades": oportunidades,
+        "total_oportunidades": oportunidades.count(),
+        "q": q,
+    })
+
+@login_required(login_url='login')
+def candidatar(request, oportunidade_id):
+    if request.method == "POST":
+        aluno = get_object_or_404(Aluno, user=request.user)
+        oportunidade = get_object_or_404(Oportunidade, id=oportunidade_id)
+        Candidatura.objects.get_or_create(aluno=aluno, oportunidade=oportunidade)
+        messages.success(request, "Candidatura enviada!")
+    return redirect("/templates/tela-minha-oportunidades-canditaturas-ativas.html")
+
+
+@login_required(login_url='login')
+def remover_favorito(request, favorito_id):
+    if request.method == "POST":
+        favorito = get_object_or_404(Favorito, id=favorito_id, aluno__user=request.user)
+        favorito.delete()
+        messages.success(request, "Favorito removido.")
+    return redirect("/templates/tela-minha-oportunidades-favoritos.html")
