@@ -71,6 +71,12 @@
                 placeholder="Buscar por título, instituição, curso..."
                 aria-label="Buscar oportunidades"
             >
+            <label for="ordem">Ordenar por</label>
+            <select name="ordem" id="ordem" onchange="this.form.submit()">
+                <option value="encerrando" {% if ordem == "encerrando" %}selected{% endif %}>Encerrando</option>
+                <option value="recentes" {% if ordem == "recentes" %}selected{% endif %}>Recentes</option>
+                <option value="maior_bolsa" {% if ordem == "maior_bolsa" %}selected{% endif %}>Maior bolsa</option>
+            </select>
         </form>
 
         <div id="categorias">
