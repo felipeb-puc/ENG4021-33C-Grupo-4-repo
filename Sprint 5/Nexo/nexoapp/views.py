@@ -2,7 +2,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Instituicao, Aluno, Oportunidade, Candidatura, Favorito
+from django.contrib.auth.models import User
+from django.db import IntegrityError, transaction
+from .models import (
+    Instituicao,
+    Curso,
+    Aluno,
+    Recrutador,
+    Representante,
+    Oportunidade,
+    Candidatura,
+    Favorito,
+)
 from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm
 # Create your views here.
 def home(request):
@@ -14,27 +25,57 @@ def criar_conta(request):
 def cadastro_estudante(request):
     return cadastro_aluno(request)
 
-def cadastro_recrutador(request):
-    empresas = Instituicao.objects.filter(tipo="empresa")
-    return render(request, "PROJETOtela_informacoes_recrutador.html", {"empresas": empresas})
-
-def cadastro_representante(request):
-    instituicoes = Instituicao.objects.exclude(tipo="empresa")
-    return render(request, "PROJETOtela_informacoes_representante.html", {"instituicoes": instituicoes})
+def _render_cadastro_conta(request, form, template, field_name, queryset):
+    form.fields["empresa"].choices = [("", "Selecione")] + [
+        (str(instituicao.pk), instituicao.nome) for instituicao in queryset
+    ]
+    return render(request, template, {
+        "form": form,
+        field_name: queryset,
+    })
 
 def cadastro_aluno(request):
     if request.method == "POST":
         form = CadastroAlunoForm(request.POST)
         if form.is_valid():
-            # O salvamento da conta será implementado na próxima etapa.
-            return render(
-                request,
-                "PROJETOtela_informacoes_estudante.html",
-                {
-                    "form": CadastroAlunoForm(),
-                    "sucesso": True,
-                },
-            )
+            dados = form.cleaned_data
+            email = dados["email_academico"].strip().lower()
+            if User.objects.filter(email__iexact=email).exists() or User.objects.filter(username__iexact=email).exists():
+                form.add_error("email_academico", "Já existe uma conta cadastrada com este e-mail.")
+            else:
+                curso_label = dict(CadastroAlunoForm.CURSOS)[dados["curso"]]
+                try:
+                    with transaction.atomic():
+                        usuario = User.objects.create_user(
+                            username=email,
+                            email=email,
+                            first_name=dados["nome_completo"].strip(),
+                            password=dados["senha"],
+                        )
+                        instituicao, _ = Instituicao.objects.get_or_create(
+                            tipo="faculdade",
+                            nome=dados["universidade"],
+                            defaults={"sede": ""},
+                        )
+                        curso, _ = Curso.objects.get_or_create(nome=curso_label)
+                        Aluno.objects.create(
+                            user=usuario,
+                            instituicao=instituicao,
+                            curso=curso,
+                            matricula=dados["matricula"],
+                            periodo=int(dados["periodo_atual"]),
+                            curriculo="",
+                            cr=dados["cr"],
+                            aparecer_em_buscas=dados["aparecer_em_buscas"],
+                        )
+                except IntegrityError:
+                    form.add_error(
+                        "email_academico",
+                        "Não foi possível criar a conta com este e-mail. Verifique se já existe um cadastro.",
+                    )
+                else:
+                    messages.success(request, "Conta de estudante criada. Faça login para continuar.")
+                    return redirect("login")
     else:
         form = CadastroAlunoForm()
 
@@ -82,19 +123,44 @@ def liga_academica(request):
     return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades})
     
 def cadastro_recrutador(request):
+    empresas = Instituicao.objects.filter(tipo="empresa")
     if request.method == "POST":
         form = CadastroRecrutadorForm(request.POST)
+        form.fields["empresa"].choices = [("", "Selecione")] + [
+            (str(empresa.pk), empresa.nome) for empresa in empresas
+        ]
         if form.is_valid():
-            # Dados validados; o salvamento da conta será
-            # implementado na próxima etapa.
-            pass
+            dados = form.cleaned_data
+            email = dados["email"].strip().lower()
+            if User.objects.filter(email__iexact=email).exists() or User.objects.filter(username__iexact=email).exists():
+                form.add_error("email", "Já existe uma conta cadastrada com este e-mail.")
+            else:
+                try:
+                    with transaction.atomic():
+                        usuario = User.objects.create_user(
+                            username=email,
+                            email=email,
+                            first_name=dados["nome"].strip(),
+                            password=dados["senha"],
+                        )
+                        Recrutador.objects.create(
+                            user=usuario,
+                            empresa=Instituicao.objects.get(pk=dados["empresa"], tipo="empresa"),
+                            cargo=dados["cargo"].strip(),
+                        )
+                except IntegrityError:
+                    form.add_error(
+                        "email",
+                        "Não foi possível criar a conta com este e-mail. Verifique se já existe um cadastro.",
+                    )
+                else:
+                    messages.success(request, "Conta de recrutador criada. Faça login para continuar.")
+                    return redirect("login")
     else:
         form = CadastroRecrutadorForm()
 
-    return render(
-        request,
-        "PROJETOtela_informacoes_recrutador.html",
-        {"form": form}
+    return _render_cadastro_conta(
+        request, form, "PROJETOtela_informacoes_recrutador.html", "empresas", empresas
     )
 
 
@@ -185,19 +251,51 @@ def tela_busca(request):
 
     return render(request, "tela-busca.html", context)
 def cadastro_representante(request):
+    instituicoes = Instituicao.objects.exclude(tipo="empresa")
     if request.method == "POST":
         form = CadastroRepresentanteForm(request.POST)
+        form.fields["empresa"].choices = [("", "Selecione")] + [
+            (str(instituicao.pk), instituicao.nome) for instituicao in instituicoes
+        ]
         if form.is_valid():
-            # Dados validados; o salvamento da conta será
-            # implementado na próxima etapa.
-            pass
+            dados = form.cleaned_data
+            email = dados["email"].strip().lower()
+            if User.objects.filter(email__iexact=email).exists() or User.objects.filter(username__iexact=email).exists():
+                form.add_error("email", "Já existe uma conta cadastrada com este e-mail.")
+            else:
+                try:
+                    with transaction.atomic():
+                        usuario = User.objects.create_user(
+                            username=email,
+                            email=email,
+                            first_name=dados["nome"].strip(),
+                            password=dados["senha"],
+                        )
+                        Representante.objects.create(
+                            user=usuario,
+                            instituicao=Instituicao.objects.get(
+                                pk=dados["empresa"],
+                                tipo__in=["faculdade", "equipe", "liga"],
+                            ),
+                            cargo=dados["cargo"].strip(),
+                        )
+                except IntegrityError:
+                    form.add_error(
+                        "email",
+                        "Não foi possível criar a conta com este e-mail. Verifique se já existe um cadastro.",
+                    )
+                else:
+                    messages.success(request, "Conta de representante criada. Faça login para continuar.")
+                    return redirect("login")
     else:
         form = CadastroRepresentanteForm()
 
-    return render(
+    return _render_cadastro_conta(
         request,
+        form,
         "PROJETOtela_informacoes_representante.html",
-        {"form": form}
+        "instituicoes",
+        instituicoes,
     )
   
 @login_required
@@ -283,7 +381,8 @@ def tela_banco_talentos(request):
         "iniciais": "CD",
         "candidatos": candidatos,
     }
-    @login_required
+
+@login_required
 def tela_painel(request):
     oportunidades = [
         {

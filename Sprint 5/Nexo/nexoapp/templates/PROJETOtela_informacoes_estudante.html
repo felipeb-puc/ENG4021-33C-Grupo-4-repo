@@ -29,7 +29,7 @@
             <p class="cinza">Com esses dados o NEXO já mostra apenas as oportunidades que a sua universidade
                 alcança e que combinam com seu curso e período.</p>
 
-            <form action="../templates/Inicio.html" method="POST">
+            <form action="{% url 'cadastro_aluno' %}" method="POST">
                 {% csrf_token %}
 
                 <h2>Dados pessoais</h2>

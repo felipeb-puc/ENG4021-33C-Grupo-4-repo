@@ -27,24 +27,30 @@
             <h1>Criar sua conta de representante acadêmico</h1>
             <p class="cinza">Para coordenações, departamentos, laboratórios, ligas acadêmicas e equipes de competição que publicam oportunidades internas.</p>
 
-            <form action="../templates/Inicio.html" method="get">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
                 <h2>Seus dados</h2>
                 <div class="campos">
                     <div>
                         <label for="nome">Nome completo</label>
-                        <input type="text" id="nome" placeholder="Rafael Amorim">
+                        <input type="text" id="nome" name="nome" value="{{ form.nome.value|default:'' }}" maxlength="100" required placeholder="Rafael Amorim">
+                        {{ form.nome.errors }}
                     </div>
                     <div>
                         <label for="email">E-mail</label>
-                        <input type="email" id="email" placeholder="rafael.amorim@puc-rio.br">
+                        <input type="email" id="email" name="email" value="{{ form.email.value|default:'' }}" required placeholder="rafael.amorim@puc-rio.br">
+                        {{ form.email.errors }}
                     </div>
                     <div>
                         <label for="cargo">Cargo ou função</label>
-                        <input type="text" id="cargo" placeholder="Coordenador de Estágios">
+                        <input type="text" id="cargo" name="cargo" value="{{ form.cargo.value|default:'' }}" maxlength="100" required placeholder="Coordenador de Estágios">
+                        {{ form.cargo.errors }}
                     </div>
                     <div>
                         <label for="senha">Senha</label>
-                        <input type="password" id="senha" placeholder="Mínimo de 8 caracteres">
+                        <input type="password" id="senha" name="senha" minlength="8" required placeholder="Mínimo de 8 caracteres">
+                        {{ form.senha.errors }}
                     </div>
                 </div>
 
@@ -52,19 +58,21 @@
                 <div class="campos">
                     <div>
                         <label for="instituicao">Instituição</label>
-                        <select id="instituicao">
-                            <option>Selecione</option>
+                        <select id="instituicao" name="empresa" required>
+                            <option value="">Selecione</option>
                             {% for instituicao in instituicoes %}
-                            <option>{{ instituicao.nome }}</option>
+                            <option value="{{ instituicao.pk }}" {% if form.empresa.value|stringformat:"s" == instituicao.pk|stringformat:"s" %}selected{% endif %}>{{ instituicao.nome }}</option>
                             {% endfor %}
                         </select>
+                        {{ form.empresa.errors }}
                     </div>
                 </div>
 
                 <div class="opcao">
-                    <input type="checkbox" id="termos" checked>
+                    <input type="checkbox" id="termos" name="aceita_termos" required {% if form.aceita_termos.value %}checked{% endif %}>
                     <label for="termos">Aceito os termos de uso e a política de privacidade.</label>
                 </div>
+                {{ form.aceita_termos.errors }}
 
                 <button type="submit" class="botao">Criar conta →</button>
             </form>
