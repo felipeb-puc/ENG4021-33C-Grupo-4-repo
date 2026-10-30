@@ -85,6 +85,7 @@ class Oportunidade(models.Model):
     remuneracao = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     prazo_inscricao = models.DateField()
     modalidade = models.CharField(max_length=20, choices=MODALIDADES)
+    periodo_minimo = models.IntegerField(default=1)
 
     def __str__(self):
         return self.titulo
