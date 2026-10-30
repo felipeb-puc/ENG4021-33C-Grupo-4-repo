@@ -25,6 +25,9 @@
     </div>
 
     <div class="pagina">
+        {% for mensagem in messages %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
         <h1>Minhas oportunidades</h1>
         <div class="abas">
             <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas <span class="contador">{{ candidaturas|length }}</span></a>
@@ -43,6 +46,16 @@
                 <div class="linha rodape">
                     <span class="cinza">Inscrições até {{ favorito.oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
                     <a href="../templates/tela-oportunidade.html">Ver →</a>
+                </div>
+                                <div class="linha">
+                    <form method="POST" action="{% url 'candidatar' favorito.oportunidade.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="botao">Candidatar-se</button>
+                    </form>
+                    <form method="POST" action="{% url 'remover_favorito' favorito.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-contorno">Remover favorito</button>
+                    </form>
                 </div>
             </div>
             {% endfor %}

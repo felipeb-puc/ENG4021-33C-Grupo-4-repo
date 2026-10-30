@@ -24,7 +24,11 @@
         <img id="logo-grande" src="../static/imagens/logoNEXO.png">
         <h1>Entrar no NEXO</h1>
         <p class="cinza">Use o e-mail cadastrado na sua conta.</p>
-
+        
+        {% for mensagem in messages %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
+        
         <form class="caixa" method="POST">
             {% csrf_token %}
             {{ form.non_field_errors }}

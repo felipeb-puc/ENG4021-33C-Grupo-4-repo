@@ -1,105 +1,249 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Candidaturas recebidas - Nexo</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
-    <link href="../static/css/tela-candidaturas-recebidas.css" rel="stylesheet">
+    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tela-candidaturas-recebidas.css' %}" rel="stylesheet">
 </head>
 <body>
 
     <div id="topo">
         <div class="menu">
-            <a href="../templates/tela-painel.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+
+            <a href="{% url 'tela_painel' %}" class="logo">
+                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
+            </a>
+
             <span class="papel">RECRUTADOR</span>
-            <a href="../templates/tela-painel.html">Visão geral</a>
-            <a href="../templates/tela-candidaturas-recebidas.html" class="ativo">Candidaturas</a>
-            <a href="../templates/tela-banco-talentos.html">Buscar candidatos</a>
-            <a href="../templates/tela-instituicao.html">Perfil da instituição</a>
+
+            <a href="{% url 'tela_painel' %}">
+                Visão geral
+            </a>
+
+            <a href="{% url 'tela_candidaturas_recebidas' %}" class="ativo">
+                Candidaturas
+            </a>
+
+            <a href="../templates/tela-banco-talentos.html">
+                Buscar candidatos
+            </a>
+
+            <a href="../templates/tela-instituicao.html">
+                Perfil da instituição
+            </a>
         </div>
+
         <div class="menu">
-            <span class="cinza">Visagio</span>
-            <a href="../templates/tela-instituicao.html" class="avatar escuro">CD</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+
+            <span class="cinza">{{ instituicao }}</span>
+
+            <a href="../templates/tela-instituicao.html" class="avatar escuro">
+                {{ iniciais }}
+            </a>
+
+            <a href="{% url 'logout' %}" class="botao-contorno">
+                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
+                Sair
+            </a>
+
         </div>
     </div>
 
     <div class="pagina">
+
         <h1>Candidaturas recebidas</h1>
-        <p class="cinza">Candidatos de todas as universidades para as quais você publicou.</p>
+
+        <p class="cinza">
+            Candidatos de todas as universidades para as quais você publicou.
+        </p>
 
         <div class="caixa" id="filtros">
+
             <div>
                 <label for="nome">Nome ou habilidade</label>
                 <input type="search" id="nome" class="com-lupa">
             </div>
+
             <div>
                 <label for="universidade">Universidade</label>
-                <select id="universidade"><option>Todas</option><option>PUC-Rio</option><option>UFRJ</option><option>UERJ</option></select>
+                <select id="universidade">
+                    <option value="">Todas</option>
+                    <option value="PUC-Rio">PUC-Rio</option>
+                    <option value="UFRJ">UFRJ</option>
+                    <option value="UERJ">UERJ</option>
+                </select>
             </div>
+
             <div>
                 <label for="curso">Curso</label>
-                <select id="curso"><option>Todos</option><option>Engenharia de Produção</option><option>Economia</option></select>
+                <select id="curso">
+                    <option value="">Todos</option>
+                    <option value="Engenharia de Produção">Engenharia de Produção</option>
+                    <option value="Economia">Economia</option>
+                </select>
             </div>
+
             <div>
                 <label for="periodo">A partir do período</label>
-                <select id="periodo"><option>Qualquer</option><option>5º período</option></select>
+                <select id="periodo">
+                    <option value="">Qualquer</option>
+                    <option value="5">5º período</option>
+                    <option value="6">6º período</option>
+                    <option value="7">7º período</option>
+                </select>
             </div>
+
             <div>
                 <label for="cr">CR mínimo</label>
-                <input type="text" id="cr">
+                <input type="number" id="cr" min="0" max="10" step="0.1">
             </div>
+
         </div>
 
-        <p class="cinza">5 candidaturas</p>
+        <p class="cinza">
+            <span id="contador">{{ candidaturas|length }}</span> candidaturas
+        </p>
 
-        <div class="caixa linha">
-            <div>
-                <a href="../templates/tela-curriculo-aluno.html" class="titulo">Juliana Peixoto</a>
-                <p class="cinza">UFRJ · Engenharia de Produção · 6º período · CR 8.6</p>
-                <p class="cinza">Estágio em análise de dados de operações · em 03/09/2026</p>
-            </div>
-            <select class="status">
-                <option>Em análise</option>
-                <option>Em análise</option>
-                <option>Entrevista marcada</option>
-                <option>Aprovada</option>
-                <option>Recusada</option>
-            </select>
+        <div id="lista-candidaturas">
+
+            {% for candidatura in candidaturas %}
+
+                <div class="caixa linha candidatura"
+                     data-nome="{{ candidatura.nome|lower }}"
+                     data-universidade="{{ candidatura.universidade }}"
+                     data-curso="{{ candidatura.curso }}"
+                     data-periodo="{{ candidatura.periodo }}"
+                     data-cr="{{ candidatura.cr }}">
+
+                    <div>
+                        <a href="../templates/tela-curriculo-aluno.html"
+                           class="titulo">
+                            {{ candidatura.nome }}
+                        </a>
+
+                        <p class="cinza">
+                            {{ candidatura.universidade }}
+                            · {{ candidatura.curso }}
+                            · {{ candidatura.periodo }}º período
+                            · CR {{ candidatura.cr }}
+                        </p>
+
+                        <p class="cinza">
+                            {{ candidatura.oportunidade }}
+                            · em {{ candidatura.data }}
+                        </p>
+                    </div>
+
+                    <select class="status" aria-label="Status da candidatura de {{ candidatura.nome }}">
+                        <option value="Em análise"
+                            {% if candidatura.status == "Em análise" %}selected{% endif %}>
+                            Em análise
+                        </option>
+
+                        <option value="Entrevista marcada"
+                            {% if candidatura.status == "Entrevista marcada" %}selected{% endif %}>
+                            Entrevista marcada
+                        </option>
+
+                        <option value="Aprovada"
+                            {% if candidatura.status == "Aprovada" %}selected{% endif %}>
+                            Aprovada
+                        </option>
+
+                        <option value="Recusada"
+                            {% if candidatura.status == "Recusada" %}selected{% endif %}>
+                            Recusada
+                        </option>
+                    </select>
+
+                </div>
+
+            {% empty %}
+
+                <div class="caixa">
+                    <p class="cinza">Nenhuma candidatura recebida.</p>
+                </div>
+
+            {% endfor %}
+
+            <p id="sem-resultados" class="cinza" hidden>
+                Nenhuma candidatura corresponde aos filtros.
+            </p>
+
         </div>
 
-        <div class="caixa linha">
-            <div>
-                <a href="../templates/tela-curriculo-aluno.html" class="titulo">Isabela Corrêa</a>
-                <p class="cinza">PUC · Engenharia de Produção · 5º período · CR 8.4</p>
-                <p class="cinza">Estágio em análise de dados de operações · em 09/09/2026</p>
-            </div>
-            <select class="status">
-                <option>Entrevista marcada</option>
-                <option>Em análise</option>
-                <option>Entrevista marcada</option>
-                <option>Aprovada</option>
-                <option>Recusada</option>
-            </select>
-        </div>
-
-        <div class="caixa linha">
-            <div>
-                <a href="../templates/tela-curriculo-aluno.html" class="titulo">Rafael Sampaio</a>
-                <p class="cinza">PUC · Engenharia de Produção · 7º período · CR 8.1</p>
-                <p class="cinza">Estágio em análise de dados de operações · em 05/09/2026</p>
-            </div>
-            <select class="status">
-                <option>Em análise</option>
-                <option>Em análise</option>
-                <option>Entrevista marcada</option>
-                <option>Aprovada</option>
-                <option>Recusada</option>
-            </select>
-        </div>
     </div>
+
+    <script>
+        const campoNome = document.getElementById("nome");
+        const campoUniversidade = document.getElementById("universidade");
+        const campoCurso = document.getElementById("curso");
+        const campoPeriodo = document.getElementById("periodo");
+        const campoCR = document.getElementById("cr");
+
+        const candidaturas = document.querySelectorAll(".candidatura");
+        const contador = document.getElementById("contador");
+        const semResultados = document.getElementById("sem-resultados");
+
+        function filtrarCandidaturas() {
+            const nome = campoNome.value.trim().toLowerCase();
+            const universidade = campoUniversidade.value;
+            const curso = campoCurso.value;
+            const periodo = campoPeriodo.value;
+            const crMinimo = campoCR.value === ""
+                ? null
+                : Number(campoCR.value);
+
+            let quantidade = 0;
+
+            candidaturas.forEach(function(candidatura) {
+                const nomeCandidato = candidatura.dataset.nome;
+                const nomeCurso = candidatura.dataset.curso;
+                const nomeUniversidade = candidatura.dataset.universidade;
+                const periodoCandidato = Number(candidatura.dataset.periodo);
+                const crCandidato = Number(candidatura.dataset.cr);
+
+                const correspondeNome = nomeCandidato.includes(nome);
+                const correspondeUniversidade =
+                    !universidade || nomeUniversidade === universidade;
+                const correspondeCurso =
+                    !curso || nomeCurso === curso;
+                const correspondePeriodo =
+                    !periodo || periodoCandidato >= Number(periodo);
+                const correspondeCR =
+                    crMinimo === null || crCandidato >= crMinimo;
+
+                const mostrar =
+                    correspondeNome &&
+                    correspondeUniversidade &&
+                    correspondeCurso &&
+                    correspondePeriodo &&
+                    correspondeCR;
+
+                candidatura.hidden = !mostrar;
+
+                if (mostrar) {
+                    quantidade++;
+                }
+            });
+
+            contador.textContent = quantidade;
+            semResultados.hidden = quantidade !== 0;
+        }
+
+        campoNome.addEventListener("input", filtrarCandidaturas);
+        campoUniversidade.addEventListener("change", filtrarCandidaturas);
+        campoCurso.addEventListener("change", filtrarCandidaturas);
+        campoPeriodo.addEventListener("change", filtrarCandidaturas);
+        campoCR.addEventListener("input", filtrarCandidaturas);
+    </script>
 
 </body>
 </html>
