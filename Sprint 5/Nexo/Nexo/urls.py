@@ -49,6 +49,12 @@ urlpatterns = [
     path('templates/tela-busca.html', busca, name='tela_busca'),
     path('candidatar/<int:oportunidade_id>/', candidatar, name='candidatar'),
     path('favorito/<int:favorito_id>/remover/', remover_favorito, name='remover_favorito'),
+    path('curriculo/',views.tela_curriculo_aluno,name='tela_curriculo_aluno'),
+    path('equipe-competicao/',views.tela_equipe_competicao,name='tela_equipe_competicao'),
+    path('monitoria/',views.tela_monitoria,name='tela_monitoria'),
+    path('nova-oportunidade/',views.tela_nova_oportunidade,name='tela_nova_oportunidade'),
+    path('oportunidade/',views.tela_oportunidade,name='tela_oportunidade'),
+    path('perfil/',views.tela_perfil,name='tela_perfil'),
 ]
 
 
