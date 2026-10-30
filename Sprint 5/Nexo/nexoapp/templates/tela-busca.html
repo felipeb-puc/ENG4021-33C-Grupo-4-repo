@@ -61,7 +61,7 @@
             Você vê o que é da sua universidade e os estágios publicados para ela.
         </p>
 
-                <form method="get">
+                <form method="get" id="form-busca">
             <input
                 type="search"
                 id="busca"
@@ -90,48 +90,33 @@
 
         <div id="corpo">
 
-            <div id="filtros" class="caixa">
+                        <div id="filtros" class="caixa">
 
                 <h2>Filtros</h2>
 
                 <label for="curso">Curso</label>
-                <select id="curso">
+                <select name="curso" id="curso" form="form-busca">
                     <option value="">Qualquer curso</option>
-                    <option value="Engenharia de Produção">Engenharia de Produção</option>
-                    <option value="Ciência da Computação">Ciência da Computação</option>
-                    <option value="Economia">Economia</option>
+                    {% for c in cursos %}
+                    <option value="{{ c.id }}" {% if curso_selecionado == c.id|stringformat:"s" %}selected{% endif %}>{{ c.nome }}</option>
+                    {% endfor %}
                 </select>
 
                 <label for="periodo">Estou no período</label>
-                <select id="periodo">
-                    <option value="">Qualquer período</option>
-                    <option value="1">1º período ou posterior</option>
-                    <option value="5">5º período ou posterior</option>
-                    <option value="8">8º período ou posterior</option>
-                </select>
+                <input type="number" name="periodo" id="periodo" min="1" max="12" value="{{ periodo_selecionado }}" form="form-busca">
 
                 <label>Modalidade</label>
-
                 <div id="modalidades">
-                    <label class="pilula">
-                        <input type="checkbox" value="Presencial">
-                        Presencial
-                    </label>
-
-                    <label class="pilula">
-                        <input type="checkbox" value="Híbrido">
-                        Híbrido
-                    </label>
-
-                    <label class="pilula">
-                        <input type="checkbox" value="Remoto">
-                        Remoto
-                    </label>
+                    <label class="pilula"><input type="checkbox" name="modalidade" value="presencial" form="form-busca" {% if "presencial" in modalidades_selecionadas %}checked{% endif %}> Presencial</label>
+                    <label class="pilula"><input type="checkbox" name="modalidade" value="hibrido" form="form-busca" {% if "hibrido" in modalidades_selecionadas %}checked{% endif %}> Híbrido</label>
+                    <label class="pilula"><input type="checkbox" name="modalidade" value="remoto" form="form-busca" {% if "remoto" in modalidades_selecionadas %}checked{% endif %}> Remoto</label>
                 </div>
 
-                <button type="button" id="limpar-filtros" class="botao-contorno">
-                    Limpar filtros
-                </button>
+                <label><input type="checkbox" name="remuneradas" value="1" form="form-busca" {% if so_remuneradas %}checked{% endif %}> Só remuneradas</label>
+                <label><input type="checkbox" name="abertas" value="1" form="form-busca" {% if so_abertas %}checked{% endif %}> Só inscrições abertas</label>
+
+                <button type="submit" class="botao" form="form-busca">Aplicar filtros</button>
+                <a href="{% url 'tela_busca' %}" class="botao-contorno">Limpar filtros</a>
 
             </div>
 
@@ -157,7 +142,7 @@
                         >
 
                             <div>
-                                <span class="etiqueta">{{ oportunidade.tipo }}</span>
+                                <span class="etiqueta">{{ oportunidade.get_tipo_display }}</span>
 
                                 <img
                                     class="salvar"
@@ -173,22 +158,22 @@
 
                             <p>
                                 <img class="ic" src="{% static 'imagens/icone-clock.svg' %}" alt="">
-                                {{ oportunidade.horas }}
+                                {{ oportunidade.carga_horaria }}h por semana
                             </p>
 
                             <p>
                                 <img class="ic" src="{% static 'imagens/icone-wallet.svg' %}" alt="">
-                                {{ oportunidade.remuneracao }}
+                                R$ {{ oportunidade.remuneracao }} por mês
                             </p>
 
                             <p>
                                 <img class="ic" src="{% static 'imagens/icone-building-2.svg' %}" alt="">
-                                {{ oportunidade.modalidade }}
+                                {{ oportunidade.get_modalidade_display }}
                             </p>
 
                             <div class="linha rodape">
                                 <span class="cinza">
-                                    Inscrições até {{ oportunidade.data_limite }}
+                                    Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}
                                 </span>
 
                                 <a href="/templates/tela-oportunidade.html">
@@ -217,101 +202,6 @@
         </div>
 
     </div>
-
-    <script>
-        const busca = document.getElementById("busca");
-        const curso = document.getElementById("curso");
-        const periodo = document.getElementById("periodo");
-
-        const modalidades = document.querySelectorAll(
-            '#modalidades input[type="checkbox"]'
-        );
-
-        const oportunidades = document.querySelectorAll(".oportunidade");
-        const contador = document.getElementById("contador");
-        const semResultados = document.getElementById("sem-resultados");
-        const limparFiltros = document.getElementById("limpar-filtros");
-
-        function filtrarOportunidades() {
-            const termo = busca.value.trim().toLowerCase();
-            const cursoSelecionado = curso.value;
-            const periodoSelecionado = periodo.value;
-
-            const modalidadesSelecionadas = Array.from(modalidades)
-                .filter(function(item) {
-                    return item.checked;
-                })
-                .map(function(item) {
-                    return item.value;
-                });
-
-            let quantidade = 0;
-
-            oportunidades.forEach(function(oportunidade) {
-                const titulo = oportunidade.dataset.titulo;
-                const instituicao = oportunidade.dataset.instituicao;
-                const tipo = oportunidade.dataset.tipo;
-                const cursoOportunidade = oportunidade.dataset.curso;
-                const periodoOportunidade = Number(
-                    oportunidade.dataset.periodo
-                );
-                const modalidade = oportunidade.dataset.modalidade;
-
-                const correspondeBusca =
-                    titulo.includes(termo) ||
-                    instituicao.includes(termo) ||
-                    cursoOportunidade.toLowerCase().includes(termo) ||
-                    tipo.toLowerCase().includes(termo);
-
-                const correspondeCurso =
-                    !cursoSelecionado ||
-                    cursoOportunidade === cursoSelecionado;
-
-                const correspondePeriodo =
-                    !periodoSelecionado ||
-                    periodoOportunidade <= Number(periodoSelecionado);
-
-                const correspondeModalidade =
-                    modalidadesSelecionadas.length === 0 ||
-                    modalidadesSelecionadas.includes(modalidade);
-
-                const mostrar =
-                    correspondeBusca &&
-                    correspondeCurso &&
-                    correspondePeriodo &&
-                    correspondeModalidade;
-
-                oportunidade.hidden = !mostrar;
-
-                if (mostrar) {
-                    quantidade++;
-                }
-            });
-
-            contador.textContent = quantidade;
-            semResultados.hidden = quantidade !== 0;
-        }
-
-        busca.addEventListener("input", filtrarOportunidades);
-        curso.addEventListener("change", filtrarOportunidades);
-        periodo.addEventListener("change", filtrarOportunidades);
-
-        modalidades.forEach(function(modalidade) {
-            modalidade.addEventListener("change", filtrarOportunidades);
-        });
-
-        limparFiltros.addEventListener("click", function() {
-            busca.value = "";
-            curso.value = "";
-            periodo.value = "";
-
-            modalidades.forEach(function(modalidade) {
-                modalidade.checked = false;
-            });
-
-            filtrarOportunidades();
-        });
-    </script>
 
 </body>
 </html>
