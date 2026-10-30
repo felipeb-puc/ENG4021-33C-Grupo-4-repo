@@ -32,10 +32,33 @@ class Aluno(models.Model):
     matricula = models.CharField(max_length=20)
     periodo = models.IntegerField()
     curriculo = models.TextField()
+    cr = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
     
 
     def __str__(self):
         return self.matricula
+
+
+class Recrutador(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    empresa = models.ForeignKey(Instituicao, on_delete=models.CASCADE, limit_choices_to={"tipo": "empresa"},)
+    cargo = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.user.get_full_name() or self.user.email
+
+
+class Representante(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    instituicao = models.ForeignKey(
+        Instituicao,
+        on_delete=models.CASCADE,
+        limit_choices_to={"tipo__in": ["faculdade", "equipe", "liga"]},
+    )
+    cargo = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.user.get_full_name() or self.user.email
 
 
 class Oportunidade(models.Model):
