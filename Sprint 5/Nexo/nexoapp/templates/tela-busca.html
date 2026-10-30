@@ -61,13 +61,17 @@
             Você vê o que é da sua universidade e os estágios publicados para ela.
         </p>
 
-        <input
-            type="search"
-            id="busca"
-            class="com-lupa"
-            placeholder="Buscar por título, instituição, curso..."
-            aria-label="Buscar oportunidades"
-        >
+                <form method="get">
+            <input
+                type="search"
+                id="busca"
+                name="q"
+                value="{{ q }}"
+                class="com-lupa"
+                placeholder="Buscar por título, instituição, curso..."
+                aria-label="Buscar oportunidades"
+            >
+        </form>
 
         <div id="categorias">
             <a href="{% url 'tela_busca' %}" class="pilula ativo">Todas</a>
