@@ -1,111 +1,147 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publicar oportunidade - Nexo</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
-    <link href="../static/css/tela-nova-oportunidade.css" rel="stylesheet">
+    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tela-nova-oportunidade.css' %}" rel="stylesheet">
 </head>
 <body>
 
     <div id="topo">
         <div class="menu">
-            <a href="../templates/tela-painel.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
+            <a href="{% url 'tela_painel' %}" class="logo">
+                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
+            </a>
+
             <span class="papel">RECRUTADOR</span>
-            <a href="../templates/tela-painel.html">Visão geral</a>
-            <a href="../templates/tela-candidaturas-recebidas.html">Candidaturas</a>
-            <a href="../templates/tela-banco-talentos.html">Buscar candidatos</a>
-            <a href="../templates/tela-instituicao.html">Perfil da instituição</a>
+
+            <a href="{% url 'tela_painel' %}">Visão geral</a>
+            <a href="{% url 'tela_candidaturas_recebidas' %}">Candidaturas</a>
+            <a href="{% url 'tela_banco_talentos' %}">Buscar candidatos</a>
+            <a href="{% url 'tela_instituicao' %}">Perfil da instituição</a>
         </div>
+
         <div class="menu">
             <span class="cinza">Visagio</span>
-            <a href="../templates/tela-instituicao.html" class="avatar escuro">CD</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+
+            <a href="{% url 'tela_instituicao' %}" class="avatar escuro">CD</a>
+
+            <a href="{% url 'logout' %}" class="botao-contorno">
+                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
+                Sair
+            </a>
         </div>
     </div>
 
     <div class="pagina-estreita">
-        <h1>Publicar oportunidade</h1>
-        <p class="cinza">Como empresa, você publica estágios e escolhe para quais universidades.</p>
 
-        <form>
+        <h1>Publicar oportunidade</h1>
+
+        <p class="cinza">
+            Como empresa, você publica estágios e escolhe para quais universidades.
+        </p>
+
+        <form method="POST" action="{% url 'tela_nova_oportunidade' %}">
+            {% csrf_token %}
+
             <div class="caixa">
                 <h2>1. O que é</h2>
+
                 <label for="tipo">Tipo</label>
-                <select id="tipo">
-                    <option>Estágio</option>
+                <select id="tipo" name="tipo">
+                    <option value="Estágio">Estágio</option>
                 </select>
+
                 <p class="cinza">Empresa publica apenas estágio.</p>
+
                 <label for="titulo">Título</label>
-                <input type="text" id="titulo">
+                <input type="text" id="titulo" name="titulo" required>
+
                 <label for="descricao">Descrição</label>
-                <textarea id="descricao" rows="4"></textarea>
+                <textarea id="descricao" name="descricao" rows="4" required></textarea>
+
                 <label for="requisitos">Pré-requisitos</label>
-                <textarea id="requisitos" rows="3"></textarea>
+                <textarea id="requisitos" name="requisitos" rows="3"></textarea>
+
                 <p class="cinza">Um por linha.</p>
             </div>
 
             <div class="caixa">
                 <h2>2. Condições</h2>
+
                 <div class="duas-colunas">
                     <div>
                         <label for="carga">Carga horária semanal (h)</label>
-                        <input type="number" id="carga">
+                        <input type="number" id="carga" name="carga_horaria" min="1" required>
                     </div>
+
                     <div>
                         <label for="prazo">Prazo de inscrição</label>
-                        <input type="date" id="prazo">
+                        <input type="date" id="prazo" name="prazo_inscricao" required>
                     </div>
                 </div>
+
                 <div class="duas-colunas">
                     <div>
                         <label for="bolsa">Valor da bolsa (R$ por mês)</label>
-                        <input type="number" id="bolsa">
+                        <input type="number" id="bolsa" name="bolsa" min="0" step="0.01">
                     </div>
+
                     <div>
                         <label for="modalidade">Modalidade</label>
-                        <select id="modalidade">
-                            <option>Presencial</option>
-                            <option>Híbrido</option>
-                            <option>Remoto</option>
+                        <select id="modalidade" name="modalidade">
+                            <option value="Presencial">Presencial</option>
+                            <option value="Híbrido">Híbrido</option>
+                            <option value="Remoto">Remoto</option>
                         </select>
                     </div>
                 </div>
+
                 <div class="duas-colunas">
                     <div>
                         <label for="cidade">Cidade</label>
-                        <input type="text" id="cidade">
+                        <input type="text" id="cidade" name="cidade">
                     </div>
+
                     <div>
                         <label for="vagas">Número de vagas</label>
-                        <input type="number" id="vagas">
+                        <input type="number" id="vagas" name="vagas" min="1" required>
                     </div>
                 </div>
             </div>
 
             <div class="caixa">
                 <h2>3. Alcance e contato</h2>
+
                 <label for="universidades">Universidades-alvo</label>
-                <select id="universidades">
-                    <option>Todas</option>
-                    <option>PUC-Rio</option>
-                    <option>UFRJ</option>
-                    <option>UERJ</option>
+                <select id="universidades" name="universidades">
+                    <option value="Todas">Todas</option>
+                    <option value="PUC-Rio">PUC-Rio</option>
+                    <option value="UFRJ">UFRJ</option>
+                    <option value="UERJ">UERJ</option>
                 </select>
+
                 <label for="responsavel">Responsável pela vaga</label>
-                <input type="text" id="responsavel">
+                <input type="text" id="responsavel" name="responsavel" required>
+
                 <label for="contato">E-mail de contato</label>
-                <input type="email" id="contato">
+                <input type="email" id="contato" name="contato" required>
             </div>
 
             <div class="linha">
-                <a href="../templates/tela-painel.html">Cancelar</a>
+                <a href="{% url 'tela_painel' %}">Cancelar</a>
                 <button type="submit" class="botao">Publicar</button>
             </div>
+
         </form>
     </div>
 
 </body>
 </html>
+
