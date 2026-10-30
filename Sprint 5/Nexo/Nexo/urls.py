@@ -41,8 +41,7 @@ urlpatterns = [
     path('templates/tela-minha-oportunidades-canditaturas-ativas.html', minha_oportunidade_candidaturas_ativas),
     path('templates/tela-minha-oportunidades-favoritos.html', minha_oportunidade_favoritos),
     path('templates/tela-minha-oportunidades-historico.html', minha_oportunidade_historico),
-    path('admin/', admin.site.urls),
-    path('', include('seu_app.urls')),
+    path('templates/tela-busca.html', busca, name='tela_busca'),
 ]
 
 
