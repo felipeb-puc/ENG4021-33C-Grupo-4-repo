@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Instituicao, Oportunidade, Candidatura, Favorito
@@ -157,7 +158,7 @@ def entrar(request):
                 login(request, usuario)
                 return redirect("/templates/Inicio.html")
             else:
-                form.add_error(None, "E-mail ou senha incorretos.")
+                messages.error(request, "Login inválido: e-mail ou senha incorretos.")
     else:
         form = LoginForm()
 
