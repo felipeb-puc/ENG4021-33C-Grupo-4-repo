@@ -41,7 +41,6 @@ urlpatterns = [
     path('templates/tela-minha-oportunidades-canditaturas-ativas.html', minha_oportunidade_candidaturas_ativas),
     path('templates/tela-minha-oportunidades-favoritos.html', minha_oportunidade_favoritos),
     path('templates/tela-minha-oportunidades-historico.html', minha_oportunidade_historico),
-    path('templates/tela-busca.html',tela_busca,name='tela_busca'),
     path('templates/tela-banco-talentos.html',tela_banco_talentos,name='tela_banco_talentos'),
     path('templates/tela-candidaturas-recebidas.html',tela_candidaturas_recebidas, name='tela_candidaturas_recebidas'),
     path('templates/tela-admin.html', tela_admin, name='tela_admin'),
@@ -49,12 +48,13 @@ urlpatterns = [
     path('templates/tela-busca.html', busca, name='tela_busca'),
     path('candidatar/<int:oportunidade_id>/', candidatar, name='candidatar'),
     path('favorito/<int:favorito_id>/remover/', remover_favorito, name='remover_favorito'),
-    path('curriculo/',views.tela_curriculo_aluno,name='tela_curriculo_aluno'),
-    path('equipe-competicao/',views.tela_equipe_competicao,name='tela_equipe_competicao'),
-    path('monitoria/',views.tela_monitoria,name='tela_monitoria'),
-    path('nova-oportunidade/',views.tela_nova_oportunidade,name='tela_nova_oportunidade'),
-    path('oportunidade/',views.tela_oportunidade,name='tela_oportunidade'),
-    path('perfil/',views.tela_perfil,name='tela_perfil'),
+    # TODO: criar a view (tarefa S9-15)
+    # path('curriculo/',views.tela_curriculo_aluno,name='tela_curriculo_aluno'),
+    # path('equipe-competicao/',views.tela_equipe_competicao,name='tela_equipe_competicao'),
+    # path('monitoria/',views.tela_monitoria,name='tela_monitoria'),
+    # path('nova-oportunidade/',views.tela_nova_oportunidade,name='tela_nova_oportunidade'),
+    # path('oportunidade/',views.tela_oportunidade,name='tela_oportunidade'),
+    # path('perfil/',views.tela_perfil,name='tela_perfil'),
 ]
 
 

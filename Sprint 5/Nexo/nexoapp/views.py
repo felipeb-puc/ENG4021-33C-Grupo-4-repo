@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import transaction
 from .models import (
     Instituicao,
     Curso,
@@ -31,12 +32,6 @@ def cadastro_aluno(request):
         if form.is_valid():
             dados = form.cleaned_data
             email = dados["email_academico"].strip().lower()
-            usuario = User.objects.create_user(
-                username=email,
-                email=email,
-                first_name=dados["nome_completo"].strip(),
-                password=dados["senha"],
-            )
             instituicao, _ = Instituicao.objects.get_or_create(
                 tipo="faculdade",
                 nome=dados["universidade"],
@@ -44,16 +39,25 @@ def cadastro_aluno(request):
             )
             nome_curso = dict(CadastroAlunoForm.CURSOS)[dados["curso"]]
             curso, _ = Curso.objects.get_or_create(nome=nome_curso)
-            Aluno.objects.create(
-                user=usuario,
-                instituicao=instituicao,
-                curso=curso,
-                matricula=dados["matricula"],
-                periodo=int(dados["periodo_atual"]),
-                curriculo="",
-                cr=dados["cr"],
-                aparecer_em_buscas=dados["aparecer_em_buscas"],
-            )
+            # atomic: User e Aluno são criados juntos; se um falhar, o outro é desfeito
+            with transaction.atomic():
+                usuario = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    first_name=dados["nome_completo"].strip(),
+                    password=dados["senha"],
+                )
+                # "aparecer_em_buscas" não é salvo: o campo saiu do model (migration 0004)
+                # e volta na tarefa do banco de talentos
+                Aluno.objects.create(
+                    user=usuario,
+                    instituicao=instituicao,
+                    curso=curso,
+                    matricula=dados["matricula"],
+                    periodo=int(dados["periodo_atual"]),
+                    curriculo="",
+                    cr=dados["cr"],
+                )
             messages.success(request, "Conta de estudante criada. Faça login para continuar.")
             return redirect("login")
     else:
@@ -132,91 +136,6 @@ def cadastro_recrutador(request):
 
 
 
-@login_required
-def tela_busca(request):
-    oportunidades = [
-        {
-            "id": 1,
-            "tipo": "Monitoria",
-            "titulo": "Monitoria de Cálculo a Várias Variáveis",
-            "instituicao": "Departamento de Matemática",
-            "horas": "12h por semana",
-            "remuneracao": "R$ 600 por mês",
-            "modalidade": "Presencial",
-            "data_limite": "06/11/2026",
-            "curso": "Engenharia de Produção",
-            "periodo": 1,
-        },
-        {
-            "id": 2,
-            "tipo": "Estágio",
-            "titulo": "Estágio em análise de dados de operações",
-            "instituicao": "Visagio",
-            "horas": "30h por semana",
-            "remuneracao": "R$ 2.200 por mês",
-            "modalidade": "Híbrido",
-            "data_limite": "09/11/2026",
-            "curso": "Engenharia de Produção",
-            "periodo": 5,
-        },
-        {
-            "id": 3,
-            "tipo": "Liga acadêmica",
-            "titulo": "Processo seletivo 2026.2",
-            "instituicao": "Liga de Empreendedorismo",
-            "horas": "6h por semana",
-            "remuneracao": "Voluntária, com certificado",
-            "modalidade": "Híbrido",
-            "data_limite": "12/11/2026",
-            "curso": "Economia",
-            "periodo": 1,
-        },
-        {
-            "id": 4,
-            "tipo": "Equipe de competição",
-            "titulo": "Visão computacional do robô autônomo",
-            "instituicao": "Equipe de Robótica",
-            "horas": "8h por semana",
-            "remuneracao": "Voluntária, com certificado",
-            "modalidade": "Presencial",
-            "data_limite": "03/11/2026",
-            "curso": "Ciência da Computação",
-            "periodo": 1,
-        },
-        {
-            "id": 5,
-            "tipo": "Iniciação científica",
-            "titulo": "Visão computacional para inspeção industrial",
-            "instituicao": "Departamento de Informática",
-            "horas": "20h por semana",
-            "remuneracao": "R$ 700 por mês",
-            "modalidade": "Presencial",
-            "data_limite": "20/11/2026",
-            "curso": "Ciência da Computação",
-            "periodo": 5,
-        },
-        {
-            "id": 6,
-            "tipo": "Monitoria",
-            "titulo": "Monitoria de Programação I",
-            "instituicao": "Departamento de Informática",
-            "horas": "8h por semana",
-            "remuneracao": "R$ 450 por mês",
-            "modalidade": "Presencial",
-            "data_limite": "10/11/2026",
-            "curso": "Ciência da Computação",
-            "periodo": 1,
-        },
-    ]
-
-    context = {
-        "oportunidades": oportunidades,
-        "total_oportunidades": len(oportunidades),
-        "universidade": "PUC-Rio",
-        "iniciais": "IC",
-    }
-
-    return render(request, "tela-busca.html", context)
 def cadastro_representante(request):
     instituicoes = Instituicao.objects.exclude(tipo="empresa")
     form = CadastroRepresentanteForm(request.POST or None)
@@ -330,6 +249,9 @@ def tela_banco_talentos(request):
         "candidatos": candidatos,
     }
 
+    return render(request, "tela-banco-talentos.html", context)
+
+
 @login_required
 def tela_painel(request):
     oportunidades = [
@@ -369,11 +291,6 @@ def tela_painel(request):
 
     return render(request, "tela-painel.html", context)
 
-    return render(
-        request,
-        "tela-banco-talentos.html",
-        context,
-    )
 @login_required
 def tela_candidaturas_recebidas(request):
     candidaturas = [
