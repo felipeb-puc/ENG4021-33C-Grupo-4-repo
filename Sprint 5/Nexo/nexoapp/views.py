@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import date, timedelta
+from urllib.parse import urlencode
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -75,10 +76,25 @@ def inicio(request):
     candidaturas = Candidatura.objects.filter(aluno__user=request.user)
     return render(request, "Inicio.html", {"oportunidades": oportunidades, "favoritos": favoritos, "candidaturas": candidaturas})
 
+def link_google_agenda(oportunidade):
+    inicio = oportunidade.prazo_inscricao.strftime("%Y%m%d")
+    fim = (oportunidade.prazo_inscricao + timedelta(days=1)).strftime("%Y%m%d")
+    parametros = {
+        "action": "TEMPLATE",
+        "text": "Prazo: " + oportunidade.titulo,
+        "dates": inicio + "/" + fim,
+        "details": "Último dia para se inscrever em " + oportunidade.titulo + " (" + oportunidade.instituicao.nome + ").",
+        "ctz": "America/Sao_Paulo",
+    }
+    return "https://calendar.google.com/calendar/render?" + urlencode(parametros)
+
 @login_required(login_url='login')
 def minha_oportunidade_favoritos(request):
     favoritos = Favorito.objects.filter(aluno__user=request.user)
     candidaturas = Candidatura.objects.filter(aluno__user=request.user)
+    for favorito in favoritos:
+        favorito.link_agenda = link_google_agenda(favorito.oportunidade)
+        favorito.prazo_encerrado = favorito.oportunidade.prazo_inscricao < date.today()
     return render(request, "tela-minha-oportunidades-favoritos.html", {"favoritos": favoritos, "candidaturas": candidaturas})
 
 def iniciacao_cientifica(request):
