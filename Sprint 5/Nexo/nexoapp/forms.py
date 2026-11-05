@@ -1,5 +1,6 @@
 
 from django import forms
+from django.contrib.auth.models import User
 
 
 class CadastroRecrutadorForm(forms.Form):
@@ -35,6 +36,12 @@ class CadastroRecrutadorForm(forms.Form):
         required=True
     )
 
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+        if User.objects.filter(username=email).exists():
+            raise forms.ValidationError("Já existe uma conta com este e-mail.")
+        return email
+
 
 class CadastroRepresentanteForm(forms.Form):
     nome = forms.CharField(
@@ -69,6 +76,13 @@ class CadastroRepresentanteForm(forms.Form):
         required=True
     )
 
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+        if User.objects.filter(username=email).exists():
+            raise forms.ValidationError("Já existe uma conta com este e-mail.")
+        return email
+
+
 class CadastroAlunoForm(forms.Form):
     nome_completo = forms.CharField(
         label="Nome completo",
@@ -86,6 +100,12 @@ class CadastroAlunoForm(forms.Form):
             "class": "form-control",
         })
     )
+
+    def clean_email_academico(self):
+        email = self.cleaned_data["email_academico"].strip().lower()
+        if User.objects.filter(username=email).exists():
+            raise forms.ValidationError("Já existe uma conta com este e-mail.")
+        return email
 
     senha = forms.CharField(
         label="Senha",
