@@ -379,7 +379,12 @@ def entrar(request):
             usuario = authenticate(request, username=email, password=senha)
             if usuario is not None:
                 login(request, usuario)
-                return redirect("/templates/Inicio.html")
+                if usuario.is_staff:
+                    return redirect("tela_admin")
+                if hasattr(usuario, "aluno"):
+                    return redirect("/templates/Inicio.html")
+                if hasattr(usuario, "recrutador") or hasattr(usuario, "representante"):
+                    return redirect("tela_painel")
             else:
                 messages.error(request, "Login inválido: e-mail ou senha incorretos.")
     else:
