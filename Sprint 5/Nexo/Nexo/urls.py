@@ -34,7 +34,7 @@ urlpatterns = [
     path('templates/tela-login.html', entrar, name='login'),
     path('logout/', sair, name='logout'),
 
-    path('templates/Inicio.html', inicio),
+    path('templates/Inicio.html', inicio, name='inicio'),
     path('templates/Iniciacao-Cientifica.html', iniciacao_cientifica),
     path('templates/Estagio.html', estagio),
     path('templates/Liga-Academica.html', liga_academica),

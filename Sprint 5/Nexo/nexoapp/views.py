@@ -382,7 +382,7 @@ def entrar(request):
                 if usuario.is_staff:
                     return redirect("tela_admin")
                 if hasattr(usuario, "aluno"):
-                    return redirect("/templates/Inicio.html")
+                    return redirect("inicio")
                 if hasattr(usuario, "recrutador") or hasattr(usuario, "representante"):
                     return redirect("tela_painel")
             else:
