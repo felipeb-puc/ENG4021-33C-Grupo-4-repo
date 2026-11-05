@@ -42,7 +42,10 @@ class CadastroEmailDuplicadoTests(TestCase):
             "aceitar_termos": "on",
         }
 
-        self.criar_conta_e_repetir_email(reverse("cadastro_aluno"), dados)
+        self.criar_conta_e_repetir_email(
+            "/templates/PROJETOtela_informacoes_estudante.html", 
+            dados
+        )
 
     def test_email_duplicado_no_cadastro_de_recrutador(self):
         dados = {
