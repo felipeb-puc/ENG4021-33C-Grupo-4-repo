@@ -43,6 +43,10 @@
                 <p class="cinza">{{ candidatura.oportunidade.instituicao.nome }}</p>
             </div>
         </div>
+        {% empty %}
+        <div class="caixa">
+            <p class="cinza">Você não tem candidaturas ativas no momento.</p>
+        </div>
         {% endfor %}
     </div>
 
