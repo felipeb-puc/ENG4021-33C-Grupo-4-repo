@@ -68,6 +68,8 @@
                     <a href="../templates/tela-oportunidade.html">Ver →</a>
                 </div>
             </div>
+            {% empty %}
+            <p class="cinza">Não há oportunidades disponíveis no momento.</p>
             {% endfor %}
         </div>
     </div>

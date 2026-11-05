@@ -78,6 +78,8 @@
                             <a href="../templates/tela-oportunidade.html">Ver →</a>
                         </div>
                     </div>
+                    {% empty %}
+                    <p class="cinza">Não há oportunidades de iniciação científica disponíveis no momento.</p>
                     {% endfor %}
                 </div>
             </div>
