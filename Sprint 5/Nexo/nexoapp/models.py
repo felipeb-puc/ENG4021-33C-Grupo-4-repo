@@ -8,6 +8,8 @@ class Instituicao(models.Model):
         ("empresa", "Empresa"),
         ("equipe", "Equipe de competição"),
         ("liga", "Liga acadêmica"),
+        ("empresa_junior", "Empresa júnior"),
+        ("departamento", "Departamento"),
     ]
 
     tipo = models.CharField(max_length=20, choices=TIPOS)
@@ -52,7 +54,7 @@ class Representante(models.Model):
     instituicao = models.ForeignKey(
         Instituicao,
         on_delete=models.CASCADE,
-        limit_choices_to={"tipo__in": ["faculdade", "equipe", "liga"]},
+        limit_choices_to={"tipo__in": ["faculdade", "equipe", "liga", "empresa_junior", "departamento"]},
     )
     cargo = models.CharField(max_length=100)
 
@@ -96,7 +98,25 @@ class Candidatura(models.Model):
     oportunidade = models.ForeignKey(Oportunidade, on_delete=models.CASCADE)
     data = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        # o mesmo aluno não pode se candidatar duas vezes à mesma oportunidade
+        constraints = [
+            models.UniqueConstraint(
+                fields=["aluno", "oportunidade"],
+                name="candidatura_unica_por_aluno_e_oportunidade",
+            )
+        ]
+
 class Favorito(models.Model):
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
     oportunidade = models.ForeignKey(Oportunidade, on_delete=models.CASCADE)
     data = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # o mesmo aluno não pode favoritar a mesma oportunidade duas vezes
+        constraints = [
+            models.UniqueConstraint(
+                fields=["aluno", "oportunidade"],
+                name="favorito_unico_por_aluno_e_oportunidade",
+            )
+        ]
