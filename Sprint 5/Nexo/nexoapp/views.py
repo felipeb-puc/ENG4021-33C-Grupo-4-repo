@@ -48,7 +48,6 @@ def cadastro_aluno(request):
                     password=dados["senha"],
                 )
                 # "aparecer_em_buscas" não é salvo: o campo saiu do model (migration 0004)
-                # e volta na tarefa do banco de talentos
                 Aluno.objects.create(
                     user=usuario,
                     instituicao=instituicao,
