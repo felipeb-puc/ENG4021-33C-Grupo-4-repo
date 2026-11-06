@@ -18,8 +18,10 @@
             <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
         </div>
         <div class="menu">
-            <span class="cinza">PUC</span>
-            <a href="../templates/tela-perfil.html" class="avatar">IC</a>
+            {% if user.aluno %}
+            <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
+            <a href="../templates/tela-perfil.html" class="avatar">{{ user.aluno.iniciais }}</a>
+            {% endif %}
             <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
         </div>
     </div>
