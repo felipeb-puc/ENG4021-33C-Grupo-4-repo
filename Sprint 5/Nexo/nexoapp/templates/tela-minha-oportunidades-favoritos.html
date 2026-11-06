@@ -49,11 +49,14 @@
                     <span class="cinza">Inscrições até {{ favorito.oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
                     <a href="../templates/tela-oportunidade.html">Ver →</a>
                 </div>
-                                <div class="linha">
+                <div class="linha acoes">
                     <form method="POST" action="{% url 'candidatar' favorito.oportunidade.id %}">
                         {% csrf_token %}
                         <button type="submit" class="botao">Candidatar-se</button>
                     </form>
+                    {% if not favorito.prazo_encerrado %}
+                    <a href="{{ favorito.link_agenda }}" target="_blank" class="botao-contorno agenda"><img class="ic" src="../static/imagens/icone-calendar.svg">Adicionar à Google Agenda</a>
+                    {% endif %}
                     <form method="POST" action="{% url 'remover_favorito' favorito.id %}">
                         {% csrf_token %}
                         <button type="submit" class="botao-contorno">Remover favorito</button>
