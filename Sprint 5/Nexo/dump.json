@@ -1,0 +1,800 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$WgJZvkMxeyXPryIQ50USpk$NbfdgIY3dK0VXoHGBtQ22cSGkz6dvNNVz/0Y2YEciMQ=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin@nexo.teste",
+    "first_name": "Administrador",
+    "last_name": "",
+    "email": "admin@nexo.teste",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-11-05T21:19:05.804Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$uLoP6sWrm4wbC9plCiVKk1$uH6x3UCU1f5bN+xXXA1Pi7kT3oGA3x6Hnczz33HfkUI=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "miguel@nexo.teste",
+    "first_name": "Miguel",
+    "last_name": "Viana",
+    "email": "miguel@nexo.teste",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-05T21:19:06.015Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$GK4QdTuGIEpMcvYuWnnriA$Gri7svddesm/QUN/IwdmC8WX+bCMnCDi70jsJYiwkhs=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "pedro@nexo.teste",
+    "first_name": "Pedro",
+    "last_name": "Alves",
+    "email": "pedro@nexo.teste",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-05T21:19:06.173Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$Ye1dIYGLfhtJkrEbDZDelw$BwTYw8DbtwwqGyB/LCyjwrcalZJBeLC41UAORK2NIU0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "daniel@nexo.teste",
+    "first_name": "Daniel",
+    "last_name": "Pessoa",
+    "email": "daniel@nexo.teste",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-05T21:19:06.328Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$VlwbOag9GScDyWwQ6wHbIn$FpgPjmkTObd0UjcfdKKwJ6bQCuGZ1l6mugui/R0vRaE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ana@nexo.teste",
+    "first_name": "Ana Luísa",
+    "last_name": "Ramos",
+    "email": "ana@nexo.teste",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-05T21:19:06.484Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$8ZywT76KacJQ0QhgKP5M64$hXJvCQ5YVFcAQdLWAQTglkVgHQV+k1wQ60f4x7fO21M=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "beatriz@nexo.teste",
+    "first_name": "Beatriz",
+    "last_name": "Costa",
+    "email": "beatriz@nexo.teste",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-05T21:19:06.640Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$TtfbzHOEb50H7X2Yg6d3El$Jdrau7jkS3T/t5UWW8x2q2FM8MUclehybEwRYZ8uZ3g=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "carla@nexo.teste",
+    "first_name": "Carla",
+    "last_name": "Mendes",
+    "email": "carla@nexo.teste",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-05T21:19:06.797Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$1baF4tEmP9IFsVtjZvLJxA$xoZLt56V1zVRztZEfUhSrtzsqWFoHJjJtGlr740FXGo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "rafael@nexo.teste",
+    "first_name": "Rafael",
+    "last_name": "Souza",
+    "email": "rafael@nexo.teste",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-05T21:19:06.961Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$g0wqmkbJmoGoPMFqAhwBDE$qV1fn0Rf2kyB7xNr035/rI5Ha9BnEC959KYzjLtqOo4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "lucas@nexo.teste",
+    "first_name": "Lucas",
+    "last_name": "Ferreira",
+    "email": "lucas@nexo.teste",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-05T21:19:07.117Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$6ICSH2BojG9dzuEHKmYwnf$vbKvsR1CyHDbJ6XRhKMGOqnZlwGZie9hswpeUFLtFos=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "marina@nexo.teste",
+    "first_name": "Marina",
+    "last_name": "Lopes",
+    "email": "marina@nexo.teste",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-05T21:19:07.269Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 1,
+  "fields": {
+    "tipo": "faculdade",
+    "nome": "PUC-Rio",
+    "sede": "Gávea, Rio de Janeiro"
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 2,
+  "fields": {
+    "tipo": "faculdade",
+    "nome": "UFRJ",
+    "sede": "Ilha do Fundão, Rio de Janeiro"
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 3,
+  "fields": {
+    "tipo": "faculdade",
+    "nome": "UERJ",
+    "sede": "Maracanã, Rio de Janeiro"
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 4,
+  "fields": {
+    "tipo": "faculdade",
+    "nome": "UFF",
+    "sede": "Niterói"
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 5,
+  "fields": {
+    "tipo": "empresa",
+    "nome": "Exacta",
+    "sede": "Gávea, Rio de Janeiro"
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 6,
+  "fields": {
+    "tipo": "empresa",
+    "nome": "Petrobras",
+    "sede": "Centro, Rio de Janeiro"
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 7,
+  "fields": {
+    "tipo": "empresa",
+    "nome": "Visagio",
+    "sede": "Botafogo, Rio de Janeiro"
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 8,
+  "fields": {
+    "tipo": "liga",
+    "nome": "Liga de Mercado Financeiro",
+    "sede": "PUC-Rio"
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 9,
+  "fields": {
+    "tipo": "liga",
+    "nome": "Liga de Empreendedorismo",
+    "sede": "UFRJ"
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 10,
+  "fields": {
+    "tipo": "equipe",
+    "nome": "Pegasus",
+    "sede": "PUC-Rio"
+  }
+},
+{
+  "model": "nexoapp.instituicao",
+  "pk": 11,
+  "fields": {
+    "tipo": "equipe",
+    "nome": "Baja",
+    "sede": "PUC-Rio"
+  }
+},
+{
+  "model": "nexoapp.curso",
+  "pk": 1,
+  "fields": {
+    "nome": "Engenharia"
+  }
+},
+{
+  "model": "nexoapp.curso",
+  "pk": 2,
+  "fields": {
+    "nome": "Direito"
+  }
+},
+{
+  "model": "nexoapp.curso",
+  "pk": 3,
+  "fields": {
+    "nome": "Administração"
+  }
+},
+{
+  "model": "nexoapp.curso",
+  "pk": 4,
+  "fields": {
+    "nome": "Psicologia"
+  }
+},
+{
+  "model": "nexoapp.curso",
+  "pk": 5,
+  "fields": {
+    "nome": "Ciência da Computação"
+  }
+},
+{
+  "model": "nexoapp.curso",
+  "pk": 6,
+  "fields": {
+    "nome": "Economia"
+  }
+},
+{
+  "model": "nexoapp.curso",
+  "pk": 7,
+  "fields": {
+    "nome": "Design"
+  }
+},
+{
+  "model": "nexoapp.aluno",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "instituicao": 1,
+    "curso": 1,
+    "matricula": "2616767",
+    "periodo": 2,
+    "curriculo": "Técnico de Informática",
+    "cr": "7.8"
+  }
+},
+{
+  "model": "nexoapp.aluno",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "instituicao": 1,
+    "curso": 2,
+    "matricula": "2520408",
+    "periodo": 4,
+    "curriculo": "6 meses de Pegasus",
+    "cr": "8.4"
+  }
+},
+{
+  "model": "nexoapp.aluno",
+  "pk": 3,
+  "fields": {
+    "user": 4,
+    "instituicao": 2,
+    "curso": 6,
+    "matricula": "2310767",
+    "periodo": 8,
+    "curriculo": "1 ano de estágio na Apple Developer Academy",
+    "cr": "9.1"
+  }
+},
+{
+  "model": "nexoapp.aluno",
+  "pk": 4,
+  "fields": {
+    "user": 5,
+    "instituicao": 3,
+    "curso": 4,
+    "matricula": "2420067",
+    "periodo": 5,
+    "curriculo": "1 ano na Liga de Mercado Financeiro",
+    "cr": "8.0"
+  }
+},
+{
+  "model": "nexoapp.aluno",
+  "pk": 5,
+  "fields": {
+    "user": 6,
+    "instituicao": 4,
+    "curso": 5,
+    "matricula": "2611234",
+    "periodo": 3,
+    "curriculo": "Monitora de Programação I. Projetos pessoais em Python.",
+    "cr": "8.7"
+  }
+},
+{
+  "model": "nexoapp.recrutador",
+  "pk": 1,
+  "fields": {
+    "user": 7,
+    "empresa": 7,
+    "cargo": "Analista de RH"
+  }
+},
+{
+  "model": "nexoapp.recrutador",
+  "pk": 2,
+  "fields": {
+    "user": 8,
+    "empresa": 6,
+    "cargo": "Coordenador de Estágios"
+  }
+},
+{
+  "model": "nexoapp.representante",
+  "pk": 1,
+  "fields": {
+    "user": 9,
+    "instituicao": 1,
+    "cargo": "Coordenação de Monitoria"
+  }
+},
+{
+  "model": "nexoapp.representante",
+  "pk": 2,
+  "fields": {
+    "user": 10,
+    "instituicao": 8,
+    "cargo": "Presidente da Liga"
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 1,
+  "fields": {
+    "instituicao": 1,
+    "curso": 1,
+    "tipo": "monitoria",
+    "titulo": "Monitoria de ENG4021",
+    "descricao": "Fazer a revisão das sprints",
+    "requisitos": "Ter sido aprovado em ENG4021",
+    "carga_horaria": 2,
+    "remuneracao": "200.00",
+    "prazo_inscricao": "2026-11-18",
+    "modalidade": "presencial",
+    "periodo_minimo": 3
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 2,
+  "fields": {
+    "instituicao": 1,
+    "curso": 1,
+    "tipo": "monitoria",
+    "titulo": "Monitoria de Cálculo I",
+    "descricao": "Tirar dúvidas dos alunos em plantões semanais.",
+    "requisitos": "Ter sido aprovado em Cálculo I com nota igual ou maior que 8.",
+    "carga_horaria": 8,
+    "remuneracao": "600.00",
+    "prazo_inscricao": "2026-11-20",
+    "modalidade": "presencial",
+    "periodo_minimo": 3
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 3,
+  "fields": {
+    "instituicao": 2,
+    "curso": 6,
+    "tipo": "monitoria",
+    "titulo": "Monitoria de Introdução à Economia",
+    "descricao": "Apoiar o professor nas aulas práticas e organizar os plantões antes das provas.",
+    "requisitos": "Ter sido aprovado em Introdução à Economia.",
+    "carga_horaria": 6,
+    "remuneracao": "400.00",
+    "prazo_inscricao": "2026-11-27",
+    "modalidade": "presencial",
+    "periodo_minimo": 3
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 4,
+  "fields": {
+    "instituicao": 4,
+    "curso": 5,
+    "tipo": "monitoria",
+    "titulo": "Monitoria de Programação I",
+    "descricao": "Acompanhar os laboratórios de Python e ajudar os alunos com os exercícios da semana.",
+    "requisitos": "Ter sido aprovado em Programação I.",
+    "carga_horaria": 10,
+    "remuneracao": "500.00",
+    "prazo_inscricao": "2026-10-20",
+    "modalidade": "hibrido",
+    "periodo_minimo": 2
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 5,
+  "fields": {
+    "instituicao": 1,
+    "curso": 5,
+    "tipo": "ic",
+    "titulo": "IC em Visão Computacional",
+    "descricao": "Pesquisa com visão computacional para inspeção de equipamentos.",
+    "requisitos": "Saber programar em Python. Ter cursado Álgebra Linear.",
+    "carga_horaria": 12,
+    "remuneracao": "700.00",
+    "prazo_inscricao": "2026-12-05",
+    "modalidade": "presencial",
+    "periodo_minimo": 3
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 6,
+  "fields": {
+    "instituicao": 3,
+    "curso": 2,
+    "tipo": "ic",
+    "titulo": "IC em Direito Digital",
+    "descricao": "Pesquisa sobre proteção de dados pessoais e a aplicação da LGPD em plataformas digitais.",
+    "requisitos": "Interesse em direito digital e disponibilidade para reuniões quinzenais.",
+    "carga_horaria": 10,
+    "remuneracao": "700.00",
+    "prazo_inscricao": "2026-11-30",
+    "modalidade": "hibrido",
+    "periodo_minimo": 4
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 7,
+  "fields": {
+    "instituicao": 2,
+    "curso": 4,
+    "tipo": "ic",
+    "titulo": "IC em Psicologia do Desenvolvimento",
+    "descricao": "Ajudar na coleta e organização de dados de uma pesquisa com crianças em idade escolar.",
+    "requisitos": "Ter cursado Psicologia do Desenvolvimento I. Vaga voluntária.",
+    "carga_horaria": 12,
+    "remuneracao": "0.00",
+    "prazo_inscricao": "2026-12-12",
+    "modalidade": "presencial",
+    "periodo_minimo": 2
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 8,
+  "fields": {
+    "instituicao": 4,
+    "curso": 1,
+    "tipo": "ic",
+    "titulo": "IC em Energia Solar",
+    "descricao": "Testar a eficiência de painéis solares em diferentes condições de temperatura no laboratório.",
+    "requisitos": "Ter cursado Física II.",
+    "carga_horaria": 20,
+    "remuneracao": "700.00",
+    "prazo_inscricao": "2026-10-15",
+    "modalidade": "presencial",
+    "periodo_minimo": 4
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 9,
+  "fields": {
+    "instituicao": 5,
+    "curso": 1,
+    "tipo": "estagio",
+    "titulo": "Exacta - vaga para estagio",
+    "descricao": "Laboratório de transformação digital do Departamento de Informática da PUC-Rio.",
+    "requisitos": "Ter um conhecimento prévio da area de atuação do projeto",
+    "carga_horaria": 20,
+    "remuneracao": "1000.00",
+    "prazo_inscricao": "2026-10-29",
+    "modalidade": "presencial",
+    "periodo_minimo": 3
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 10,
+  "fields": {
+    "instituicao": 6,
+    "curso": 3,
+    "tipo": "estagio",
+    "titulo": "Estagio Nivel iniciante na Petrobras",
+    "descricao": "Vagas para a área de back-end",
+    "requisitos": "Estar entre o 3º e o 7º período.",
+    "carga_horaria": 20,
+    "remuneracao": "1800.00",
+    "prazo_inscricao": "2026-12-18",
+    "modalidade": "hibrido",
+    "periodo_minimo": 3
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 11,
+  "fields": {
+    "instituicao": 7,
+    "curso": 6,
+    "tipo": "estagio",
+    "titulo": "Estágio em Análise de Dados",
+    "descricao": "Montar painéis e relatórios para projetos de consultoria, trabalhando com Excel, SQL e Power BI.",
+    "requisitos": "Conhecimento de Excel. SQL é um diferencial.",
+    "carga_horaria": 30,
+    "remuneracao": "2200.00",
+    "prazo_inscricao": "2026-12-10",
+    "modalidade": "hibrido",
+    "periodo_minimo": 5
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 12,
+  "fields": {
+    "instituicao": 5,
+    "curso": 7,
+    "tipo": "estagio",
+    "titulo": "Estágio em Design de Produto",
+    "descricao": "Criar protótipos de telas e participar de testes com usuários dos projetos do laboratório.",
+    "requisitos": "Saber usar Figma. Ter portfólio.",
+    "carga_horaria": 20,
+    "remuneracao": "1200.00",
+    "prazo_inscricao": "2026-11-25",
+    "modalidade": "remoto",
+    "periodo_minimo": 3
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 13,
+  "fields": {
+    "instituicao": 6,
+    "curso": 2,
+    "tipo": "estagio",
+    "titulo": "Estágio Jurídico",
+    "descricao": "Apoiar a equipe jurídica na análise de contratos e no acompanhamento de processos.",
+    "requisitos": "Estar a partir do 6º período de Direito.",
+    "carga_horaria": 30,
+    "remuneracao": "2000.00",
+    "prazo_inscricao": "2027-01-15",
+    "modalidade": "presencial",
+    "periodo_minimo": 6
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 14,
+  "fields": {
+    "instituicao": 10,
+    "curso": 1,
+    "tipo": "equipe",
+    "titulo": "Processo Seletivo da Pegasus",
+    "descricao": "Equipe que projeta e fabrica um carro estilo fórmula para a Fórmula SAE Brasil.",
+    "requisitos": "Ter comprometimento com o projeto",
+    "carga_horaria": 8,
+    "remuneracao": "0.00",
+    "prazo_inscricao": "2026-10-29",
+    "modalidade": "hibrido",
+    "periodo_minimo": 1
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 15,
+  "fields": {
+    "instituicao": 11,
+    "curso": 1,
+    "tipo": "equipe",
+    "titulo": "Processo Seletivo da Baja",
+    "descricao": "Equipe que projeta e constrói um veículo off-road para a competição Baja SAE.",
+    "requisitos": "Disponibilidade para encontros aos sábados.",
+    "carga_horaria": 10,
+    "remuneracao": "0.00",
+    "prazo_inscricao": "2026-11-22",
+    "modalidade": "presencial",
+    "periodo_minimo": 1
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 16,
+  "fields": {
+    "instituicao": 8,
+    "curso": 6,
+    "tipo": "liga",
+    "titulo": "Processo Seletivo da Liga",
+    "descricao": "Liga que aproxima os estudantes do mercado financeiro.",
+    "requisitos": "Ter habilidade de grupo e estar cursando algum curso na puc",
+    "carga_horaria": 6,
+    "remuneracao": "0.00",
+    "prazo_inscricao": "2026-10-29",
+    "modalidade": "hibrido",
+    "periodo_minimo": 1
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 17,
+  "fields": {
+    "instituicao": 8,
+    "curso": 6,
+    "tipo": "liga",
+    "titulo": "Liga de Mercado Financeiro: Núcleo de Research",
+    "descricao": "Escrever relatórios de análise de empresas e apresentar para os membros da liga.",
+    "requisitos": "Ter cursado Contabilidade ou Finanças.",
+    "carga_horaria": 6,
+    "remuneracao": "0.00",
+    "prazo_inscricao": "2026-12-03",
+    "modalidade": "presencial",
+    "periodo_minimo": 2
+  }
+},
+{
+  "model": "nexoapp.oportunidade",
+  "pk": 18,
+  "fields": {
+    "instituicao": 9,
+    "curso": 3,
+    "tipo": "liga",
+    "titulo": "Processo Seletivo da Liga de Empreendedorismo",
+    "descricao": "Participar de workshops e desenvolver ideias de negócio com mentoria de empreendedores.",
+    "requisitos": "Vontade de aprender e de trabalhar em grupo.",
+    "carga_horaria": 4,
+    "remuneracao": "0.00",
+    "prazo_inscricao": "2026-11-28",
+    "modalidade": "hibrido",
+    "periodo_minimo": 1
+  }
+},
+{
+  "model": "nexoapp.candidatura",
+  "pk": 1,
+  "fields": {
+    "aluno": 1,
+    "oportunidade": 1,
+    "data": "2026-11-05T21:19:07.409Z"
+  }
+},
+{
+  "model": "nexoapp.candidatura",
+  "pk": 2,
+  "fields": {
+    "aluno": 2,
+    "oportunidade": 13,
+    "data": "2026-11-05T21:19:07.410Z"
+  }
+},
+{
+  "model": "nexoapp.candidatura",
+  "pk": 3,
+  "fields": {
+    "aluno": 3,
+    "oportunidade": 11,
+    "data": "2026-11-05T21:19:07.411Z"
+  }
+},
+{
+  "model": "nexoapp.candidatura",
+  "pk": 4,
+  "fields": {
+    "aluno": 5,
+    "oportunidade": 5,
+    "data": "2026-11-05T21:19:07.412Z"
+  }
+},
+{
+  "model": "nexoapp.favorito",
+  "pk": 1,
+  "fields": {
+    "aluno": 1,
+    "oportunidade": 9,
+    "data": "2026-11-05T21:19:07.413Z"
+  }
+},
+{
+  "model": "nexoapp.favorito",
+  "pk": 2,
+  "fields": {
+    "aluno": 3,
+    "oportunidade": 14,
+    "data": "2026-11-05T21:19:07.414Z"
+  }
+},
+{
+  "model": "nexoapp.favorito",
+  "pk": 3,
+  "fields": {
+    "aluno": 4,
+    "oportunidade": 6,
+    "data": "2026-11-05T21:19:07.415Z"
+  }
+}
+]
