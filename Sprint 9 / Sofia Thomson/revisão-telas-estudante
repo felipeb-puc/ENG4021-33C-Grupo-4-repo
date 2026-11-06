@@ -1,0 +1,70 @@
+**Gravidade:**
+- **Alta:** a tela quebra (erro ou 404) ou expõe dados de outra pessoa.
+- **Média:** a função não faz o que promete.
+- **Baixa:** texto fixo ou detalhe visual.
+
+## Resumo
+- **4 telas do estudante não abrem (404):** Monitoria, Equipe de competição, Detalhe da oportunidade e Perfil. As rotas delas estão comentadas no `urls.py`.
+- **Links de categoria inconsistentes:** "Liga acadêmica" aponta para `tela-liga-academica.html`, mas a rota é `Liga-Academica.html`. Por isso também dá 404.
+- **Não existe como favoritar:** o ícone de salvar (bookmark) não faz nada. Favoritos só podem ser criados pelo `/admin`.
+- **Cabeçalho fixo:** "PUC" e o avatar "IC" aparecem para qualquer aluno (tarefa S9-19).
+
+## Tabela
+
+| Tela | Problema | Gravidade | Sugestão de tarefa |
+| --- | --- | --- | --- |
+| Tela inicial (`tela-inicial.html`) | Funciona: os links "Entrar" e "Criar conta" abrem as páginas certas. O conteúdo é institucional e fixo por natureza. | — | — |
+| Tela inicial | Usuário já logado que abre a tela inicial não é levado para o Início. | Baixa | Redirecionar usuário logado para a tela do seu papel. |
+| Escolha de conta (`PROJETOtela_escolha_login.html`) | Funciona: os três "Continuar →" levam aos cadastros certos. | — | — |
+| Cadastro de estudante | Funciona: cria `User` e `Aluno` e redireciona para o login com mensagem. | — | — |
+| Cadastro de estudante | Lista de universidades (PUC-Rio, UFRJ, UERJ, UFF) e de cursos fixa no `forms.py`, e não vem do banco. A view cria a instituição/curso pelo nome se não existir. | Média | Montar as opções de universidade e curso a partir de `Instituicao` e `Curso`. |
+| Cadastro de estudante | O checkbox "Quero aparecer em buscas de recrutadores" aparece, mas não é salvo (campo removido do model na migração 0004). | Média | Decidir: remover o checkbox ou voltar o campo ao model. |
+| Login (`tela-login.html`) | Funciona: e-mail ou senha errados mostram "Login inválido". Aluno vai para o Início. | — | — |
+| Login | Usuário que existe mas não é aluno, recrutador, representante nem staff faz login e volta para a tela de login sem nenhuma mensagem. | Média | Mostrar mensagem ou mandar para uma página padrão quando o usuário não tem papel. |
+| Login | "Já tenho conta" e "Entrar" funcionam, mas não existe "Esqueci minha senha". | Baixa | Avaliar o fluxo de recuperação de senha do Django. |
+| Início (`Inicio.html`) | Cabeçalho mostra "PUC" e avatar "IC" fixos para qualquer aluno. | Média | S9-19: usar `user.aluno.instituicao.nome` e as iniciais do usuário. |
+| Início | Link "Monitoria" (`tela-monitoria.html`) dá 404: não há rota. | Alta | Criar view e rota de monitoria (igual a `estagio`, com `tipo="monitoria"`). |
+| Início | Link "Equipe de competição" (`tela-equipe-competicao.html`) dá 404. | Alta | Criar view e rota de equipe (`tipo="equipe"`). |
+| Início | Link "Liga acadêmica" aponta para `tela-liga-academica.html`, mas a rota é `Liga-Academica.html`: 404. | Alta | Corrigir o link (melhor: usar `{% url %}` com nome na rota). |
+| Início | O botão "Ver →" de cada cartão leva para `tela-oportunidade.html`, que não tem rota: 404. | Alta | S9/S10: página de detalhe `/oportunidade/<id>/`. |
+| Início | O avatar "IC" leva para `tela-perfil.html`, que não tem rota: 404. | Alta | Criar a view de perfil. |
+| Início | O ícone de salvar (bookmark) nos cartões não faz nada; não existe ação de favoritar. | Alta | Criar a view `favoritar` (POST) e trocar o ícone por um botão. |
+| Início | "oportunidades abertas para você" conta todas as oportunidades do banco, inclusive as de prazo vencido e as de outras universidades. | Média | Filtrar por prazo (`prazo_inscricao__gte=hoje`) e pela universidade do aluno. |
+| Início | O texto "Oportunidades da PUC-Rio com inscrição mais próxima do fim." está fixo. | Baixa | Usar o nome da universidade do aluno. |
+| Início | Usuário que não é aluno (recrutador, representante) consegue abrir o Início. | Média | Checar o papel na view e redirecionar. |
+| Estágio (`estagio.html`) | A view não tem `@login_required`: qualquer pessoa, mesmo deslogada, abre a tela. | Média | Adicionar `@login_required(login_url='login')`. |
+| Estágio | A caixa de busca não tem formulário: digitar não faz nada. | Média | Ligar a busca ao back-end, como na tela de busca (ou levar para `tela-busca.html?q=`). |
+| Estágio | Os filtros (curso, período, modalidade) são fixos no HTML e não filtram nada. | Média | Reaproveitar os filtros da tela de busca. |
+| Estágio | O título "Oportunidades abertas na PUC-Rio" e o cabeçalho "PUC"/"IC" estão fixos. | Baixa | Usar dados do aluno logado (ver S9-19). |
+| Estágio | Os links "Monitoria", "Liga acadêmica" e "Equipe de competição" das pílulas dão 404 (mesmos problemas do Início). | Alta | Mesmas tarefas de rota do Início. |
+| Estágio | "Ver →" e o bookmark: mesmos problemas do Início (404 e sem ação). | Alta | Mesmas tarefas do Início. |
+| Iniciação científica (`Iniciacao-Cientifica.html`) | Igual à tela de Estágio: sem `@login_required`, busca e filtros sem efeito, textos fixos, links de categoria com 404. | Média | Mesmas tarefas da tela de Estágio. |
+| Liga acadêmica (`tela-liga-academica.html`) | Igual à tela de Estágio. A própria pílula "Liga acadêmica" desta tela aponta para `tela-liga-academica.html` (404). | Alta | Mesmas tarefas + corrigir o link. |
+| Monitoria (`tela-monitoria.html`) | A tela não abre: não há rota (comentada no `urls.py`). | Alta | Criar view e rota. |
+| Monitoria | Mesmo com rota, o template quebraria: usa `{% url %}` com nomes que não existem (`tela_estagio`, `tela_monitoria`, `tela_minha_oportunidades`, `tela_perfil`, `tela_oportunidade`...). | Alta | Padronizar os nomes das rotas e usar os mesmos em todos os templates. |
+| Monitoria | Os 3 cartões de oportunidade estão escritos à mão no HTML, e não vêm do banco. | Alta | Usar `{% for oportunidade in oportunidades %}`, como em `estagio.html`. |
+| Monitoria | O logo e o link "Início" levam para `tela_painel` (tela do recrutador), e não para o Início do aluno. | Média | Apontar para `inicio`. |
+| Equipe de competição (`tela-equipe-competicao.html`) | Mesmos problemas da tela de Monitoria: sem rota, `{% url %}` com nomes inexistentes, cartões fixos, logo indo para o painel. | Alta | Mesmas tarefas da Monitoria. |
+| Busca (`tela-busca.html`) | Funciona: busca por texto, ordenação e filtros (curso, período, modalidade, remuneradas, abertas) filtram no back-end. | — | — |
+| Busca | O título "Oportunidades abertas na {{ universidade }}" e o cabeçalho usam `universidade` e `iniciais`, que a view não envia: aparecem em branco. | Média | Enviar esses valores na view ou usar `user.aluno` (S9-19). |
+| Busca | O placeholder diz "Buscar por título, instituição, curso…", mas a busca só procura no título. | Média | Buscar também em `instituicao__nome` e `curso__nome` com `Q`. |
+| Busca | As pílulas Monitoria, Liga acadêmica e Equipe dão 404, e as pílulas não mudam o resultado da busca (levam para outras páginas). | Média | Transformar as pílulas em filtro `?tipo=` na própria busca. |
+| Busca | "Ver →" (404) e bookmark (sem ação): mesmos problemas do Início. | Alta | Mesmas tarefas do Início. |
+| Busca | O parágrafo "Nenhuma oportunidade encontrada com esses filtros" (`#sem-resultados`) nunca aparece, porque era controlado pelo JavaScript removido. O `{% empty %}` já cobre esse caso. | Baixa | Remover o parágrafo. |
+| Busca | Os atributos `data-*` dos cartões sobraram do JavaScript antigo; `data-periodo` usa um campo que não existe. | Baixa | Remover os `data-*`. |
+| Detalhe da oportunidade (`tela-oportunidade.html`) | A tela não abre: não há rota. | Alta | Criar `/oportunidade/<id>/` com `get_object_or_404`. |
+| Detalhe da oportunidade | Todo o conteúdo é fixo ("Monitoria de Cálculo a Várias Variáveis", "Profa. Ana Ribeiro", R$ 600...). Os botões "Candidatar-se" e "Salvar para depois" são links, e não ações. | Alta | Preencher com a oportunidade do banco e usar os POST de `candidatar`/favoritar. |
+| Minhas oportunidades – Candidaturas ativas | Funciona: lista as candidaturas do aluno e mostra a mensagem "Candidatura enviada!". | — | — |
+| Minhas oportunidades – Candidaturas ativas | O título de cada candidatura leva para `tela-oportunidade.html` (404). | Alta | Usar a página de detalhe com o id. |
+| Minhas oportunidades – Candidaturas ativas | Não há status nem botão de desistir. | Média | Campo `status` em `Candidatura` + ação "Desistir". |
+| Minhas oportunidades – Favoritos | Funciona: lista os favoritos; "Candidatar-se" e "Remover favorito" salvam no banco e mostram mensagem. | — | — |
+| Minhas oportunidades – Favoritos | "Ver →" leva para 404, e o bookmark do cartão não faz nada. | Alta | Mesmas tarefas do Início. |
+| Minhas oportunidades – Favoritos | O aluno pode clicar em "Candidatar-se" de novo numa vaga em que já se candidatou; aparece "Candidatura enviada!" mesmo sem criar nada. | Baixa | Mostrar "Você já se candidatou" ou esconder o botão. |
+| Minhas oportunidades – Histórico | Mostra exatamente as mesmas candidaturas da aba "Candidaturas ativas"; o contador do histórico também repete o das ativas. | Média | Separar por status (encerradas, recusadas, desistências). |
+| Minhas oportunidades (3 abas) | Cabeçalho "PUC"/"IC" fixo; o avatar leva para o perfil (404). | Média | S9-19 + view de perfil. |
+| Minhas oportunidades (3 abas) | A view usa `aluno__user`; usuário que não é aluno vê listas vazias, em vez de ser redirecionado. | Baixa | Checar o papel na view. |
+| Perfil (`tela-perfil.html`) | A tela não abre: não há rota. | Alta | Criar view de perfil. |
+| Perfil | Todo o conteúdo é fixo (PUC-Rio, matrícula 2410123, CR 8,4, resumo, habilidades, experiências de Isabela Corrêa). O botão "Salvar perfil" não salva nada. | Alta | Preencher com `user.aluno` e salvar com um ModelForm. |
+| Perfil | Campos como resumo, áreas, habilidades e experiências não existem no model `Aluno`. | Média | Decidir quais campos criar no model. |
+| Perfil | O logo e o "Início" levam para o painel do recrutador; os links usam `{% url %}` com nomes inexistentes. | Alta | Mesma padronização de nomes de rota. |
+| Todas as telas do estudante | Os links usam caminhos escritos à mão (`../templates/...html`), e não `{% url %}`. Foi isso que causou os links quebrados de Liga e Monitoria. | Média | Dar `name=` a todas as rotas e trocar os `href` por `{% url %}`. |
