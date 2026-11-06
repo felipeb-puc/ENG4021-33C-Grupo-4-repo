@@ -39,10 +39,10 @@
 
         <div class="menu">
 
-            <span class="cinza">{{ universidade }}</span>
+            <span class="cinza">{% if user.aluno %}{{ user.aluno.instituicao.nome }}{% endif %}</span>
 
             <a href="/templates/tela-perfil.html" class="avatar">
-                {{ iniciais }}
+                    {% if user.aluno %}{{ user.aluno.iniciais }}{% endif %}
             </a>
 
             <a href="{% url 'logout' %}" class="botao-contorno">

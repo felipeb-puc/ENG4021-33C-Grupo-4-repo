@@ -35,7 +35,15 @@ class Aluno(models.Model):
     periodo = models.IntegerField()
     curriculo = models.TextField()
     cr = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
-
+    
+    def iniciais(self):
+        partes = self.user.first_name.split()
+        if not partes:
+            return self.user.username[:1].upper()
+        if len(partes) == 1:
+            return partes[0][0].upper()
+        return (partes[0][0] + partes[-1][0]).upper()
+        
     def __str__(self):
         return self.matricula
 

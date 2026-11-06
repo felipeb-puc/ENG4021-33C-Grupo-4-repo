@@ -18,8 +18,10 @@
             <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
         </div>
         <div class="menu">
-            <span class="cinza">PUC</span>
-            <a href="../templates/tela-perfil.html" class="avatar">IC</a>
+            {% if user.aluno %}
+            <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
+            <a href="../templates/tela-perfil.html" class="avatar">{{ user.aluno.iniciais }}</a>
+            {% endif %}
             <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
         </div>
     </div>
@@ -47,11 +49,14 @@
                     <span class="cinza">Inscrições até {{ favorito.oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
                     <a href="../templates/tela-oportunidade.html">Ver →</a>
                 </div>
-                                <div class="linha">
+                <div class="linha acoes">
                     <form method="POST" action="{% url 'candidatar' favorito.oportunidade.id %}">
                         {% csrf_token %}
                         <button type="submit" class="botao">Candidatar-se</button>
                     </form>
+                    {% if not favorito.prazo_encerrado %}
+                    <a href="{{ favorito.link_agenda }}" target="_blank" class="botao-contorno agenda"><img class="ic" src="../static/imagens/icone-calendar.svg">Adicionar à Google Agenda</a>
+                    {% endif %}
                     <form method="POST" action="{% url 'remover_favorito' favorito.id %}">
                         {% csrf_token %}
                         <button type="submit" class="botao-contorno">Remover favorito</button>
