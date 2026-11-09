@@ -173,6 +173,13 @@
                                 {{ oportunidade.get_modalidade_display }}
                             </p>
 
+                            {% if oportunidade.texto_prazo %}
+                            <p class="prazo-restante{% if oportunidade.dias_restantes <= 3 %} urgente{% endif %}">
+                                <img class="ic" src="{% static 'imagens/icone-calendar.svg' %}" alt="">
+                                {{ oportunidade.texto_prazo }}
+                            </p>
+                            {% endif %}
+
                             <div class="linha rodape">
                                 <span class="cinza">
                                     Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}

@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from urllib.parse import urlencode
+from urllib.parse import urlencode, quote
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -468,6 +468,15 @@ def busca(request):
         "ids_favoritos": ids_dos_favoritos(request),
     })
 
+def link_whatsapp(request, oportunidade):
+    texto = (
+        "Olha essa oportunidade no Nexo: " + oportunidade.titulo
+        + " (" + oportunidade.instituicao.nome + "), inscrições até "
+        + oportunidade.prazo_inscricao.strftime("%d/%m/%Y") + ". "
+        + request.build_absolute_uri()
+    )
+    return "https://wa.me/?text=" + quote(texto)
+
 @login_required(login_url='login')
 def tela_oportunidade(request, id):
     oportunidade = get_object_or_404(Oportunidade, id=id)
@@ -480,6 +489,7 @@ def tela_oportunidade(request, id):
         "ja_candidatou": ja_candidatou,
         "favoritada": favoritada,
         "link_agenda": link_google_agenda(oportunidade),
+        "link_whatsapp": link_whatsapp(request, oportunidade),
     })
 
 @login_required(login_url='login')

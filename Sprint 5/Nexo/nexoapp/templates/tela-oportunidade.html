@@ -106,6 +106,9 @@
                             Prazo de inscrição
                         </p>
                         <b>{{ oportunidade.prazo_inscricao|date:"d/m/Y" }}</b>
+                        {% if oportunidade.texto_prazo %}
+                        <p class="prazo-restante{% if oportunidade.dias_restantes <= 3 %} urgente{% endif %}">{{ oportunidade.texto_prazo }}</p>
+                        {% endif %}
                     </div>
 
                     <div class="caixa-cinza">
@@ -169,6 +172,11 @@
                     <a href="{{ link_agenda }}" target="_blank" class="botao-contorno">
                         <img class="ic" src="{% static 'imagens/icone-calendar.svg' %}" alt="">
                         Adicionar à Google Agenda
+                    </a>
+
+                    <a href="{{ link_whatsapp }}" target="_blank" class="botao-contorno">
+                        <img class="ic" src="{% static 'imagens/icone-message-circle.svg' %}" alt="">
+                        Enviar pelo WhatsApp
                     </a>
                     {% endif %}
 
