@@ -2,7 +2,8 @@ from datetime import date, timedelta
 from urllib.parse import urlencode, quote
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -413,6 +414,20 @@ def entrar(request):
         form = LoginForm()
 
     return render(request, "tela-login.html", {"form": form})
+
+
+@login_required(login_url='login')
+def trocar_senha(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            usuario = form.save()
+            update_session_auth_hash(request, usuario)
+            messages.success(request, "Senha alterada.")
+            return redirect("trocar_senha")
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, "tela-trocar-senha.html", {"form": form})
 
 
 def sair(request):

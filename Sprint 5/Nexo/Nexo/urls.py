@@ -33,6 +33,7 @@ urlpatterns = [
     # Login e logout
     path('templates/tela-login.html', entrar, name='login'),
     path('logout/', sair, name='logout'),
+    path('trocar-senha/', trocar_senha, name='trocar_senha'),
 
     path('templates/Inicio.html', inicio, name='inicio'),
     path('templates/Iniciacao-Cientifica.html', iniciacao_cientifica),
