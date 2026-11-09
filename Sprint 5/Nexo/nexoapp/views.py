@@ -69,12 +69,19 @@ def cadastro_aluno(request):
         {"form": form},
     )
 
+def ids_dos_favoritos(request):
+    ids = []
+    if request.user.is_authenticated:
+        for favorito in Favorito.objects.filter(aluno__user=request.user):
+            ids.append(favorito.oportunidade_id)
+    return ids
+
 @login_required(login_url='login')
 def inicio(request):
     oportunidades = Oportunidade.objects.order_by("prazo_inscricao")
     favoritos = Favorito.objects.filter(aluno__user=request.user)
     candidaturas = Candidatura.objects.filter(aluno__user=request.user)
-    return render(request, "Inicio.html", {"oportunidades": oportunidades, "favoritos": favoritos, "candidaturas": candidaturas})
+    return render(request, "Inicio.html", {"oportunidades": oportunidades, "favoritos": favoritos, "candidaturas": candidaturas, "ids_favoritos": ids_dos_favoritos(request)})
 
 def link_google_agenda(oportunidade):
     inicio = oportunidade.prazo_inscricao.strftime("%Y%m%d")
@@ -99,7 +106,7 @@ def minha_oportunidade_favoritos(request):
 
 def iniciacao_cientifica(request):
     oportunidades = Oportunidade.objects.filter(tipo="ic")
-    return render(request, "Iniciacao-Cientifica.html", {"oportunidades": oportunidades})
+    return render(request, "Iniciacao-Cientifica.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
 
 @login_required(login_url='login')
 def minha_oportunidade_historico(request):
@@ -109,7 +116,7 @@ def minha_oportunidade_historico(request):
 
 def estagio(request):
     oportunidades = Oportunidade.objects.filter(tipo="estagio")
-    return render(request, "estagio.html", {"oportunidades": oportunidades})
+    return render(request, "estagio.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
 
 @login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):
@@ -119,7 +126,7 @@ def minha_oportunidade_candidaturas_ativas(request):
 
 def liga_academica(request):
     oportunidades = Oportunidade.objects.filter(tipo="liga")
-    return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades})
+    return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
     
 def cadastro_recrutador(request):
     empresas = Instituicao.objects.filter(tipo="empresa")
@@ -458,16 +465,49 @@ def busca(request):
         "modalidades_selecionadas": modalidades,
         "so_remuneradas": so_remuneradas,
         "so_abertas": so_abertas,
+        "ids_favoritos": ids_dos_favoritos(request),
+    })
+
+@login_required(login_url='login')
+def tela_oportunidade(request, id):
+    oportunidade = get_object_or_404(Oportunidade, id=id)
+    encerrada = oportunidade.prazo_inscricao < date.today()
+    ja_candidatou = Candidatura.objects.filter(aluno__user=request.user, oportunidade=oportunidade).exists()
+    favoritada = Favorito.objects.filter(aluno__user=request.user, oportunidade=oportunidade).exists()
+    return render(request, "tela-oportunidade.html", {
+        "oportunidade": oportunidade,
+        "encerrada": encerrada,
+        "ja_candidatou": ja_candidatou,
+        "favoritada": favoritada,
+        "link_agenda": link_google_agenda(oportunidade),
     })
 
 @login_required(login_url='login')
 def candidatar(request, oportunidade_id):
+    oportunidade = get_object_or_404(Oportunidade, id=oportunidade_id)
     if request.method == "POST":
-        aluno = get_object_or_404(Aluno, user=request.user)
+        if not hasattr(request.user, "aluno"):
+            messages.error(request, "Só estudantes podem se candidatar.")
+        elif oportunidade.prazo_inscricao < date.today():
+            messages.error(request, "As inscrições para esta oportunidade já foram encerradas.")
+        elif Candidatura.objects.filter(aluno=request.user.aluno, oportunidade=oportunidade).exists():
+            messages.error(request, "Você já se candidatou a esta oportunidade.")
+        else:
+            Candidatura.objects.create(aluno=request.user.aluno, oportunidade=oportunidade)
+            messages.success(request, "Candidatura enviada!")
+            return redirect("/templates/tela-minha-oportunidades-canditaturas-ativas.html")
+    return redirect("tela_oportunidade", id=oportunidade.id)
+
+@login_required(login_url='login')
+def favoritar(request, oportunidade_id):
+    if request.method == "POST" and hasattr(request.user, "aluno"):
         oportunidade = get_object_or_404(Oportunidade, id=oportunidade_id)
-        Candidatura.objects.get_or_create(aluno=aluno, oportunidade=oportunidade)
-        messages.success(request, "Candidatura enviada!")
-    return redirect("/templates/tela-minha-oportunidades-canditaturas-ativas.html")
+        favorito = Favorito.objects.filter(aluno=request.user.aluno, oportunidade=oportunidade).first()
+        if favorito:
+            favorito.delete()
+        else:
+            Favorito.objects.create(aluno=request.user.aluno, oportunidade=oportunidade)
+    return redirect(request.META.get("HTTP_REFERER", "inicio"))
 
 
 @login_required(login_url='login')
