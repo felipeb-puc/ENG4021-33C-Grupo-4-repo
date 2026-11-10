@@ -49,6 +49,14 @@
             <a href="../templates/Estagio.html" class="categoria">Estágio</a>
             <a href="../templates/tela-equipe-competicao.html" class="categoria">Equipe de competição</a>
         </div>
+        <p class="cinza">
+            Ver na busca:
+            <a href="{% url 'tela_busca' %}?tipo=monitoria">Monitoria</a> ·
+            <a href="{% url 'tela_busca' %}?tipo=ic">Iniciação científica</a> ·
+            <a href="{% url 'tela_busca' %}?tipo=liga">Liga acadêmica</a> ·
+            <a href="{% url 'tela_busca' %}?tipo=estagio">Estágio</a> ·
+            <a href="{% url 'tela_busca' %}?tipo=equipe">Equipe de competição</a>
+        </p>
 
         <div class="linha">
             <h2>Encerrando primeiro</h2>
