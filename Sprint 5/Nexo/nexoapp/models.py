@@ -99,6 +99,19 @@ class Oportunidade(models.Model):
     modalidade = models.CharField(max_length=20, choices=MODALIDADES)
     periodo_minimo = models.IntegerField(default=1)
 
+    def dias_restantes(self):
+        return (self.prazo_inscricao - date.today()).days
+
+    def texto_prazo(self):
+        dias = self.dias_restantes()
+        if dias < 0:
+            return ""
+        if dias == 0:
+            return "Último dia para se inscrever"
+        if dias == 1:
+            return "Falta 1 dia"
+        return "Faltam " + str(dias) + " dias"
+
     def __str__(self):
         return self.titulo
 

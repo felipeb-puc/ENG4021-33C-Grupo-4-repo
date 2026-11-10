@@ -50,6 +50,11 @@
   margin: 0px;
 }
 
+#fichas .prazo-restante {
+  font-size: 13.5px;
+  margin: 4px 0px 0px 0px;
+}
+
 #lateral {
   width: 300px;
   text-align: center;

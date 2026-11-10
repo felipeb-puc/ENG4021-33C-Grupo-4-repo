@@ -47,6 +47,9 @@
                 <p><img class="ic" src="../static/imagens/icone-clock.svg">{{ favorito.oportunidade.carga_horaria }}h por semana</p>
                 <p><img class="ic" src="../static/imagens/icone-wallet.svg">{% if favorito.oportunidade.remuneracao %}R$ {{ favorito.oportunidade.remuneracao|floatformat:"2g" }} por mês{% else %}Voluntária{% endif %}</p>
                 <p><img class="ic" src="../static/imagens/icone-building-2.svg">{{ favorito.oportunidade.get_modalidade_display }}</p>
+                {% if favorito.oportunidade.texto_prazo %}
+                <p class="prazo-restante{% if favorito.oportunidade.dias_restantes <= 3 %} urgente{% endif %}"><img class="ic" src="../static/imagens/icone-calendar.svg">{{ favorito.oportunidade.texto_prazo }}</p>
+                {% endif %}
                 <div class="linha rodape">
                     <span class="cinza">{% if favorito.oportunidade.encerrada %}Inscrições encerradas{% else %}Inscrições até {{ favorito.oportunidade.prazo_inscricao|date:"d/m/Y" }}{% endif %}</span>
                     <a href="{% url 'tela_oportunidade' favorito.oportunidade.id %}">Ver →</a>

@@ -85,6 +85,9 @@
                 <p><img class="ic" src="../static/imagens/icone-clock.svg">{{ oportunidade.carga_horaria }}h por semana</p>
                 <p><img class="ic" src="../static/imagens/icone-wallet.svg">{% if oportunidade.remuneracao %}R$ {{ oportunidade.remuneracao|floatformat:"2g" }} por mês{% else %}Voluntária{% endif %}</p>
                 <p><img class="ic" src="../static/imagens/icone-building-2.svg">{{ oportunidade.get_modalidade_display }}</p>
+                {% if oportunidade.texto_prazo %}
+                <p class="prazo-restante{% if oportunidade.dias_restantes <= 3 %} urgente{% endif %}"><img class="ic" src="../static/imagens/icone-calendar.svg">{{ oportunidade.texto_prazo }}</p>
+                {% endif %}
                 <div class="linha rodape">
                     <span class="cinza">{% if oportunidade.encerrada %}Inscrições encerradas{% else %}Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}{% endif %}</span>
                     <a href="{% url 'tela_oportunidade' oportunidade.id %}">Ver →</a>
