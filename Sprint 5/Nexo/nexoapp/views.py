@@ -105,13 +105,35 @@ def estagio(request):
     oportunidades = Oportunidade.objects.filter(tipo="estagio")
     return render(request, "estagio.html", {"oportunidades": oportunidades})
 
+@login_required(login_url='login')
 def tela_monitoria(request):
     oportunidades = Oportunidade.objects.filter(tipo="monitoria")
     return render(request, "tela-monitoria.html", {"oportunidades": oportunidades})
 
+@login_required(login_url='login')
 def tela_equipe_competicao(request):
     oportunidades = Oportunidade.objects.filter(tipo="equipe")
     return render(request, "tela-equipe-competicao.html", {"oportunidades": oportunidades})
+
+@login_required(login_url='login')
+def tela_oportunidade(request):
+    return render(request, "tela-oportunidade.html")
+
+@login_required(login_url='login')
+def tela_perfil(request):
+    return render(request, "tela-perfil.html")
+
+@login_required(login_url='login')
+def tela_curriculo_aluno(request):
+    return render(request, "tela-curriculo-aluno.html")
+
+@login_required(login_url='login')
+def tela_instituicao(request):
+    return render(request, "tela-instituicao.html")
+
+@login_required(login_url='login')
+def tela_nova_oportunidade(request):
+    return render(request, "tela-nova-oportunidade.html")
 
 @login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):
