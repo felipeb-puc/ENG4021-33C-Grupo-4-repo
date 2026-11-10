@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.db.models import Q
 from .models import (
     Instituicao,
     Curso,
@@ -33,13 +34,6 @@ def cadastro_aluno(request):
         if form.is_valid():
             dados = form.cleaned_data
             email = dados["email_academico"].strip().lower()
-            instituicao, _ = Instituicao.objects.get_or_create(
-                tipo="faculdade",
-                nome=dados["universidade"],
-                defaults={"sede": ""},
-            )
-            nome_curso = dict(CadastroAlunoForm.CURSOS)[dados["curso"]]
-            curso, _ = Curso.objects.get_or_create(nome=nome_curso)
             # atomic: User e Aluno são criados juntos; se um falhar, o outro é desfeito
             with transaction.atomic():
                 usuario = User.objects.create_user(
@@ -51,8 +45,8 @@ def cadastro_aluno(request):
                 # "aparecer_em_buscas" não é salvo: o campo saiu do model (migration 0004)
                 Aluno.objects.create(
                     user=usuario,
-                    instituicao=instituicao,
-                    curso=curso,
+                    instituicao=dados["universidade"],
+                    curso=dados["curso"],
                     matricula=dados["matricula"],
                     periodo=int(dados["periodo_atual"]),
                     curriculo="",
@@ -117,6 +111,32 @@ def minha_oportunidade_historico(request):
 def estagio(request):
     oportunidades = Oportunidade.objects.filter(tipo="estagio")
     return render(request, "estagio.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
+
+@login_required(login_url='login')
+def tela_monitoria(request):
+    oportunidades = Oportunidade.objects.filter(tipo="monitoria")
+    return render(request, "tela-monitoria.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
+
+@login_required(login_url='login')
+def tela_equipe_competicao(request):
+    oportunidades = Oportunidade.objects.filter(tipo="equipe")
+    return render(request, "tela-equipe-competicao.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
+
+@login_required(login_url='login')
+def tela_perfil(request):
+    return render(request, "tela-perfil.html")
+
+@login_required(login_url='login')
+def tela_curriculo_aluno(request):
+    return render(request, "tela-curriculo-aluno.html")
+
+@login_required(login_url='login')
+def tela_instituicao(request):
+    return render(request, "tela-instituicao.html")
+
+@login_required(login_url='login')
+def tela_nova_oportunidade(request):
+    return render(request, "tela-nova-oportunidade.html")
 
 @login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):
@@ -425,7 +445,17 @@ def busca(request):
     ordem = request.GET.get("ordem", "encerrando")
     oportunidades = Oportunidade.objects.all()
     if q:
-        oportunidades = oportunidades.filter(titulo__icontains=q)
+        # Q permite juntar condições com | (OU): acha o texto no título, na instituição ou na descrição
+        oportunidades = oportunidades.filter(
+            Q(titulo__icontains=q)
+            | Q(instituicao__nome__icontains=q)
+            | Q(descricao__icontains=q)
+        )
+
+    tipos = request.GET.getlist("tipo")
+    if tipos:
+        oportunidades = oportunidades.filter(tipo__in=tipos)
+
     curso = request.GET.get("curso", "")
     if curso:
         oportunidades = oportunidades.filter(curso_id=curso)
@@ -459,6 +489,8 @@ def busca(request):
         "total_oportunidades": oportunidades.count(),
         "q": q,
         "ordem": ordem,
+        "tipos_opcoes": Oportunidade.TIPOS,
+        "tipos_selecionados": tipos,
         "cursos": Curso.objects.order_by("nome"),
         "curso_selecionado": curso,
         "periodo_selecionado": periodo,
