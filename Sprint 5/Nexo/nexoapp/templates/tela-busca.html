@@ -10,7 +10,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="{% static 'css/geral.css' %}" rel="stylesheet">
-    <link href="{% static 'css/tela-busca.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tela-busca.css' %}?v=2" rel="stylesheet">
 </head>
 <body>
 
@@ -55,10 +55,10 @@
 
     <div class="pagina">
 
-        <h1>Oportunidades abertas na {{ universidade }}</h1>
+        <h1>Encontre sua próxima oportunidade</h1>
 
         <p class="cinza">
-            Você vê o que é da sua universidade e os estágios publicados para ela.
+            Estágio, monitoria, iniciação científica, liga acadêmica e equipe de competição num lugar só.
         </p>
 
                 <form method="get" id="form-busca">
@@ -68,8 +68,9 @@
                 name="q"
                 value="{{ q }}"
                 class="com-lupa"
-                placeholder="Buscar por título, instituição, curso..."
+                placeholder="Buscar por título, instituição ou descrição..."
                 aria-label="Buscar oportunidades"
+                onchange="this.form.submit()"
             >
             <label for="ordem">Ordenar por</label>
             <select name="ordem" id="ordem" onchange="this.form.submit()">
@@ -88,11 +89,21 @@
             <a href="/templates/tela-equipe-competicao.html" class="pilula">Equipe de competição</a>
         </div>
 
+        <!-- abre e fecha a caixa de filtros sem recarregar a página -->
+        <button type="button" id="botao-filtros" class="botao-contorno" onclick="const f = document.getElementById('filtros'); f.hidden = !f.hidden; this.textContent = f.hidden ? 'Mostrar filtros' : 'Ocultar filtros';">Ocultar filtros</button>
+
         <div id="corpo">
 
-                        <div id="filtros" class="caixa">
+                        <div id="filtros" class="caixa" onchange="aplicarFiltros()">
 
                 <h2>Filtros</h2>
+
+                <label>Tipo</label>
+                <div id="tipos">
+                    {% for valor, nome in tipos_opcoes %}
+                    <label class="opcao"><input type="checkbox" name="tipo" value="{{ valor }}" form="form-busca" {% if valor in tipos_selecionados %}checked{% endif %}> {{ nome }}</label>
+                    {% endfor %}
+                </div>
 
                 <label for="curso">Curso</label>
                 <select name="curso" id="curso" form="form-busca">
@@ -112,10 +123,9 @@
                     <label class="pilula"><input type="checkbox" name="modalidade" value="remoto" form="form-busca" {% if "remoto" in modalidades_selecionadas %}checked{% endif %}> Remoto</label>
                 </div>
 
-                <label><input type="checkbox" name="remuneradas" value="1" form="form-busca" {% if so_remuneradas %}checked{% endif %}> Só remuneradas</label>
-                <label><input type="checkbox" name="abertas" value="1" form="form-busca" {% if so_abertas %}checked{% endif %}> Só inscrições abertas</label>
+                <label class="opcao"><input type="checkbox" name="remuneradas" value="1" form="form-busca" {% if so_remuneradas %}checked{% endif %}> Só remuneradas</label>
+                <label class="opcao"><input type="checkbox" name="abertas" value="1" form="form-busca" {% if so_abertas %}checked{% endif %}> Só inscrições abertas</label>
 
-                <button type="submit" class="botao" form="form-busca">Aplicar filtros</button>
                 <a href="{% url 'tela_busca' %}" class="botao-contorno">Limpar filtros</a>
 
             </div>
@@ -186,7 +196,7 @@
                     {% empty %}
 
                         <p class="cinza">
-                            Nenhuma oportunidade disponível no momento.
+                            Nenhuma oportunidade encontrada.
                         </p>
 
                     {% endfor %}
@@ -202,6 +212,21 @@
         </div>
 
     </div>
+
+    <script>
+        // guarda onde a pessoa estava na página antes de recarregar com o filtro novo
+        function aplicarFiltros() {
+            sessionStorage.setItem("rolagem-busca", window.scrollY);
+            document.getElementById("form-busca").submit();
+        }
+
+        // depois de recarregar, volta para o mesmo ponto em vez de ficar no topo
+        const rolagem = sessionStorage.getItem("rolagem-busca");
+        if (rolagem) {
+            window.scrollTo(0, Number(rolagem));
+            sessionStorage.removeItem("rolagem-busca");
+        }
+    </script>
 
 </body>
 </html>

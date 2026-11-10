@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.db.models import Q
 from .models import (
     Instituicao,
     Curso,
@@ -33,13 +34,6 @@ def cadastro_aluno(request):
         if form.is_valid():
             dados = form.cleaned_data
             email = dados["email_academico"].strip().lower()
-            instituicao, _ = Instituicao.objects.get_or_create(
-                tipo="faculdade",
-                nome=dados["universidade"],
-                defaults={"sede": ""},
-            )
-            nome_curso = dict(CadastroAlunoForm.CURSOS)[dados["curso"]]
-            curso, _ = Curso.objects.get_or_create(nome=nome_curso)
             # atomic: User e Aluno são criados juntos; se um falhar, o outro é desfeito
             with transaction.atomic():
                 usuario = User.objects.create_user(
@@ -51,8 +45,8 @@ def cadastro_aluno(request):
                 # "aparecer_em_buscas" não é salvo: o campo saiu do model (migration 0004)
                 Aluno.objects.create(
                     user=usuario,
-                    instituicao=instituicao,
-                    curso=curso,
+                    instituicao=dados["universidade"],
+                    curso=dados["curso"],
                     matricula=dados["matricula"],
                     periodo=int(dados["periodo_atual"]),
                     curriculo="",
@@ -418,7 +412,17 @@ def busca(request):
     ordem = request.GET.get("ordem", "encerrando")
     oportunidades = Oportunidade.objects.all()
     if q:
-        oportunidades = oportunidades.filter(titulo__icontains=q)
+        # Q permite juntar condições com | (OU): acha o texto no título, na instituição ou na descrição
+        oportunidades = oportunidades.filter(
+            Q(titulo__icontains=q)
+            | Q(instituicao__nome__icontains=q)
+            | Q(descricao__icontains=q)
+        )
+
+    tipos = request.GET.getlist("tipo")
+    if tipos:
+        oportunidades = oportunidades.filter(tipo__in=tipos)
+
     curso = request.GET.get("curso", "")
     if curso:
         oportunidades = oportunidades.filter(curso_id=curso)
@@ -452,6 +456,8 @@ def busca(request):
         "total_oportunidades": oportunidades.count(),
         "q": q,
         "ordem": ordem,
+        "tipos_opcoes": Oportunidade.TIPOS,
+        "tipos_selecionados": tipos,
         "cursos": Curso.objects.order_by("nome"),
         "curso_selecionado": curso,
         "periodo_selecionado": periodo,
