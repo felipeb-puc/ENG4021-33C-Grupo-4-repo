@@ -1,6 +1,7 @@
 
 from django import forms
 from django.contrib.auth.models import User
+from .models import Instituicao, Curso
 
 
 class CadastroRecrutadorForm(forms.Form):
@@ -125,35 +126,18 @@ class CadastroAlunoForm(forms.Form):
         })
     )
 
-    UNIVERSIDADES = [
-        ("PUC-Rio", "PUC-Rio"),
-        ("UFRJ", "UFRJ"),
-        ("UERJ", "UERJ"),
-        ("UFF", "UFF"),
-    ]
-
-    universidade = forms.ChoiceField(
+    # as opções vêm do banco: o aluno escolhe uma universidade e um curso que já existem
+    universidade = forms.ModelChoiceField(
         label="Universidade",
-        choices=UNIVERSIDADES,
+        queryset=Instituicao.objects.filter(tipo="faculdade").order_by("nome"),
+        empty_label="Selecione",
         widget=forms.Select(attrs={"class": "form-control"})
     )
 
-    CURSOS = [
-        ("Administracao", "Administração"),
-        ("Direito", "Direito"),
-        ("Engenharia", "Engenharia"),
-        ("Computacao", "Ciência da Computação"),
-        ("Economia", "Economia"),
-        ("Psicologia", "Psicologia"),
-        ("Design", "Design"),
-        ("Comunicacao", "Comunicação"),
-        ("Relacoes_Internacionais", "Relações Internacionais"),
-        ("Outro", "Outro"),
-    ]
-
-    curso = forms.ChoiceField(
+    curso = forms.ModelChoiceField(
         label="Curso",
-        choices=CURSOS,
+        queryset=Curso.objects.order_by("nome"),
+        empty_label="Selecione",
         widget=forms.Select(attrs={"class": "form-control"})
     )
 

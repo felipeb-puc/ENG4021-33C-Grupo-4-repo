@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil - Nexo</title>
+    <title>NEXO · Perfil</title>
+    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="{% static 'css/geral.css' %}" rel="stylesheet">
@@ -37,9 +38,9 @@
         </div>
 
         <div class="menu">
-            <span class="cinza">PUC</span>
+            <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
 
-            <a href="{% url 'tela_perfil' %}" class="avatar">IC</a>
+            <a href="{% url 'tela_perfil' %}" class="avatar">{{ user.aluno.iniciais }}</a>
 
             <a href="{% url 'logout' %}" class="botao-contorno">
                 <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">

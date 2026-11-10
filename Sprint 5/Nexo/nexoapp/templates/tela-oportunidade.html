@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ oportunidade.titulo }} - Nexo</title>
+    <title>NEXO · {{ oportunidade.titulo }}</title>
+    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="{% static 'css/geral.css' %}" rel="stylesheet">
@@ -38,7 +39,7 @@
         <div class="menu">
             {% if user.aluno %}
             <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
-            <a href="/templates/tela-perfil.html" class="avatar">{{ user.aluno.iniciais }}</a>
+            <a href="{% url 'tela_perfil' %}" class="avatar">{{ user.aluno.iniciais }}</a>
             {% endif %}
 
             <a href="{% url 'logout' %}" class="botao-contorno">
@@ -89,7 +90,7 @@
                             <img class="ic" src="{% static 'imagens/icone-wallet.svg' %}" alt="">
                             Remuneração
                         </p>
-                        <b>R$ {{ oportunidade.remuneracao }} por mês</b>
+                        <b>{% if oportunidade.remuneracao %}R$ {{ oportunidade.remuneracao|floatformat:"2g" }} por mês{% else %}Voluntária{% endif %}</b>
                     </div>
 
                     <div class="caixa-cinza">
