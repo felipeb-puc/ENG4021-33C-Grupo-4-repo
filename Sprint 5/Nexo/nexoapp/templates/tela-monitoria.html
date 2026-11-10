@@ -106,7 +106,14 @@
                     <div class="cartao">
                         <div>
                             <span class="etiqueta">{{ oportunidade.get_tipo_display }}</span>
-                            <img class="salvar" src="{% static 'imagens/icone-bookmark.svg' %}" alt="Salvar">
+                            <form method="post" action="{% url 'favoritar' oportunidade.id %}" class="form-salvar">
+                                {% csrf_token %}
+                                {% if oportunidade.id in ids_favoritos %}
+                                <button type="submit" class="botao-salvar ativo" title="Tirar dos favoritos"><img src="{% static 'imagens/icone-bookmark-branco.svg' %}" alt=""></button>
+                                {% else %}
+                                <button type="submit" class="botao-salvar" title="Salvar nos favoritos"><img src="{% static 'imagens/icone-bookmark.svg' %}" alt=""></button>
+                                {% endif %}
+                            </form>
                         </div>
 
                         <h2>{{ oportunidade.titulo }}</h2>
@@ -118,7 +125,7 @@
 
                         <div class="linha rodape">
                             <span class="cinza">{% if oportunidade.encerrada %}Inscrições encerradas{% else %}Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}{% endif %}</span>
-                            <a href="{% url 'tela_oportunidade' %}">Ver →</a>
+                            <a href="{% url 'tela_oportunidade' oportunidade.id %}">Ver →</a>
                         </div>
                     </div>
                     {% empty %}

@@ -1,11 +1,10 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO · Oportunidade</title>
+    <title>NEXO · {{ oportunidade.titulo }}</title>
     <link rel="icon" href="{% static 'imagens/logo.svg' %}">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,18 +15,18 @@
 
     <div id="topo">
         <div class="menu">
-            <a href="{% url 'tela_painel' %}" class="logo">
+            <a href="{% url 'inicio' %}" class="logo">
                 <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
             </a>
 
-            <a href="{% url 'tela_painel' %}">Início</a>
+            <a href="{% url 'inicio' %}">Início</a>
 
             <a href="{% url 'tela_busca' %}" class="ativo">
                 <img class="ic" src="{% static 'imagens/icone-search-branco.svg' %}" alt="">
                 Buscar
             </a>
 
-            <a href="{% url 'tela_minha_oportunidades' %}">
+            <a href="/templates/tela-minha-oportunidades-canditaturas-ativas.html">
                 Minhas oportunidades
                 {% if user.aluno %}
                     <span class="contador">
@@ -38,9 +37,10 @@
         </div>
 
         <div class="menu">
+            {% if user.aluno %}
             <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
-
             <a href="{% url 'tela_perfil' %}" class="avatar">{{ user.aluno.iniciais }}</a>
+            {% endif %}
 
             <a href="{% url 'logout' %}" class="botao-contorno">
                 <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
@@ -51,21 +51,23 @@
 
     <div class="pagina">
 
+        {% for mensagem in messages %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
+
         <a href="{% url 'tela_busca' %}" class="cinza">
             ← Voltar para a busca
         </a>
 
         <div id="cabecalho">
-            <img src="{% static 'imagens/pucrio.png' %}" alt="PUC-Rio">
+            <div class="selo">{{ oportunidade.instituicao.nome|first|upper }}</div>
 
             <div>
-                <span class="etiqueta">Monitoria</span>
+                <span class="etiqueta">{{ oportunidade.get_tipo_display }}</span>
 
-                <h1>Monitoria de Cálculo a Várias Variáveis</h1>
+                <h1>{{ oportunidade.titulo }}</h1>
 
-                <a href="{% url 'tela_oportunidade' %}" class="cinza">
-                    Departamento de Matemática
-                </a>
+                <p class="cinza">{{ oportunidade.instituicao.nome }}</p>
             </div>
         </div>
 
@@ -80,15 +82,15 @@
                             <img class="ic" src="{% static 'imagens/icone-clock.svg' %}" alt="">
                             Carga horária
                         </p>
-                        <b>12h por semana</b>
+                        <b>{{ oportunidade.carga_horaria }}h por semana</b>
                     </div>
 
                     <div class="caixa-cinza">
                         <p class="cinza">
                             <img class="ic" src="{% static 'imagens/icone-wallet.svg' %}" alt="">
-                            Bolsa
+                            Remuneração
                         </p>
-                        <b>R$ 600 por mês</b>
+                        <b>{% if oportunidade.remuneracao %}R$ {{ oportunidade.remuneracao|floatformat:"2g" }} por mês{% else %}Voluntária{% endif %}</b>
                     </div>
 
                     <div class="caixa-cinza">
@@ -96,7 +98,7 @@
                             <img class="ic" src="{% static 'imagens/icone-building-2.svg' %}" alt="">
                             Modalidade
                         </p>
-                        <b>Presencial · Rio de Janeiro, RJ</b>
+                        <b>{{ oportunidade.get_modalidade_display }}</b>
                     </div>
 
                     <div class="caixa-cinza">
@@ -104,74 +106,80 @@
                             <img class="ic" src="{% static 'imagens/icone-calendar.svg' %}" alt="">
                             Prazo de inscrição
                         </p>
-                        <b>06/11/2026</b>
+                        <b>{{ oportunidade.prazo_inscricao|date:"d/m/Y" }}</b>
                     </div>
 
                     <div class="caixa-cinza">
                         <p class="cinza">
                             <img class="ic" src="{% static 'imagens/icone-graduation-cap.svg' %}" alt="">
-                            Curso-alvo
+                            Curso
                         </p>
-                        <b>
-                            Engenharia de Produção, Engenharia da Computação,
-                            Engenharia Civil, Matemática
-                        </b>
+                        <b>{{ oportunidade.curso.nome }}</b>
                     </div>
 
                     <div class="caixa-cinza">
                         <p class="cinza">
                             <img class="ic" src="{% static 'imagens/icone-list-checks.svg' %}" alt="">
-                            Exigências
+                            Período mínimo
                         </p>
-                        <b>A partir do 3º período · CR mínimo 7.0</b>
+                        <b>A partir do {{ oportunidade.periodo_minimo }}º período</b>
                     </div>
 
                 </div>
 
                 <h2>Descrição</h2>
 
-                <p>
-                    Apoio às listas de exercícios e plantão de dúvidas duas vezes por semana,
-                    para as turmas do diurno. A monitoria inclui participação na reunião
-                    semanal de acompanhamento com a professora responsável.
-                </p>
+                <p>{{ oportunidade.descricao|linebreaksbr }}</p>
 
-                <h2>Pré-requisitos</h2>
+                <h2>Requisitos</h2>
 
-                <ul>
-                    <li>Aprovação em Cálculo a Várias Variáveis com nota mínima 7,0</li>
-                    <li>Disponibilidade às terças e quintas à tarde</li>
-                </ul>
-
-                <h2>O que oferece</h2>
-
-                <ul>
-                    <li>Bolsa mensal de R$ 600</li>
-                    <li>Certificado de monitoria</li>
-                </ul>
+                <p>{{ oportunidade.requisitos|linebreaksbr }}</p>
 
             </div>
 
             <div id="lateral">
 
                 <div class="caixa">
-                    <a href="{% url 'tela_minha_oportunidades' %}" class="botao">
-                        Candidatar-se
-                    </a>
+                    {% if ja_candidatou %}
+                    <span class="botao enviada">Candidatura enviada</span>
+                    {% elif encerrada %}
+                    <span class="botao desativado">Inscrições encerradas</span>
+                    {% else %}
+                    <form method="post" action="{% url 'candidatar' oportunidade.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="botao">Candidatar-se</button>
+                    </form>
+                    {% endif %}
 
-                    <a href="{% url 'tela_favoritos' %}" class="botao-contorno">
-                        <img class="ic" src="{% static 'imagens/icone-bookmark.svg' %}" alt="">
-                        Salvar para depois
-                    </a>
+                    <form method="post" action="{% url 'favoritar' oportunidade.id %}">
+                        {% csrf_token %}
+                        {% if favoritada %}
+                        <button type="submit" class="botao-contorno salvo">
+                            <img class="ic" src="{% static 'imagens/icone-bookmark-cheio.svg' %}" alt="">
+                            Salva nos favoritos
+                        </button>
+                        {% else %}
+                        <button type="submit" class="botao-contorno">
+                            <img class="ic" src="{% static 'imagens/icone-bookmark.svg' %}" alt="">
+                            Salvar para depois
+                        </button>
+                        {% endif %}
+                    </form>
 
-                    <p class="cinza">2 vagas</p>
+                    {% if not encerrada %}
+                    <a href="{{ link_agenda }}" target="_blank" class="botao-contorno">
+                        <img class="ic" src="{% static 'imagens/icone-calendar.svg' %}" alt="">
+                        Adicionar à Google Agenda
+                    </a>
+                    {% endif %}
+
+                    <p class="cinza">Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}</p>
                 </div>
 
                 <div class="caixa">
-                    <p class="cinza">Responsável pela vaga</p>
-                    <b>Profa. Ana Ribeiro</b>
-                    <p class="cinza">ana.ribeiro@puc-rio.br</p>
-                    <p class="cinza">Publicada em 01/09/2026</p>
+                    <p class="cinza">Publicada por</p>
+                    <b>{{ oportunidade.instituicao.nome }}</b>
+                    <p class="cinza">{{ oportunidade.instituicao.get_tipo_display }}{% if oportunidade.instituicao.sede %} · {{ oportunidade.instituicao.sede }}{% endif %}</p>
                 </div>
 
             </div>

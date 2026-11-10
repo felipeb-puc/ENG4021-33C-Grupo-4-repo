@@ -4,11 +4,26 @@
   margin: 24px 0px 28px 0px;
 }
 
-#cabecalho img {
+.selo {
   width: 56px;
   height: 56px;
-  border: 1px solid #dde4e2;
+  flex-shrink: 0;
   border-radius: 50%;
+  background-color: #2d433d;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mensagem {
+  background-color: #eef2f1;
+  border: 1px solid #c9d5d2;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
 }
 
 #corpo {
@@ -47,8 +62,31 @@
 #lateral .botao,
 #lateral .botao-contorno {
   display: block;
+  width: 100%;
+  box-sizing: border-box;
   text-align: center;
   margin-bottom: 10px;
+  cursor: pointer;
+}
+
+#lateral form {
+  margin: 0px;
+}
+
+#lateral .botao.enviada {
+  background-color: #2d433d;
+  cursor: default;
+}
+
+#lateral .botao.desativado {
+  background-color: #eef2f1;
+  color: #8a9592;
+  cursor: default;
+}
+
+#lateral .botao-contorno.salvo {
+  background-color: #eef2f1;
+  border-color: #4b6e65;
 }
 
 @media (max-width: 900px) {

@@ -43,7 +43,7 @@
         <div class="caixa linha">
             <div>
                 <p class="cinza">{{ candidatura.oportunidade.get_tipo_display }} · candidatura em {{ candidatura.data|date:"d/m/Y" }}</p>
-                <a href="../templates/tela-oportunidade.html" class="titulo">{{ candidatura.oportunidade.titulo }}</a>
+                <a href="{% url 'tela_oportunidade' candidatura.oportunidade.id %}" class="titulo">{{ candidatura.oportunidade.titulo }}</a>
                 <p class="cinza">{{ candidatura.oportunidade.instituicao.nome }}</p>
             </div>
         </div>

@@ -372,3 +372,36 @@ input, select, textarea {
     font-size: 16px;
   }
 }
+
+.form-salvar {
+  float: right;
+  margin: 0px;
+}
+
+.botao-salvar {
+  width: 32px;
+  height: 32px;
+  padding: 0px;
+  border: 1px solid #c9d5d2;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.botao-salvar img {
+  width: 16px;
+  height: 16px;
+  margin: 0px;
+}
+
+.botao-salvar:hover {
+  background-color: #eef2f1;
+}
+
+.botao-salvar.ativo {
+  background-color: #4b6e65;
+  border-color: #4b6e65;
+}
