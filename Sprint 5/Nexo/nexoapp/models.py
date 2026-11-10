@@ -115,6 +115,11 @@ class Oportunidade(models.Model):
     def __str__(self):
         return self.titulo
 
+    # True quando o prazo de inscrição já passou; os templates usam para avisar e esconder o botão
+    @property
+    def encerrada(self):
+        return self.prazo_inscricao < date.today()
+
 
 class Candidatura(models.Model):
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)

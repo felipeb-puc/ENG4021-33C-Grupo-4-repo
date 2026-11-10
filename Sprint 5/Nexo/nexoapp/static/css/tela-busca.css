@@ -29,3 +29,34 @@
     width: auto;
   }
 }
+
+/* o geral.css deixa todo input com 100% de largura e margem embaixo; checkbox precisa de tamanho normal */
+#filtros input[type="checkbox"] {
+  width: auto;
+  margin: 0px 8px 0px 0px;
+  padding: 0px;
+}
+
+#filtros .opcao {
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+#tipos,
+#modalidades {
+  margin-bottom: 16px;
+}
+
+#modalidades .pilula {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+#botao-filtros {
+  margin-top: 8px;
+  cursor: pointer;
+}
