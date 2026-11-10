@@ -37,7 +37,7 @@
                 <p class="cinza">{{ user.aluno.curso.nome }} · {{ user.aluno.periodo }}º período · {{ user.aluno.instituicao.nome }}</p>
                 {% endif %}
                 <div id="numeros">
-                    <div><p class="numero">{{ oportunidades|length }}</p><p class="cinza">oportunidades abertas para você</p></div>
+                    <div><p class="numero">{{ total_abertas }}</p><p class="cinza">oportunidades abertas para você</p></div>
                     <div><p class="numero">{{ favoritos|length }}</p><p class="cinza">salvas para depois</p></div>
                     <div><p class="numero">{{ candidaturas|length }}</p><p class="cinza">candidaturas em andamento</p></div>
                 </div>
@@ -63,7 +63,7 @@
 
         <div class="linha">
             <h2>Encerrando primeiro</h2>
-            <a href="../templates/tela-busca.html">Ver todas →</a>
+            <a href="{% url 'tela_busca' %}?abertas=1&ordem=encerrando">Ver todas →</a>
         </div>
         <p class="cinza">Oportunidades da PUC-Rio com inscrição mais próxima do fim.</p>
 
@@ -95,7 +95,7 @@
                 </div>
             </div>
             {% empty %}
-            <p class="cinza">Não há oportunidades disponíveis no momento.</p>
+            <p class="cinza">Nenhuma oportunidade com inscrições abertas no momento.</p>
             {% endfor %}
         </div>
     </div>

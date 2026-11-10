@@ -73,10 +73,17 @@ def ids_dos_favoritos(request):
 
 @login_required(login_url='login')
 def inicio(request):
-    oportunidades = Oportunidade.objects.order_by("prazo_inscricao")
+    abertas = Oportunidade.objects.filter(prazo_inscricao__gte=date.today()).order_by("prazo_inscricao")
+    oportunidades = abertas[:6]
     favoritos = Favorito.objects.filter(aluno__user=request.user)
     candidaturas = Candidatura.objects.filter(aluno__user=request.user)
-    return render(request, "Inicio.html", {"oportunidades": oportunidades, "favoritos": favoritos, "candidaturas": candidaturas, "ids_favoritos": ids_dos_favoritos(request)})
+    return render(request, "Inicio.html", {
+        "oportunidades": oportunidades,
+        "total_abertas": abertas.count(),
+        "favoritos": favoritos,
+        "candidaturas": candidaturas,
+        "ids_favoritos": ids_dos_favoritos(request),
+    })
 
 def link_google_agenda(oportunidade):
     inicio = oportunidade.prazo_inscricao.strftime("%Y%m%d")
