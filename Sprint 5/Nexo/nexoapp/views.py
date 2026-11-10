@@ -105,6 +105,14 @@ def estagio(request):
     oportunidades = Oportunidade.objects.filter(tipo="estagio")
     return render(request, "estagio.html", {"oportunidades": oportunidades})
 
+def tela_monitoria(request):
+    oportunidades = Oportunidade.objects.filter(tipo="monitoria")
+    return render(request, "tela-monitoria.html", {"oportunidades": oportunidades})
+
+def tela_equipe_competicao(request):
+    oportunidades = Oportunidade.objects.filter(tipo="equipe")
+    return render(request, "tela-equipe-competicao.html", {"oportunidades": oportunidades})
+
 @login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):
     candidaturas = Candidatura.objects.filter(aluno__user=request.user)
