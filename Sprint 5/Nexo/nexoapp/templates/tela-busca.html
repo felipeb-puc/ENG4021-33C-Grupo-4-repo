@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Buscar - Nexo</title>
+    <title>NEXO · Buscar</title>
+    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="{% static 'css/geral.css' %}" rel="stylesheet">
@@ -173,7 +174,7 @@
 
                             <p>
                                 <img class="ic" src="{% static 'imagens/icone-wallet.svg' %}" alt="">
-                                R$ {{ oportunidade.remuneracao }} por mês
+                                {% if oportunidade.remuneracao %}R$ {{ oportunidade.remuneracao|floatformat:"2g" }} por mês{% else %}Voluntária{% endif %}
                             </p>
 
                             <p>
@@ -183,7 +184,7 @@
 
                             <div class="linha rodape">
                                 <span class="cinza">
-                                    Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}
+                                    {% if oportunidade.encerrada %}Inscrições encerradas{% else %}Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}{% endif %}
                                 </span>
 
                                 <a href="/templates/tela-oportunidade.html">

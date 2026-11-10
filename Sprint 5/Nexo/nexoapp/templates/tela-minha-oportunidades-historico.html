@@ -1,9 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Histórico - Nexo</title>
+    <title>NEXO · Histórico</title>
+    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="../static/css/geral.css" rel="stylesheet">
     <link href="../static/css/tela-minha-oportunidades-historico.css" rel="stylesheet">
@@ -27,6 +29,9 @@
     </div>
 
     <div class="pagina">
+        {% for mensagem in messages %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
         <h1>Minhas oportunidades</h1>
         <div class="abas">
             <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas <span class="contador">{{ candidaturas|length }}</span></a>
