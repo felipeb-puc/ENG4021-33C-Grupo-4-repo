@@ -18,6 +18,10 @@
   margin: 0;
 }
 
+.acoes .etiqueta[class*="etiqueta-status-"] {
+  text-align: center;
+}
+
 .acoes .agenda {
   display: flex;
   justify-content: center;
