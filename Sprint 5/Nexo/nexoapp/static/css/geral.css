@@ -165,6 +165,42 @@ p {
   margin: 0px 4px 4px 0px;
 }
 
+.etiqueta-status-inscrita {
+  background-color: #2563eb;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
+.etiqueta-status-em_analise {
+  background-color: #b45309;
+  border-color: #92400e;
+  color: #ffffff;
+}
+
+.etiqueta-status-entrevista {
+  background-color: #7c3aed;
+  border-color: #6d28d9;
+  color: #ffffff;
+}
+
+.etiqueta-status-aprovada {
+  background-color: #15803d;
+  border-color: #166534;
+  color: #ffffff;
+}
+
+.etiqueta-status-recusada {
+  background-color: #dc2626;
+  border-color: #b91c1c;
+  color: #ffffff;
+}
+
+.etiqueta-status-desistiu {
+  background-color: #475569;
+  border-color: #334155;
+  color: #ffffff;
+}
+
 .etiqueta-verde {
   display: inline-block;
   background-color: #4b6e65;

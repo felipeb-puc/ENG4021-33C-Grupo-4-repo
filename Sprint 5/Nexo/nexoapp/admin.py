@@ -18,7 +18,7 @@ class OportunidadeAdmin(admin.ModelAdmin):
 
 
 class CandidaturaAdmin(admin.ModelAdmin):
-    list_display = ("aluno", "oportunidade", "data")
+    list_display = ("aluno", "oportunidade", "status", "data")
     search_fields = ("aluno__matricula", "aluno__user__first_name", "aluno__user__email", "oportunidade__titulo")
     list_filter = ("oportunidade__tipo", "data")
 

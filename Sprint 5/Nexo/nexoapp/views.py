@@ -100,11 +100,22 @@ def link_google_agenda(oportunidade):
 @login_required(login_url='login')
 def minha_oportunidade_favoritos(request):
     favoritos = Favorito.objects.filter(aluno__user=request.user)
-    candidaturas = Candidatura.objects.filter(aluno__user=request.user)
+    candidaturas_ativas = Candidatura.objects.filter(
+        aluno__user=request.user,
+        status__in=["inscrita", "em_analise", "entrevista"],
+    )
+    candidaturas_historico = Candidatura.objects.filter(
+        aluno__user=request.user,
+        status__in=["aprovada", "recusada", "desistiu"],
+    )
     for favorito in favoritos:
         favorito.link_agenda = link_google_agenda(favorito.oportunidade)
         favorito.prazo_encerrado = favorito.oportunidade.prazo_inscricao < date.today()
-    return render(request, "tela-minha-oportunidades-favoritos.html", {"favoritos": favoritos, "candidaturas": candidaturas})
+    return render(request, "tela-minha-oportunidades-favoritos.html", {
+        "favoritos": favoritos,
+        "candidaturas_ativas": candidaturas_ativas,
+        "candidaturas_historico": candidaturas_historico,
+    })
 
 def iniciacao_cientifica(request):
     oportunidades = Oportunidade.objects.filter(tipo="ic")
@@ -112,9 +123,20 @@ def iniciacao_cientifica(request):
 
 @login_required(login_url='login')
 def minha_oportunidade_historico(request):
-    candidaturas = Candidatura.objects.filter(aluno__user=request.user)
+    candidaturas_ativas = Candidatura.objects.filter(
+        aluno__user=request.user,
+        status__in=["inscrita", "em_analise", "entrevista"],
+    )
+    candidaturas_historico = Candidatura.objects.filter(
+        aluno__user=request.user,
+        status__in=["aprovada", "recusada", "desistiu"],
+    )
     favoritos = Favorito.objects.filter(aluno__user=request.user)
-    return render(request, "tela-minha-oportunidades-historico.html", {"candidaturas": candidaturas, "favoritos": favoritos})
+    return render(request, "tela-minha-oportunidades-historico.html", {
+        "candidaturas_ativas": candidaturas_ativas,
+        "candidaturas_historico": candidaturas_historico,
+        "favoritos": favoritos,
+    })
 
 def estagio(request):
     oportunidades = Oportunidade.objects.filter(tipo="estagio")
@@ -148,9 +170,20 @@ def tela_nova_oportunidade(request):
 
 @login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):
-    candidaturas = Candidatura.objects.filter(aluno__user=request.user)
+    candidaturas_ativas = Candidatura.objects.filter(
+        aluno__user=request.user,
+        status__in=["inscrita", "em_analise", "entrevista"],
+    )
+    candidaturas_historico = Candidatura.objects.filter(
+        aluno__user=request.user,
+        status__in=["aprovada", "recusada", "desistiu"],
+    )
     favoritos = Favorito.objects.filter(aluno__user=request.user)
-    return render(request, "tela-minha-oportunidades-canditaturas-ativas.html", {"candidaturas": candidaturas, "favoritos": favoritos})
+    return render(request, "tela-minha-oportunidades-canditaturas-ativas.html", {
+        "candidaturas_ativas": candidaturas_ativas,
+        "candidaturas_historico": candidaturas_historico,
+        "favoritos": favoritos,
+    })
 
 def liga_academica(request):
     oportunidades = Oportunidade.objects.filter(tipo="liga")

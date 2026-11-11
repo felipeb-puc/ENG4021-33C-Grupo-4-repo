@@ -34,17 +34,18 @@
         {% endfor %}
         <h1>Minhas oportunidades</h1>
         <div class="abas">
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas <span class="contador">{{ candidaturas|length }}</span></a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas <span class="contador">{{ candidaturas_ativas|length }}</span></a>
             <a href="../templates/tela-minha-oportunidades-favoritos.html">Favoritos <span class="contador">{{ favoritos|length }}</span></a>
-            <a href="../templates/tela-minha-oportunidades-historico.html" class="ativo">Histórico <span class="contador">{{ candidaturas|length }}</span></a>
+            <a href="../templates/tela-minha-oportunidades-historico.html" class="ativo">Histórico <span class="contador">{{ candidaturas_historico|length }}</span></a>
         </div>
 
-        {% for candidatura in candidaturas %}
+        {% for candidatura in candidaturas_historico %}
         <div class="caixa linha">
             <div>
                 <p class="cinza">{{ candidatura.oportunidade.get_tipo_display }} · candidatura em {{ candidatura.data|date:"d/m/Y" }}</p>
                 <a href="{% url 'tela_oportunidade' candidatura.oportunidade.id %}" class="titulo">{{ candidatura.oportunidade.titulo }}</a>
                 <p class="cinza">{{ candidatura.oportunidade.instituicao.nome }}</p>
+                <span class="etiqueta etiqueta-status-{{ candidatura.status }}">{{ candidatura.get_status_display }}</span>
             </div>
         </div>
         {% empty %}
