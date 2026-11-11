@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models import Q
@@ -100,17 +101,23 @@ def link_google_agenda(oportunidade):
 @login_required(login_url='login')
 def minha_oportunidade_favoritos(request):
     favoritos = Favorito.objects.filter(aluno__user=request.user)
-    candidaturas_ativas = Candidatura.objects.filter(
-        aluno__user=request.user,
+    candidaturas = Candidatura.objects.filter(aluno__user=request.user)
+    candidaturas_ativas = candidaturas.filter(
         status__in=["inscrita", "em_analise", "entrevista"],
     )
-    candidaturas_historico = Candidatura.objects.filter(
-        aluno__user=request.user,
+    candidaturas_historico = candidaturas.filter(
         status__in=["aprovada", "recusada", "desistiu"],
     )
+    candidaturas_por_oportunidade = {
+        candidatura.oportunidade_id: candidatura
+        for candidatura in candidaturas
+    }
     for favorito in favoritos:
         favorito.link_agenda = link_google_agenda(favorito.oportunidade)
         favorito.prazo_encerrado = favorito.oportunidade.prazo_inscricao < date.today()
+        favorito.candidatura = candidaturas_por_oportunidade.get(
+            favorito.oportunidade_id
+        )
     return render(request, "tela-minha-oportunidades-favoritos.html", {
         "favoritos": favoritos,
         "candidaturas_ativas": candidaturas_ativas,
@@ -614,3 +621,17 @@ def remover_favorito(request, favorito_id):
         favorito.delete()
         messages.success(request, "Favorito removido.")
     return redirect("/templates/tela-minha-oportunidades-favoritos.html")
+
+
+@login_required
+@require_POST
+def desistir(request, candidatura_id):
+    candidatura = get_object_or_404(
+        Candidatura,
+        id=candidatura_id,
+        aluno__user=request.user,
+    )
+    candidatura.status = "desistiu"
+    candidatura.save(update_fields=["status"])
+    messages.success(request, "Você desistiu da candidatura.")
+    return redirect("tela_minha_oportunidades")

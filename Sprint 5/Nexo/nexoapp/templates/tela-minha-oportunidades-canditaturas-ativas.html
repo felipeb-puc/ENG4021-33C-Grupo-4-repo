@@ -46,6 +46,10 @@
                 <a href="{% url 'tela_oportunidade' candidatura.oportunidade.id %}" class="titulo">{{ candidatura.oportunidade.titulo }}</a>
                 <p class="cinza">{{ candidatura.oportunidade.instituicao.nome }}</p>
                 <span class="etiqueta etiqueta-status-{{ candidatura.status }}">{{ candidatura.get_status_display }}</span>
+                <form class="form-desistir" method="POST" action="{% url 'desistir' candidatura.id %}" onsubmit="return confirm('Tem certeza que deseja desistir desta candidatura?');">
+                    {% csrf_token %}
+                    <button type="submit" class="botao" aria-label="Desistir da candidatura para {{ candidatura.oportunidade.titulo }}">Desistir</button>
+                </form>
             </div>
         </div>
         {% empty %}
