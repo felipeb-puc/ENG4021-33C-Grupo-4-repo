@@ -182,6 +182,17 @@ def tela_nova_oportunidade(request):
         return redirect("inicio")
 
     form = OportunidadeForm(request.POST or None)
+    if hasattr(request.user, "recrutador"):
+        form.fields["tipo"].choices = [
+            ("estagio", "Estágio"),
+        ]
+    else:
+        form.fields["tipo"].choices = [
+            ("monitoria", "Monitoria"),
+            ("ic", "Iniciação científica"),
+            ("equipe", "Equipe de competição"),
+            ("liga", "Liga acadêmica"),
+        ]
 
     if request.method == "POST" and form.is_valid():
         oportunidade = form.save(commit=False)
