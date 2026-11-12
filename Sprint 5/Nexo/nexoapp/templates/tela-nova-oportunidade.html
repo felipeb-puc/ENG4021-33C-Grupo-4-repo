@@ -48,91 +48,79 @@
             Como empresa, você publica estágios e escolhe para quais universidades.
         </p>
 
-        <form method="POST" action="{% url 'tela_nova_oportunidade' %}">
+               <form method="POST" action="{% url 'tela_nova_oportunidade' %}">
             {% csrf_token %}
 
             <div class="caixa">
                 <h2>1. O que é</h2>
 
-                <label for="tipo">Tipo</label>
-                <select id="tipo" name="tipo">
-                    <option value="Estágio">Estágio</option>
-                </select>
+                <label for="{{ form.tipo.id_for_label }}">Tipo</label>
+                {{ form.tipo }}
+                {{ form.tipo.errors }}
 
-                <p class="cinza">Empresa publica apenas estágio.</p>
+                <label for="{{ form.titulo.id_for_label }}">Título</label>
+                {{ form.titulo }}
+                {{ form.titulo.errors }}
 
-                <label for="titulo">Título</label>
-                <input type="text" id="titulo" name="titulo" required>
+                <label for="{{ form.descricao.id_for_label }}">Descrição</label>
+                {{ form.descricao }}
+                {{ form.descricao.errors }}
 
-                <label for="descricao">Descrição</label>
-                <textarea id="descricao" name="descricao" rows="4" required></textarea>
-
-                <label for="requisitos">Pré-requisitos</label>
-                <textarea id="requisitos" name="requisitos" rows="3"></textarea>
+                <label for="{{ form.requisitos.id_for_label }}">Pré-requisitos</label>
+                {{ form.requisitos }}
+                {{ form.requisitos.errors }}
 
                 <p class="cinza">Um por linha.</p>
             </div>
 
             <div class="caixa">
-                <h2>2. Condições</h2>
+                <h2>2. Para quem</h2>
 
                 <div class="duas-colunas">
                     <div>
-                        <label for="carga">Carga horária semanal (h)</label>
-                        <input type="number" id="carga" name="carga_horaria" min="1" required>
+                        <label for="{{ form.curso.id_for_label }}">Curso</label>
+                        {{ form.curso }}
+                        {{ form.curso.errors }}
                     </div>
 
                     <div>
-                        <label for="prazo">Prazo de inscrição</label>
-                        <input type="date" id="prazo" name="prazo_inscricao" required>
-                    </div>
-                </div>
-
-                <div class="duas-colunas">
-                    <div>
-                        <label for="bolsa">Valor da bolsa (R$ por mês)</label>
-                        <input type="number" id="bolsa" name="bolsa" min="0" step="0.01">
-                    </div>
-
-                    <div>
-                        <label for="modalidade">Modalidade</label>
-                        <select id="modalidade" name="modalidade">
-                            <option value="Presencial">Presencial</option>
-                            <option value="Híbrido">Híbrido</option>
-                            <option value="Remoto">Remoto</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="duas-colunas">
-                    <div>
-                        <label for="cidade">Cidade</label>
-                        <input type="text" id="cidade" name="cidade">
-                    </div>
-
-                    <div>
-                        <label for="vagas">Número de vagas</label>
-                        <input type="number" id="vagas" name="vagas" min="1" required>
+                        <label for="{{ form.periodo_minimo.id_for_label }}">Período mínimo</label>
+                        {{ form.periodo_minimo }}
+                        {{ form.periodo_minimo.errors }}
                     </div>
                 </div>
             </div>
 
             <div class="caixa">
-                <h2>3. Alcance e contato</h2>
+                <h2>3. Condições</h2>
 
-                <label for="universidades">Universidades-alvo</label>
-                <select id="universidades" name="universidades">
-                    <option value="Todas">Todas</option>
-                    <option value="PUC-Rio">PUC-Rio</option>
-                    <option value="UFRJ">UFRJ</option>
-                    <option value="UERJ">UERJ</option>
-                </select>
+                <div class="duas-colunas">
+                    <div>
+                        <label for="{{ form.carga_horaria.id_for_label }}">Carga horária semanal (h)</label>
+                        {{ form.carga_horaria }}
+                        {{ form.carga_horaria.errors }}
+                    </div>
 
-                <label for="responsavel">Responsável pela vaga</label>
-                <input type="text" id="responsavel" name="responsavel" required>
+                    <div>
+                        <label for="{{ form.prazo_inscricao.id_for_label }}">Prazo de inscrição</label>
+                        {{ form.prazo_inscricao }}
+                        {{ form.prazo_inscricao.errors }}
+                    </div>
+                </div>
 
-                <label for="contato">E-mail de contato</label>
-                <input type="email" id="contato" name="contato" required>
+                <div class="duas-colunas">
+                    <div>
+                        <label for="{{ form.remuneracao.id_for_label }}">Valor da bolsa (R$ por mês)</label>
+                        {{ form.remuneracao }}
+                        {{ form.remuneracao.errors }}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.modalidade.id_for_label }}">Modalidade</label>
+                        {{ form.modalidade }}
+                        {{ form.modalidade.errors }}
+                    </div>
+                </div>
             </div>
 
             <div class="linha">
