@@ -58,6 +58,9 @@
     </div>
 
     <div class="pagina">
+                {% for mensagem in messages %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
 
         <div class="linha">
             <div>
