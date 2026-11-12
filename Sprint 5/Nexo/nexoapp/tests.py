@@ -19,6 +19,7 @@ class CadastroEmailDuplicadoTests(TestCase):
             nome="PUC-Rio",
             sede="Rio de Janeiro",
         )
+        self.curso = Curso.objects.create(nome="Engenharia")
 
     def criar_conta_e_repetir_email(self, url, dados):
         primeira_resposta = self.client.post(url, dados)
@@ -37,8 +38,8 @@ class CadastroEmailDuplicadoTests(TestCase):
             "email_academico": "aluno@example.com",
             "senha": "senha-segura-123",
             "matricula": "123456",
-            "universidade": "PUC-Rio",
-            "curso": "Engenharia",
+            "universidade": str(self.faculdade.pk),
+            "curso": str(self.curso.pk),
             "periodo_atual": "1",
             "cr": "",
             "aceitar_termos": "on",
@@ -92,8 +93,8 @@ class CadastroELoginTests(TestCase):
             "email_academico": "joana@example.com",
             "senha": "senha-segura-123",
             "matricula": "2410001",
-            "universidade": "PUC-Rio",
-            "curso": "Engenharia",
+            "universidade": str(self.faculdade.pk),
+            "curso": str(self.curso.pk),
             "periodo_atual": "3",
             "cr": "8.5",
             "aceitar_termos": "on",
