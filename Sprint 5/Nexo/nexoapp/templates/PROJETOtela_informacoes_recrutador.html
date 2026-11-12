@@ -65,8 +65,14 @@
                             {% for empresa in empresas %}
                             <option value="{{ empresa.pk }}" {% if form.empresa.value|stringformat:"s" == empresa.pk|stringformat:"s" %}selected{% endif %}>{{ empresa.nome }}</option>
                             {% endfor %}
+                            <option value="outro" {% if form.empresa.value == "outro" %}selected{% endif %}>Outro</option>
                         </select>
                         {{ form.empresa.errors }}
+                    </div>
+                    <div id="campo-nova-empresa" {% if form.empresa.value != "outro" %}hidden{% endif %}>
+                        <label for="nova_empresa">Nome da nova empresa</label>
+                        <input type="text" id="nova_empresa" name="nova_empresa" value="{{ form.nova_empresa.value|default:'' }}" maxlength="150" placeholder="Digite o nome da empresa" {% if form.empresa.value == "outro" %}required{% endif %}>
+                        {{ form.nova_empresa.errors }}
                     </div>
                 </div>
 
@@ -89,5 +95,19 @@
         </div>
     </div>
 
+    <script>
+        const seletorEmpresa = document.getElementById("instituicao");
+        const campoNovaEmpresa = document.getElementById("campo-nova-empresa");
+        const entradaNovaEmpresa = document.getElementById("nova_empresa");
+
+        function atualizarCampoNovaEmpresa() {
+            const selecionouOutro = seletorEmpresa.value === "outro";
+            campoNovaEmpresa.hidden = !selecionouOutro;
+            entradaNovaEmpresa.required = selecionouOutro;
+        }
+
+        seletorEmpresa.addEventListener("change", atualizarCampoNovaEmpresa);
+        atualizarCampoNovaEmpresa();
+    </script>
 </body>
 </html>

@@ -201,21 +201,33 @@ def cadastro_recrutador(request):
     form = CadastroRecrutadorForm(request.POST or None)
     form.fields["empresa"].choices = [("", "Selecione")] + [
         (str(empresa.pk), empresa.nome) for empresa in empresas
-    ]
+    ] + [("outro", "Outro")]
     if request.method == "POST" and form.is_valid():
         dados = form.cleaned_data
         email = dados["email"].strip().lower()
-        usuario = User.objects.create_user(
-            username=email,
-            email=email,
-            first_name=dados["nome"].strip(),
-            password=dados["senha"],
-        )
-        Recrutador.objects.create(
-            user=usuario,
-            empresa=Instituicao.objects.get(pk=dados["empresa"]),
-            cargo=dados["cargo"].strip(),
-        )
+        with transaction.atomic():
+            if dados["empresa"] == "outro":
+                empresa, _ = Instituicao.objects.get_or_create(
+                    tipo="empresa",
+                    nome=dados["nova_empresa"].strip(),
+                    defaults={"sede": ""},
+                )
+            else:
+                empresa = Instituicao.objects.get(
+                    pk=dados["empresa"],
+                    tipo="empresa",
+                )
+            usuario = User.objects.create_user(
+                username=email,
+                email=email,
+                first_name=dados["nome"].strip(),
+                password=dados["senha"],
+            )
+            Recrutador.objects.create(
+                user=usuario,
+                empresa=empresa,
+                cargo=dados["cargo"].strip(),
+            )
         messages.success(request, "Conta de recrutador criada. Faça login para continuar.")
         return redirect("login")
 

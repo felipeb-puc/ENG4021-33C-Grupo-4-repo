@@ -32,6 +32,15 @@ class CadastroRecrutadorForm(forms.Form):
         choices=[("", "Selecione")]
     )
 
+    nova_empresa = forms.CharField(
+        label="Nome da nova empresa",
+        max_length=150,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "placeholder": "Digite o nome da empresa",
+        }),
+    )
+
     aceita_termos = forms.BooleanField(
         label="Aceito os termos e a política de privacidade",
         required=True
@@ -42,6 +51,12 @@ class CadastroRecrutadorForm(forms.Form):
         if User.objects.filter(username=email).exists():
             raise forms.ValidationError("Já existe uma conta com este e-mail.")
         return email
+
+    def clean_nova_empresa(self):
+        nome = self.cleaned_data["nova_empresa"].strip()
+        if self.cleaned_data.get("empresa") == "outro" and not nome:
+            raise forms.ValidationError("Informe o nome da empresa.")
+        return nome
 
 
 class CadastroRepresentanteForm(forms.Form):
