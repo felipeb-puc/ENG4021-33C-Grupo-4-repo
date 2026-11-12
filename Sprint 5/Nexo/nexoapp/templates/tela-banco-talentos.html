@@ -118,37 +118,24 @@
         <div class="grade" id="lista-candidatos">
 
             {% for candidato in candidatos %}
-
                 <div class="cartao candidato"
-                     data-nome="{{ candidato.nome|lower }}"
-                     data-habilidades="{{ candidato.habilidades|join:' '|lower }}"
-                     data-universidade="{{ candidato.universidade }}"
-                     data-curso="{{ candidato.curso }}"
+                     data-nome="{{ candidato.user.first_name|lower }}"
+                     data-habilidades=""
+                     data-universidade="{{ candidato.instituicao.nome }}"
+                     data-curso="{{ candidato.curso.nome }}"
                      data-periodo="{{ candidato.periodo }}"
-                     data-cr="{{ candidato.cr }}">
+                     data-cr="{{ candidato.cr|stringformat:'s' }}">
 
                     <div class="linha">
-                        <b>{{ candidato.nome }}</b>
-                        <span class="cr">CR {{ candidato.cr }}</span>
+                        <b>{{ candidato.user.first_name }}</b>
+                        <span class="cr">CR {{ candidato.cr|default:"—" }}</span>
                     </div>
 
                     <p class="cinza">
-                        {{ candidato.universidade }}
-                        · {{ candidato.curso }}
+                        {{ candidato.instituicao.nome }}
+                        · {{ candidato.curso.nome }}
                         · {{ candidato.periodo }}º
                     </p>
-
-                    <p>
-                        {% for habilidade in candidato.habilidades %}
-                            {{ habilidade }}{% if not forloop.last %} · {% endif %}
-                        {% endfor %}
-                    </p>
-
-                    <div>
-                        {% for area in candidato.areas %}
-                            <span class="etiqueta">{{ area }}</span>
-                        {% endfor %}
-                    </div>
 
                     <a href="../templates/tela-curriculo-aluno.html"
                        class="rodape">
