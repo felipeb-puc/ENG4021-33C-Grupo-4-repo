@@ -1,7 +1,7 @@
 
 from django import forms
 from django.contrib.auth.models import User
-from .models import Instituicao, Curso
+from .models import Instituicao, Curso, Oportunidade
 
 
 class CadastroRecrutadorForm(forms.Form):
@@ -220,3 +220,25 @@ class LoginForm(forms.Form):
             "autocomplete": "current-password",
         })
     )
+
+
+class OportunidadeForm(forms.ModelForm):
+    class Meta:
+        model = Oportunidade
+        fields = [
+            "tipo",
+            "titulo",
+            "descricao",
+            "requisitos",
+            "curso",
+            "periodo_minimo",
+            "carga_horaria",
+            "prazo_inscricao",
+            "remuneracao",
+            "modalidade",
+        ]
+        widgets = {
+            "descricao": forms.Textarea(attrs={"rows": 4}),
+            "requisitos": forms.Textarea(attrs={"rows": 3}),
+            "prazo_inscricao": forms.DateInput(attrs={"type": "date"}),
+        }
