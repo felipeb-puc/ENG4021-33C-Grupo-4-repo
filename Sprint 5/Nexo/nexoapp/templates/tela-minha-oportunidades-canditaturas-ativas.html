@@ -7,7 +7,7 @@
     <title>NEXO · Candidaturas ativas</title>
     <link rel="icon" href="{% static 'imagens/logo.svg' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
+    <link href="/static/css/geral.css?v=2" rel="stylesheet">
     <link href="../static/css/tela-minha-oportunidades-canditaturas-ativas.css" rel="stylesheet">
 </head>
 <body>
@@ -34,17 +34,22 @@
         {% endfor %}
         <h1>Minhas oportunidades</h1>
         <div class="abas">
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Candidaturas ativas <span class="contador">{{ candidaturas|length }}</span></a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html" class="ativo">Candidaturas ativas <span class="contador">{{ candidaturas_ativas|length }}</span></a>
             <a href="../templates/tela-minha-oportunidades-favoritos.html">Favoritos <span class="contador">{{ favoritos|length }}</span></a>
-            <a href="../templates/tela-minha-oportunidades-historico.html">Histórico <span class="contador">{{ candidaturas|length }}</span></a>
+            <a href="../templates/tela-minha-oportunidades-historico.html">Histórico <span class="contador">{{ candidaturas_historico|length }}</span></a>
         </div>
 
-        {% for candidatura in candidaturas %}
+        {% for candidatura in candidaturas_ativas %}
         <div class="caixa linha">
             <div>
                 <p class="cinza">{{ candidatura.oportunidade.get_tipo_display }} · candidatura em {{ candidatura.data|date:"d/m/Y" }}</p>
                 <a href="{% url 'tela_oportunidade' candidatura.oportunidade.id %}" class="titulo">{{ candidatura.oportunidade.titulo }}</a>
                 <p class="cinza">{{ candidatura.oportunidade.instituicao.nome }}</p>
+                <span class="etiqueta etiqueta-status-{{ candidatura.status }}">{{ candidatura.get_status_display }}</span>
+                <form class="form-desistir" method="POST" action="{% url 'desistir' candidatura.id %}" onsubmit="return confirm('Tem certeza que deseja desistir desta candidatura?');">
+                    {% csrf_token %}
+                    <button type="submit" class="botao" aria-label="Desistir da candidatura para {{ candidatura.oportunidade.titulo }}">Desistir</button>
+                </form>
             </div>
         </div>
         {% empty %}

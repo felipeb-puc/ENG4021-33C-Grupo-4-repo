@@ -7,7 +7,7 @@
     <title>NEXO · Favoritos</title>
     <link rel="icon" href="{% static 'imagens/logo.svg' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
+    <link href="../static/css/geral.css?v=2" rel="stylesheet">
     <link href="../static/css/tela-minha-oportunidades-favoritos.css" rel="stylesheet">
 </head>
 <body>
@@ -34,9 +34,9 @@
         {% endfor %}
         <h1>Minhas oportunidades</h1>
         <div class="abas">
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas <span class="contador">{{ candidaturas|length }}</span></a>
+            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Candidaturas ativas <span class="contador">{{ candidaturas_ativas|length }}</span></a>
             <a href="../templates/tela-minha-oportunidades-favoritos.html" class="ativo">Favoritos <span class="contador">{{ favoritos|length }}</span></a>
-            <a href="../templates/tela-minha-oportunidades-historico.html">Histórico <span class="contador">{{ candidaturas|length }}</span></a>
+            <a href="../templates/tela-minha-oportunidades-historico.html">Histórico <span class="contador">{{ candidaturas_historico|length }}</span></a>
         </div>
         <div class="grade">
             {% for favorito in favoritos %}
@@ -55,7 +55,9 @@
                     <a href="{% url 'tela_oportunidade' favorito.oportunidade.id %}">Ver →</a>
                 </div>
                 <div class="linha acoes">
-                    {% if not favorito.oportunidade.encerrada %}
+                    {% if favorito.candidatura %}
+                    <span class="etiqueta etiqueta-status-{{ favorito.candidatura.status }}">{{ favorito.candidatura.get_status_display }}</span>
+                    {% elif not favorito.oportunidade.encerrada %}
                     <form method="POST" action="{% url 'candidatar' favorito.oportunidade.id %}">
                         {% csrf_token %}
                         <button type="submit" class="botao">Candidatar-se</button>

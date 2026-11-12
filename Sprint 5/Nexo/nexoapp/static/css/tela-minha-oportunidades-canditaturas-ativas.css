@@ -9,3 +9,11 @@
 .caixa p {
   margin: 0px 0px 4px 0px;
 }
+
+.form-desistir {
+  margin-top: 16px;
+}
+
+.form-desistir .botao {
+  cursor: pointer;
+}

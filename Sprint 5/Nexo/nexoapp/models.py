@@ -122,9 +122,23 @@ class Oportunidade(models.Model):
 
 
 class Candidatura(models.Model):
+    STATUS_CHOICES = [
+        ("inscrita", "Inscrita"),
+        ("em_analise", "Em análise"),
+        ("entrevista", "Entrevista"),
+        ("aprovada", "Aprovada"),
+        ("recusada", "Recusada"),
+        ("desistiu", "Desistiu"),
+    ]
+
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
     oportunidade = models.ForeignKey(Oportunidade, on_delete=models.CASCADE)
     data = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="inscrita",
+    )
 
     class Meta:
         # o mesmo aluno não pode se candidatar duas vezes à mesma oportunidade
@@ -134,6 +148,11 @@ class Candidatura(models.Model):
                 name="candidatura_unica_por_aluno_e_oportunidade",
             )
         ]
+
+    def __str__(self):
+        aluno = self.aluno.user.get_full_name() or self.aluno.user.email
+        return f"{aluno} - {self.oportunidade} ({self.get_status_display()})"
+
 
 class Favorito(models.Model):
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
@@ -148,3 +167,7 @@ class Favorito(models.Model):
                 name="favorito_unico_por_aluno_e_oportunidade",
             )
         ]
+
+    def __str__(self):
+        aluno = self.aluno.user.get_full_name() or self.aluno.user.email
+        return f"{aluno} - {self.oportunidade}"
