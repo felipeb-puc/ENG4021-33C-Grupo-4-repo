@@ -75,7 +75,7 @@ def ids_dos_favoritos(request):
 @login_required(login_url='login')
 def inicio(request):
     abertas = Oportunidade.objects.filter(prazo_inscricao__gte=date.today()).order_by("prazo_inscricao")
-    oportunidades = abertas[:6]
+    oportunidades = abertas[:4]
     favoritos = Favorito.objects.filter(aluno__user=request.user)
     candidaturas = Candidatura.objects.filter(aluno__user=request.user)
     return render(request, "Inicio.html", {
