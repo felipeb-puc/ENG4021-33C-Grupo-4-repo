@@ -128,6 +128,21 @@
                         <b>A partir do {{ oportunidade.periodo_minimo }}º período</b>
                     </div>
 
+                    <div class="caixa-cinza">
+                        <p class="cinza">Candidaturas</p>
+                        {% with total_candidaturas=oportunidade.candidatura_set.count %}
+                        <b>
+                            {% if total_candidaturas == 0 %}
+                            Nenhuma pessoa se candidatou ainda
+                            {% elif total_candidaturas == 1 %}
+                            1 pessoa já se candidatou
+                            {% else %}
+                            {{ total_candidaturas }} pessoas já se candidataram
+                            {% endif %}
+                        </b>
+                        {% endwith %}
+                    </div>
+
                 </div>
 
                 <h2>Descrição</h2>
