@@ -30,6 +30,9 @@
     </div>
 
     <div class="pagina">
+                {% for mensagem in messages %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
         <div id="boas-vindas" class="linha">
             <div>
                 <h1>Olá, {{ user.first_name|default:user.username }}</h1>
