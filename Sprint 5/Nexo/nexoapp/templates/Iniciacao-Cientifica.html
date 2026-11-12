@@ -91,7 +91,11 @@
                         <p class="prazo-restante{% if oportunidade.dias_restantes <= 3 %} urgente{% endif %}"><img class="ic" src="../static/imagens/icone-calendar.svg">{{ oportunidade.texto_prazo }}</p>
                         {% endif %}
                         <div class="linha rodape">
-                            <span class="cinza">{% if oportunidade.encerrada %}Inscrições encerradas{% else %}Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}{% endif %}</span>
+                            {% if oportunidade.encerrada %}
+                            <span class="etiqueta">Inscrições encerradas</span>
+                            {% else %}
+                            <span class="cinza">Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
+                            {% endif %}
                             <a href="{% url 'tela_oportunidade' oportunidade.id %}">Ver →</a>
                         </div>
                     </div>
