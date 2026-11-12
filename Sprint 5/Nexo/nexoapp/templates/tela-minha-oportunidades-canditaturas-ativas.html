@@ -24,6 +24,7 @@
             <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
             <a href="../templates/tela-perfil.html" class="avatar">{{ user.aluno.iniciais }}</a>
             {% endif %}
+            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
             <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
         </div>
     </div>

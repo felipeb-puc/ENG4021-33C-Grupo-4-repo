@@ -42,6 +42,8 @@
 
             <a href="{% url 'tela_perfil' %}" class="avatar">{{ user.aluno.iniciais }}</a>
 
+            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
+
             <a href="{% url 'logout' %}" class="botao-contorno">
                 <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
                 Sair
