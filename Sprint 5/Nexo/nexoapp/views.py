@@ -297,7 +297,7 @@ def cadastro_representante(request):
   
 @login_required
 def tela_banco_talentos(request):
-        if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
+    if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
         messages.error(request, "Você não tem acesso a essa página.")
         return redirect("inicio")
     candidatos = Aluno.objects.order_by("-cr")
@@ -313,7 +313,7 @@ def tela_banco_talentos(request):
 
 @login_required
 def tela_painel(request):
-        if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
+    if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
         messages.error(request, "Você não tem acesso a essa página.")
         return redirect("inicio")
     oportunidades = [
@@ -355,7 +355,7 @@ def tela_painel(request):
 
 @login_required
 def tela_candidaturas_recebidas(request):
-        if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
+    if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
         messages.error(request, "Você não tem acesso a essa página.")
         return redirect("inicio")
     candidaturas = [
@@ -404,7 +404,7 @@ def tela_candidaturas_recebidas(request):
     )    
 @login_required
 def tela_admin(request):
-        if not request.user.is_staff:
+    if not request.user.is_staff:
         messages.error(request, "Você não tem acesso a essa página.")
         if hasattr(request.user, "aluno"):
             return redirect("inicio")
