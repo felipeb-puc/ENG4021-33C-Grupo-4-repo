@@ -19,7 +19,7 @@ from .models import (
     Candidatura,
     Favorito,
 )
-from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm
+from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm, OportunidadeForm
 # Create your views here.
 def home(request):
     return render(request, "tela-inicial.html")
@@ -173,8 +173,25 @@ def tela_instituicao(request):
 
 @login_required(login_url='login')
 def tela_nova_oportunidade(request):
-    return render(request, "tela-nova-oportunidade.html")
+    if hasattr(request.user, "recrutador"):
+        instituicao = request.user.recrutador.empresa
+    elif hasattr(request.user, "representante"):
+        instituicao = request.user.representante.instituicao
+    else:
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
 
+    form = OportunidadeForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        oportunidade = form.save(commit=False)
+        oportunidade.instituicao = instituicao
+        oportunidade.save()
+        messages.success(request, "Oportunidade publicada!")
+        return redirect("tela_painel")
+
+    return render(request, "tela-nova-oportunidade.html", {"form": form})
+    
 @login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):
     candidaturas_ativas = Candidatura.objects.filter(
