@@ -148,10 +148,10 @@ def tela_de_categoria(request, tipo, template):
         "curso_selecionado": curso,
         "periodos": range(1, 11),
         "periodo_selecionado": periodo,
-    }) 
+    })
+
 def iniciacao_cientifica(request):
-    oportunidades = Oportunidade.objects.filter(tipo="ic")
-    return render(request, "Iniciacao-Cientifica.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
+    return tela_de_categoria(request, "ic", "Iniciacao-Cientifica.html")
 
 @login_required(login_url='login')
 def minha_oportunidade_historico(request):
@@ -171,18 +171,15 @@ def minha_oportunidade_historico(request):
     })
 
 def estagio(request):
-    oportunidades = Oportunidade.objects.filter(tipo="estagio")
-    return render(request, "estagio.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
+    return tela_de_categoria(request, "estagio", "estagio.html")
 
 @login_required(login_url='login')
 def tela_monitoria(request):
-    oportunidades = Oportunidade.objects.filter(tipo="monitoria")
-    return render(request, "tela-monitoria.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
+    return tela_de_categoria(request, "monitoria", "tela-monitoria.html")
 
 @login_required(login_url='login')
 def tela_equipe_competicao(request):
-    oportunidades = Oportunidade.objects.filter(tipo="equipe")
-    return render(request, "tela-equipe-competicao.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
+    return tela_de_categoria(request, "equipe", "tela-equipe-competicao.html")
 
 @login_required(login_url='login')
 def tela_perfil(request):
@@ -227,7 +224,7 @@ def tela_nova_oportunidade(request):
         return redirect("tela_painel")
 
     return render(request, "tela-nova-oportunidade.html", {"form": form})
-    
+
 @login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):
     candidaturas_ativas = Candidatura.objects.filter(
@@ -246,9 +243,8 @@ def minha_oportunidade_candidaturas_ativas(request):
     })
 
 def liga_academica(request):
-    oportunidades = Oportunidade.objects.filter(tipo="liga")
-    return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
-    
+    return tela_de_categoria(request, "liga", "tela-liga-academica.html")
+
 def cadastro_recrutador(request):
     empresas = Instituicao.objects.filter(tipo="empresa")
     form = CadastroRecrutadorForm(request.POST or None)
@@ -319,7 +315,7 @@ def cadastro_representante(request):
         "form": form,
         "instituicoes": instituicoes,
     })
-  
+
 @login_required
 def tela_banco_talentos(request):
     if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
@@ -426,7 +422,8 @@ def tela_candidaturas_recebidas(request):
         request,
         "tela-candidaturas-recebidas.html",
         context
-    )    
+    )
+
 @login_required
 def tela_admin(request):
     if not request.user.is_staff:
@@ -542,7 +539,7 @@ def busca(request):
     so_abertas = request.GET.get("abertas") == "1"
     if so_abertas:
         oportunidades = oportunidades.filter(prazo_inscricao__gte=date.today())
-        
+
     if ordem == "recentes":
         oportunidades = oportunidades.order_by("-id")
     elif ordem == "maior_bolsa":
@@ -550,7 +547,7 @@ def busca(request):
     else:
         ordem = "encerrando"
         oportunidades = oportunidades.order_by("prazo_inscricao")
-        
+
     return render(request, "tela-busca.html", {
         "oportunidades": oportunidades,
         "total_oportunidades": oportunidades.count(),
