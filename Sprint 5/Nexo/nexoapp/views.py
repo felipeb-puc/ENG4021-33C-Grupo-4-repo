@@ -124,6 +124,31 @@ def minha_oportunidade_favoritos(request):
         "candidaturas_historico": candidaturas_historico,
     })
 
+def tela_de_categoria(request, tipo, template):
+    q = request.GET.get("q", "")
+    curso = request.GET.get("curso", "")
+    periodo = request.GET.get("periodo", "")
+
+    oportunidades = Oportunidade.objects.filter(tipo=tipo)
+
+    if q:
+        oportunidades = oportunidades.filter(titulo__icontains=q)
+
+    if curso.isdigit():
+        oportunidades = oportunidades.filter(curso_id=int(curso))
+
+    if periodo.isdigit():
+        oportunidades = oportunidades.filter(periodo_minimo__lte=int(periodo))
+
+    return render(request, template, {
+        "oportunidades": oportunidades,
+        "ids_favoritos": ids_dos_favoritos(request),
+        "q": q,
+        "cursos": Curso.objects.order_by("nome"),
+        "curso_selecionado": curso,
+        "periodos": range(1, 11),
+        "periodo_selecionado": periodo,
+    }) 
 def iniciacao_cientifica(request):
     oportunidades = Oportunidade.objects.filter(tipo="ic")
     return render(request, "Iniciacao-Cientifica.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
