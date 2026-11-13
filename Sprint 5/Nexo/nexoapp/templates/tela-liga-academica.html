@@ -14,8 +14,8 @@
 
     <div id="topo">
         <div class="menu">
-            <a href="{% url 'tela_painel' %}" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}"></a>
-            <a href="{% url 'tela_painel' %}">Início</a>
+            <a href="{% url 'inicio' %}" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}"></a>
+            <a href="{% url 'inicio' %}">Início</a>
             <a href="{% url 'tela_busca' %}" class="ativo"><img class="ic" src="{% static 'imagens/icone-search-branco.svg' %}">Buscar</a>
             <a href="{% url 'tela_minha_oportunidades' %}">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
         </div>
