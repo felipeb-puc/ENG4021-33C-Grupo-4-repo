@@ -7,25 +7,25 @@
     <title>NEXO · Iniciação científica</title>
     <link rel="icon" href="{% static 'imagens/logo.svg' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
-    <link href="../static/css/Iniciacao-Cientifica.css" rel="stylesheet">
+    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+    <link href="{% static 'css/Iniciacao-Cientifica.css' %}" rel="stylesheet">
 </head>
 <body>
 
     <div id="topo">
         <div class="menu">
-            <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
-            <a href="../templates/Inicio.html">Início</a>
-            <a href="../templates/tela-busca.html" class="ativo"><img class="ic" src="../static/imagens/icone-search-branco.svg">Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
+            <a href="{% url 'tela_painel' %}" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}"></a>
+            <a href="{% url 'tela_painel' %}">Início</a>
+            <a href="{% url 'tela_busca' %}" class="ativo"><img class="ic" src="{% static 'imagens/icone-search-branco.svg' %}">Buscar</a>
+            <a href="{% url 'tela_minha_oportunidades' %}">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
         </div>
         <div class="menu">
             {% if user.aluno %}
             <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
-            <a href="../templates/tela-perfil.html" class="avatar">{{ user.aluno.iniciais }}</a>
+            <a href="{% url 'tela_perfil' %}" class="avatar">{{ user.aluno.iniciais }}</a>
             {% endif %}
             <a href="{% url 'trocar_senha' %}">Trocar senha</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
+            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="{% static 'imagens/icone-log-out.svg' %}">Sair</a>
         </div>
     </div>
 
@@ -33,39 +33,50 @@
         <h1>Oportunidades abertas na PUC-Rio</h1>
         <p class="cinza">Você vê o que é da sua universidade e os estágios publicados para ela.</p>
 
-        <input type="search" id="busca" class="com-lupa" placeholder="Buscar por título, instituição, curso...">
+        <input type="search" id="busca" class="com-lupa" name="q" value="{{ q }}" form="form-filtros" placeholder="Buscar por título...">
 
         <div>
-            <a href="../templates/tela-busca.html" class="pilula">Todas</a>
-            <a href="../templates/Estagio.html" class="pilula">Estágio</a>
-            <a href="../templates/tela-monitoria.html" class="pilula">Monitoria</a>
-            <a href="../templates/Iniciacao-Cientifica.html" class="pilula ativo">Iniciação científica</a>
-            <a href="../templates/tela-liga-academica.html" class="pilula">Liga acadêmica</a>
-            <a href="../templates/tela-equipe-competicao.html" class="pilula">Equipe de competição</a>
+            <a href="{% url 'tela_busca' %}" class="pilula">Todas</a>
+            <a href="{% url 'tela_estagio' %}" class="pilula">Estágio</a>
+            <a href="{% url 'tela_monitoria' %}" class="pilula">Monitoria</a>
+            <a href="{% url 'tela_iniciacao_cientifica' %}" class="pilula ativo">Iniciação científica</a>
+            <a href="{% url 'tela_liga_academica' %}" class="pilula">Liga acadêmica</a>
+            <a href="{% url 'tela_equipe_competicao' %}" class="pilula">Equipe de competição</a>
         </div>
 
         <div id="corpo">
-            <div id="filtros" class="caixa">
-                <h2>Filtros</h2>
-                <label for="curso">Curso</label>
-                <select id="curso">
-                    <option>Qualquer curso</option>
-                    <option>Engenharia de Produção</option>
-                    <option>Ciência da Computação</option>
-                    <option>Economia</option>
-                </select>
-                <label for="periodo">Estou no período</label>
-                <select id="periodo">
-                    <option>Qualquer período</option>
-                    <option>1º período</option>
-                    <option>5º período</option>
-                    <option>8º período</option>
-                </select>
-                <label>Modalidade</label>
-                <span class="pilula">Presencial</span>
-                <span class="pilula">Híbrido</span>
-                <span class="pilula">Remoto</span>
-            </div>
+            <form method="get" id="form-filtros" class="caixa">
+                <div id="filtros">
+                    <h2>Filtros</h2>
+
+                    <label for="curso">Curso</label>
+                    <select id="curso" name="curso">
+                        <option value="">Qualquer curso</option>
+                        {% for curso in cursos %}
+                        <option value="{{ curso.id }}" {% if curso.id|stringformat:"s" == curso_selecionado %}selected{% endif %}>
+                            {{ curso.nome }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="periodo">Estou no período</label>
+                    <select id="periodo" name="periodo">
+                        <option value="">Qualquer período</option>
+                        {% for periodo in periodos %}
+                        <option value="{{ periodo }}" {% if periodo|stringformat:"s" == periodo_selecionado %}selected{% endif %}>
+                            {{ periodo }}º período
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <label>Modalidade</label>
+                    <span class="pilula">Presencial</span>
+                    <span class="pilula">Híbrido</span>
+                    <span class="pilula">Remoto</span>
+
+                    <button type="submit">Aplicar filtros</button>
+                </div>
+            </form>
 
             <div id="resultados">
                 <p class="cinza">{{ oportunidades|length }} oportunidades</p>
@@ -77,20 +88,23 @@
                             <form method="post" action="{% url 'favoritar' oportunidade.id %}" class="form-salvar">
                                 {% csrf_token %}
                                 {% if oportunidade.id in ids_favoritos %}
-                                <button type="submit" class="botao-salvar ativo" title="Tirar dos favoritos"><img src="../static/imagens/icone-bookmark-branco.svg"></button>
+                                <button type="submit" class="botao-salvar ativo" title="Tirar dos favoritos"><img src="{% static 'imagens/icone-bookmark-branco.svg' %}"></button>
                                 {% else %}
-                                <button type="submit" class="botao-salvar" title="Salvar nos favoritos"><img src="../static/imagens/icone-bookmark.svg"></button>
+                                <button type="submit" class="botao-salvar" title="Salvar nos favoritos"><img src="{% static 'imagens/icone-bookmark.svg' %}"></button>
                                 {% endif %}
                             </form>
                         </div>
+
                         <h2>{{ oportunidade.titulo }}</h2>
                         <p class="cinza">{{ oportunidade.instituicao.nome }}</p>
-                        <p><img class="ic" src="../static/imagens/icone-clock.svg">{{ oportunidade.carga_horaria }}h por semana</p>
-                        <p><img class="ic" src="../static/imagens/icone-wallet.svg">{% if oportunidade.remuneracao %}R$ {{ oportunidade.remuneracao|floatformat:"2g" }} por mês{% else %}Voluntária{% endif %}</p>
-                        <p><img class="ic" src="../static/imagens/icone-building-2.svg">{{ oportunidade.get_modalidade_display }}</p>
+                        <p><img class="ic" src="{% static 'imagens/icone-clock.svg' %}">{{ oportunidade.carga_horaria }}h por semana</p>
+                        <p><img class="ic" src="{% static 'imagens/icone-wallet.svg' %}">{% if oportunidade.remuneracao %}R$ {{ oportunidade.remuneracao|floatformat:"2g" }} por mês{% else %}Voluntária{% endif %}</p>
+                        <p><img class="ic" src="{% static 'imagens/icone-building-2.svg' %}">{{ oportunidade.get_modalidade_display }}</p>
+
                         {% if oportunidade.texto_prazo %}
-                        <p class="prazo-restante{% if oportunidade.dias_restantes <= 3 %} urgente{% endif %}"><img class="ic" src="../static/imagens/icone-calendar.svg">{{ oportunidade.texto_prazo }}</p>
+                        <p class="prazo-restante{% if oportunidade.dias_restantes <= 3 %} urgente{% endif %}"><img class="ic" src="{% static 'imagens/icone-calendar.svg' %}">{{ oportunidade.texto_prazo }}</p>
                         {% endif %}
+
                         <div class="linha rodape">
                             {% if oportunidade.encerrada %}
                             <span class="etiqueta">Inscrições encerradas</span>
