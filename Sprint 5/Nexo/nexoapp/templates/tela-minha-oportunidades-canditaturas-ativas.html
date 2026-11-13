@@ -42,16 +42,16 @@
 
         {% for candidatura in candidaturas_ativas %}
         <div class="caixa linha">
-            <div>
+            <div class="candidatura-detalhes">
                 <p class="cinza">{{ candidatura.oportunidade.get_tipo_display }} · candidatura em {{ candidatura.data|date:"d/m/Y" }}</p>
                 <a href="{% url 'tela_oportunidade' candidatura.oportunidade.id %}" class="titulo">{{ candidatura.oportunidade.titulo }}</a>
                 <p class="cinza">{{ candidatura.oportunidade.instituicao.nome }}</p>
-                <span class="etiqueta etiqueta-status-{{ candidatura.status }}">{{ candidatura.get_status_display }}</span>
                 <form class="form-desistir" method="POST" action="{% url 'desistir' candidatura.id %}" onsubmit="return confirm('Tem certeza que deseja desistir desta candidatura?');">
                     {% csrf_token %}
                     <button type="submit" class="botao" aria-label="Desistir da candidatura para {{ candidatura.oportunidade.titulo }}">Desistir</button>
                 </form>
             </div>
+            <span class="etiqueta etiqueta-status-{{ candidatura.status }} status-candidatura">{{ candidatura.get_status_display }}</span>
         </div>
         {% empty %}
         <div class="caixa">

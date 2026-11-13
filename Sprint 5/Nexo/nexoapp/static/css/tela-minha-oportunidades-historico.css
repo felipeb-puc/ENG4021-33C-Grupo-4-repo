@@ -9,3 +9,13 @@
 .caixa p {
   margin: 0px 0px 4px 0px;
 }
+
+.candidatura-detalhes {
+  flex: 1;
+  min-width: 0;
+}
+
+.status-candidatura {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
