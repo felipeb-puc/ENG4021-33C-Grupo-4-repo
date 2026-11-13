@@ -136,9 +136,7 @@ def minha_oportunidade_favoritos(request):
         "candidaturas_historico": candidaturas_historico,
     })
 
-
 def tela_de_categoria(request, tipo, template):
-    # Função auxiliar usada pelas cinco telas de categoria.
     q = request.GET.get("q", "")
     curso = request.GET.get("curso", "")
     periodo = request.GET.get("periodo", "")
@@ -197,11 +195,9 @@ def estagio(request):
 def tela_monitoria(request):
     return tela_de_categoria(request, "monitoria", "tela-monitoria.html")
 
-
 @login_required(login_url='login')
 def tela_equipe_competicao(request):
     return tela_de_categoria(request, "equipe", "tela-equipe-competicao.html")
-
 
 @login_required(login_url='login')
 def tela_perfil(request):
@@ -273,7 +269,6 @@ def minha_oportunidade_candidaturas_ativas(request):
 
 def liga_academica(request):
     return tela_de_categoria(request, "liga", "tela-liga-academica.html")
-
 
 def cadastro_recrutador(request):
     empresas = Instituicao.objects.filter(tipo="empresa")
@@ -347,7 +342,6 @@ def cadastro_representante(request):
         "form": form,
         "instituicoes": instituicoes,
     })
-
 
 @login_required
 def tela_banco_talentos(request):
@@ -457,7 +451,6 @@ def tela_candidaturas_recebidas(request):
         "tela-candidaturas-recebidas.html",
         context
     )
-
 
 @login_required
 def tela_admin(request):
