@@ -345,3 +345,22 @@ class MenuDoPerfilTests(BaseTarefasSprint11):
         self.assertContains(resposta, 'id="menu-perfil"')
         self.assertContains(resposta, "Perfil da instituição", count=1)
         self.assertNotContains(resposta, "Meu perfil e currículo")
+
+
+class TelasPorPapelTests(BaseTarefasSprint11):
+
+    def test_recrutador_nao_abre_telas_do_aluno(self):
+        self.entrar("carla@example.com")
+        for nome in ["inicio", "tela_perfil", "tela_favoritos", "tela_minha_oportunidades", "tela_historico"]:
+            resposta = self.client.get(reverse(nome))
+            self.assertRedirects(resposta, reverse("tela_painel"), fetch_redirect_response=False)
+
+    def test_admin_nao_abre_telas_do_aluno(self):
+        self.entrar("admin@example.com")
+        resposta = self.client.get(reverse("inicio"))
+        self.assertRedirects(resposta, reverse("tela_admin"), fetch_redirect_response=False)
+
+    def test_aluno_continua_abrindo_as_telas_dele(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("inicio"))
+        self.assertEqual(resposta.status_code, 200)
