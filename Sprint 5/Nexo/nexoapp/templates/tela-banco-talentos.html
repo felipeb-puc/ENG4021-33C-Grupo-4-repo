@@ -87,7 +87,7 @@
                         · {{ candidato.periodo }}º
                     </p>
 
-                    <a href="../templates/tela-curriculo-aluno.html"
+                    <a href="{% url 'tela_curriculo_aluno' candidato.id %}"
                        class="rodape">
                         Ver currículo
                     </a>

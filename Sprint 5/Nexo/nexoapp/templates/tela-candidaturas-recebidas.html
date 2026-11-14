@@ -75,10 +75,10 @@
                      data-cr="{{ candidatura.cr }}">
 
                     <div>
-                        <a href="../templates/tela-curriculo-aluno.html"
-                           class="titulo">
+                        {# o link para o currículo entra quando a lista vier do banco: {% url 'tela_curriculo_aluno' candidatura.aluno.id %} #}
+                        <span class="titulo">
                             {{ candidatura.nome }}
-                        </a>
+                        </span>
 
                         <p class="cinza">
                             {{ candidatura.universidade }}

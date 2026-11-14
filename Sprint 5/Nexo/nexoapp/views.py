@@ -78,6 +78,15 @@ def tela_so_de_aluno(request):
     return redirect("home")
 
 
+def instituicao_do_usuario(user):
+    """Instituição de quem publica (recrutador ou representante). Para aluno e admin devolve None."""
+    if hasattr(user, "recrutador"):
+        return user.recrutador.empresa
+    if hasattr(user, "representante"):
+        return user.representante.instituicao
+    return None
+
+
 def ids_dos_favoritos(request):
     ids = []
     if request.user.is_authenticated:
@@ -199,8 +208,33 @@ def tela_perfil(request):
     return render(request, "tela-perfil.html", {"form": form, "aluno": aluno})
 
 @login_required(login_url='login')
-def tela_curriculo_aluno(request):
-    return render(request, "tela-curriculo-aluno.html")
+def tela_curriculo_aluno(request, id):
+    aluno = get_object_or_404(Aluno, id=id)
+    instituicao = instituicao_do_usuario(request.user)
+    # candidaturas desse aluno para as oportunidades da instituição de quem está vendo
+    candidaturas = Candidatura.objects.filter(aluno=aluno, oportunidade__instituicao=instituicao)
+
+    # Só podem ver o currículo: o próprio aluno, ou quem recebeu uma candidatura dele.
+    if hasattr(request.user, "aluno") and request.user.aluno == aluno:
+        pode_ver = True
+    elif instituicao is not None and candidaturas.exists():
+        pode_ver = True
+    else:
+        pode_ver = False
+
+    if not pode_ver:
+        messages.error(request, "Você só pode ver o currículo de quem se candidatou às suas oportunidades.")
+        if hasattr(request.user, "aluno"):
+            return redirect("tela_perfil")
+        if instituicao is not None:
+            return redirect("tela_candidaturas_recebidas")
+        return redirect("home")
+
+    return render(request, "tela-curriculo-aluno.html", {
+        "aluno": aluno,
+        "candidaturas": candidaturas,
+        "e_o_proprio_aluno": hasattr(request.user, "aluno") and request.user.aluno == aluno,
+    })
 
 @login_required(login_url='login')
 def tela_instituicao(request):
