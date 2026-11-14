@@ -629,9 +629,12 @@ def tela_oportunidade(request, id):
     encerrada = oportunidade.prazo_inscricao < date.today()
     ja_candidatou = Candidatura.objects.filter(aluno__user=request.user, oportunidade=oportunidade).exists()
     favoritada = Favorito.objects.filter(aluno__user=request.user, oportunidade=oportunidade).exists()
+    # o aluno ainda não chegou no período mínimo da vaga
+    periodo_insuficiente = hasattr(request.user, "aluno") and request.user.aluno.periodo < oportunidade.periodo_minimo
     return render(request, "tela-oportunidade.html", {
         "oportunidade": oportunidade,
         "encerrada": encerrada,
+        "periodo_insuficiente": periodo_insuficiente,
         "ja_candidatou": ja_candidatou,
         "favoritada": favoritada,
         "link_agenda": link_google_agenda(oportunidade),
@@ -648,6 +651,8 @@ def candidatar(request, oportunidade_id):
             messages.error(request, "As inscrições para esta oportunidade já foram encerradas.")
         elif Candidatura.objects.filter(aluno=request.user.aluno, oportunidade=oportunidade).exists():
             messages.error(request, "Você já se candidatou a esta oportunidade.")
+        elif request.user.aluno.periodo < oportunidade.periodo_minimo:
+            messages.error(request, "Esta oportunidade é a partir do " + str(oportunidade.periodo_minimo) + "º período, e você está no " + str(request.user.aluno.periodo) + "º.")
         else:
             Candidatura.objects.create(aluno=request.user.aluno, oportunidade=oportunidade)
             messages.success(request, "Candidatura enviada!")
