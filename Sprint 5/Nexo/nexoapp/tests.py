@@ -384,3 +384,28 @@ class PerfilDoAlunoTests(BaseTarefasSprint11):
         self.assertTrue(resposta.context["form"].errors)
         self.aluno.refresh_from_db()
         self.assertEqual(self.aluno.periodo, 6)
+
+
+class CurriculoDoAlunoTests(BaseTarefasSprint11):
+
+    def test_aluno_ve_o_proprio_curriculo(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.aluno.id]))
+        self.assertEqual(resposta.status_code, 200)
+        self.assertContains(resposta, "Monitora de Cálculo.")
+
+    def test_aluno_nao_ve_curriculo_de_outro_aluno(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.calouro.id]))
+        self.assertRedirects(resposta, reverse("tela_perfil"))
+
+    def test_recrutador_ve_curriculo_de_quem_se_candidatou(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.aluno.id]))
+        self.assertEqual(resposta.status_code, 200)
+        self.assertContains(resposta, "Estágio em Dados")
+
+    def test_recrutador_nao_ve_curriculo_de_quem_nao_se_candidatou(self):
+        self.entrar("rafael@example.com")
+        resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.aluno.id]))
+        self.assertRedirects(resposta, reverse("tela_candidaturas_recebidas"), fetch_redirect_response=False)

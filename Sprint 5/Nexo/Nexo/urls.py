@@ -55,7 +55,7 @@ urlpatterns = [
     path('templates/tela-monitoria.html', tela_monitoria, name='tela_monitoria'),
     path('templates/tela-equipe-competicao.html', tela_equipe_competicao, name='tela_equipe_competicao'),
     path('templates/tela-perfil.html', tela_perfil, name='tela_perfil'),
-    path('templates/tela-curriculo-aluno.html', tela_curriculo_aluno, name='tela_curriculo_aluno'),
+    path('aluno/<int:id>/curriculo/', tela_curriculo_aluno, name='tela_curriculo_aluno'),
     path('templates/tela-instituicao.html', tela_instituicao, name='tela_instituicao'),
     path('templates/tela-nova-oportunidade.html', tela_nova_oportunidade, name='tela_nova_oportunidade'),
 ]
