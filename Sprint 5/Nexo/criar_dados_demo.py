@@ -1,6 +1,6 @@
 import os
 import sys
-from datetime import date
+from datetime import date, timedelta
 
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Nexo.settings")
@@ -13,6 +13,14 @@ from nexoapp.models import (
 )
 
 SENHA_TESTE = "nexo2026"
+
+
+# Os prazos são contados a partir do dia em que o script roda, para as vagas não vencerem antes da DEMO.
+# daqui(26) é daqui a 26 dias; daqui(-15) é 15 dias atrás (vaga já encerrada, para mostrar "Inscrições encerradas").
+# As abertas vencem entre 26 e 84 dias depois, então um dump feito até três semanas antes da DEMO
+# ainda chega lá com as mesmas vagas abertas.
+def daqui(dias):
+    return date.today() + timedelta(days=dias)
 
 if Oportunidade.objects.exists() or User.objects.exists():
     print("O banco já tem dados. Rode este script só num banco novo (apague o db.sqlite3 e rode o migrate).")
@@ -64,96 +72,96 @@ mon_eng4021 = nova_oportunidade(
     puc, engenharia, "monitoria", "Monitoria de ENG4021",
     "Fazer a revisão das sprints",
     "Ter sido aprovado em ENG4021",
-    2, 200, date(2026, 11, 18), "presencial", 3)
+    2, 200, daqui(26), "presencial", 3)
 mon_calculo = nova_oportunidade(
     puc, engenharia, "monitoria", "Monitoria de Cálculo I",
     "Tirar dúvidas dos alunos em plantões semanais.",
     "Ter sido aprovado em Cálculo I com nota igual ou maior que 8.",
-    8, 600, date(2026, 11, 20), "presencial", 3)
+    8, 600, daqui(28), "presencial", 3)
 mon_economia = nova_oportunidade(
     ufrj, economia, "monitoria", "Monitoria de Introdução à Economia",
     "Apoiar o professor nas aulas práticas e organizar os plantões antes das provas.",
     "Ter sido aprovado em Introdução à Economia.",
-    6, 400, date(2026, 11, 27), "presencial", 3)
+    6, 400, daqui(35), "presencial", 3)
 mon_programacao = nova_oportunidade(
     uff, computacao, "monitoria", "Monitoria de Programação I",
     "Acompanhar os laboratórios de Python e ajudar os alunos com os exercícios da semana.",
     "Ter sido aprovado em Programação I.",
-    10, 500, date(2026, 10, 20), "hibrido", 2)
+    10, 500, daqui(-24), "hibrido", 2)
 
 ic_visao = nova_oportunidade(
     puc, computacao, "ic", "IC em Visão Computacional",
     "Pesquisa com visão computacional para inspeção de equipamentos.",
     "Saber programar em Python. Ter cursado Álgebra Linear.",
-    12, 700, date(2026, 12, 5), "presencial", 3)
+    12, 700, daqui(43), "presencial", 3)
 ic_direito = nova_oportunidade(
     uerj, direito, "ic", "IC em Direito Digital",
     "Pesquisa sobre proteção de dados pessoais e a aplicação da LGPD em plataformas digitais.",
     "Interesse em direito digital e disponibilidade para reuniões quinzenais.",
-    10, 700, date(2026, 11, 30), "hibrido", 4)
+    10, 700, daqui(38), "hibrido", 4)
 ic_psicologia = nova_oportunidade(
     ufrj, psicologia, "ic", "IC em Psicologia do Desenvolvimento",
     "Ajudar na coleta e organização de dados de uma pesquisa com crianças em idade escolar.",
     "Ter cursado Psicologia do Desenvolvimento I. Vaga voluntária.",
-    12, 0, date(2026, 12, 12), "presencial", 2)
+    12, 0, daqui(50), "presencial", 2)
 ic_energia = nova_oportunidade(
     uff, engenharia, "ic", "IC em Energia Solar",
     "Testar a eficiência de painéis solares em diferentes condições de temperatura no laboratório.",
     "Ter cursado Física II.",
-    20, 700, date(2026, 10, 15), "presencial", 4)
+    20, 700, daqui(-29), "presencial", 4)
 
 est_exacta = nova_oportunidade(
     exacta, engenharia, "estagio", "Exacta - vaga para estagio",
     "Laboratório de transformação digital do Departamento de Informática da PUC-Rio.",
     "Ter um conhecimento prévio da area de atuação do projeto",
-    20, 1000, date(2026, 10, 29), "presencial", 3)
+    20, 1000, daqui(-15), "presencial", 3)
 est_petrobras = nova_oportunidade(
     petrobras, administracao, "estagio", "Estagio Nivel iniciante na Petrobras",
     "Vagas para a área de back-end",
     "Estar entre o 3º e o 7º período.",
-    20, 1800, date(2026, 12, 18), "hibrido", 3)
+    20, 1800, daqui(56), "hibrido", 3)
 est_dados = nova_oportunidade(
     visagio, economia, "estagio", "Estágio em Análise de Dados",
     "Montar painéis e relatórios para projetos de consultoria, trabalhando com Excel, SQL e Power BI.",
     "Conhecimento de Excel. SQL é um diferencial.",
-    30, 2200, date(2026, 12, 10), "hibrido", 5)
+    30, 2200, daqui(48), "hibrido", 5)
 est_design = nova_oportunidade(
     exacta, design, "estagio", "Estágio em Design de Produto",
     "Criar protótipos de telas e participar de testes com usuários dos projetos do laboratório.",
     "Saber usar Figma. Ter portfólio.",
-    20, 1200, date(2026, 11, 25), "remoto", 3)
+    20, 1200, daqui(33), "remoto", 3)
 est_juridico = nova_oportunidade(
     petrobras, direito, "estagio", "Estágio Jurídico",
     "Apoiar a equipe jurídica na análise de contratos e no acompanhamento de processos.",
     "Estar a partir do 6º período de Direito.",
-    30, 2000, date(2027, 1, 15), "presencial", 6)
+    30, 2000, daqui(84), "presencial", 6)
 
 eq_pegasus = nova_oportunidade(
     pegasus, engenharia, "equipe", "Processo Seletivo da Pegasus",
     "Equipe que projeta e fabrica um carro estilo fórmula para a Fórmula SAE Brasil.",
     "Ter comprometimento com o projeto",
-    8, 0, date(2026, 10, 29), "hibrido", 1)
+    8, 0, daqui(-15), "hibrido", 1)
 eq_baja = nova_oportunidade(
     baja, engenharia, "equipe", "Processo Seletivo da Baja",
     "Equipe que projeta e constrói um veículo off-road para a competição Baja SAE.",
     "Disponibilidade para encontros aos sábados.",
-    10, 0, date(2026, 11, 22), "presencial", 1)
+    10, 0, daqui(30), "presencial", 1)
 
 liga_ps = nova_oportunidade(
     liga_financas, economia, "liga", "Processo Seletivo da Liga",
     "Liga que aproxima os estudantes do mercado financeiro.",
     "Ter habilidade de grupo e estar cursando algum curso na puc",
-    6, 0, date(2026, 10, 29), "hibrido", 1)
+    6, 0, daqui(-15), "hibrido", 1)
 liga_research = nova_oportunidade(
     liga_financas, economia, "liga", "Liga de Mercado Financeiro: Núcleo de Research",
     "Escrever relatórios de análise de empresas e apresentar para os membros da liga.",
     "Ter cursado Contabilidade ou Finanças.",
-    6, 0, date(2026, 12, 3), "presencial", 2)
+    6, 0, daqui(41), "presencial", 2)
 liga_empreend_ps = nova_oportunidade(
     liga_empreend, administracao, "liga", "Processo Seletivo da Liga de Empreendedorismo",
     "Participar de workshops e desenvolver ideias de negócio com mentoria de empreendedores.",
     "Vontade de aprender e de trabalhar em grupo.",
-    4, 0, date(2026, 11, 28), "hibrido", 1)
+    4, 0, daqui(36), "hibrido", 1)
 
 
 def novo_usuario(email, nome, sobrenome):
