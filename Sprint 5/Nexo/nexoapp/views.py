@@ -19,7 +19,7 @@ from .models import (
     Candidatura,
     Favorito,
 )
-from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm, OportunidadeForm
+from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm, OportunidadeForm, PerfilAlunoForm
 # Create your views here.
 def home(request):
     return render(request, "tela-inicial.html")
@@ -186,7 +186,17 @@ def tela_perfil(request):
     bloqueio = tela_so_de_aluno(request)
     if bloqueio:
         return bloqueio
-    return render(request, "tela-perfil.html")
+    aluno = request.user.aluno
+    if request.method == "POST":
+        # instance=aluno faz o form salvar em cima do aluno logado, em vez de criar outro
+        form = PerfilAlunoForm(request.POST, instance=aluno)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Perfil salvo.")
+            return redirect("tela_perfil")
+    else:
+        form = PerfilAlunoForm(instance=aluno)
+    return render(request, "tela-perfil.html", {"form": form, "aluno": aluno})
 
 @login_required(login_url='login')
 def tela_curriculo_aluno(request):

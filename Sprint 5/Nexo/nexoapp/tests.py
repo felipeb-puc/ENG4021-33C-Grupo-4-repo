@@ -364,3 +364,23 @@ class TelasPorPapelTests(BaseTarefasSprint11):
         self.entrar("ana@example.com")
         resposta = self.client.get(reverse("inicio"))
         self.assertEqual(resposta.status_code, 200)
+
+
+class PerfilDoAlunoTests(BaseTarefasSprint11):
+
+    def test_aluno_salva_periodo_cr_e_curriculo(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.post(reverse("tela_perfil"), {"periodo": "7", "cr": "9.1", "curriculo": "Estágio na Exacta."})
+        self.assertRedirects(resposta, reverse("tela_perfil"))
+        self.aluno.refresh_from_db()
+        self.assertEqual(self.aluno.periodo, 7)
+        self.assertEqual(str(self.aluno.cr), "9.1")
+        self.assertEqual(self.aluno.curriculo, "Estágio na Exacta.")
+
+    def test_perfil_recusa_periodo_e_cr_fora_do_limite(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.post(reverse("tela_perfil"), {"periodo": "15", "cr": "11", "curriculo": "x"})
+        self.assertEqual(resposta.status_code, 200)
+        self.assertTrue(resposta.context["form"].errors)
+        self.aluno.refresh_from_db()
+        self.assertEqual(self.aluno.periodo, 6)
