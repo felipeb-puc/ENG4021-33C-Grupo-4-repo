@@ -328,3 +328,20 @@ class CabecalhoUnicoTests(BaseTarefasSprint11):
         resposta = self.client.get(reverse("home"))
         self.assertContains(resposta, "Entrar")
         self.assertContains(resposta, "Criar conta")
+
+
+class MenuDoPerfilTests(BaseTarefasSprint11):
+
+    def test_menu_do_aluno(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("inicio"))
+        self.assertContains(resposta, 'id="menu-perfil"')
+        self.assertContains(resposta, "Meu perfil e currículo")
+        self.assertContains(resposta, "menu-perfil.js")
+
+    def test_perfil_da_instituicao_so_no_menu_de_quem_publica(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_painel"))
+        self.assertContains(resposta, 'id="menu-perfil"')
+        self.assertContains(resposta, "Perfil da instituição", count=1)
+        self.assertNotContains(resposta, "Meu perfil e currículo")
