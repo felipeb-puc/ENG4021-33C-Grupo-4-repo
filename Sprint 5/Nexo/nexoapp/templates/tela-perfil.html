@@ -12,6 +12,10 @@
 
         <h1>Perfil e currículo</h1>
 
+        {% for mensagem in messages %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
+
         <div class="abas">
             <a href="{% url 'tela_perfil' %}" class="ativo">Editar</a>
 
@@ -43,60 +47,40 @@
                 <h2>Dados acadêmicos</h2>
 
                 <p class="cinza">
-                    PUC-Rio · Engenharia de Produção · matrícula 2410123.
-                    Universidade e curso vêm do cadastro e não são editáveis.
+                    {{ aluno.instituicao.nome }} · {{ aluno.curso.nome }} · matrícula {{ aluno.matricula }}.
+                    Universidade, curso e matrícula vêm do cadastro e não são editáveis.
                 </p>
 
                 <div class="duas-colunas">
 
                     <div>
-                        <label for="periodo">Período</label>
-
-                        <select id="periodo" name="periodo">
-                            <option>4º período</option>
-                            <option selected>5º período</option>
-                            <option>6º período</option>
-                        </select>
+                        <label for="{{ form.periodo.id_for_label }}">Período</label>
+                        {{ form.periodo }}
+                        {{ form.periodo.errors }}
                     </div>
 
                     <div>
-                        <label for="cr">CR</label>
-                        <input type="text" id="cr" name="cr" value="8,4">
+                        <label for="{{ form.cr.id_for_label }}">CR</label>
+                        {{ form.cr }}
+                        {{ form.cr.errors }}
                     </div>
 
                 </div>
-
-                <label for="resumo">Resumo</label>
-
-                <textarea id="resumo" name="resumo" rows="4">Monitora de Cálculo e integrante da Liga de Empreendedorismo. Busca estágio em operações.</textarea>
-
-                <label for="areas">Áreas de interesse</label>
-
-                <input type="text" id="areas" name="areas"
-                       value="Operações, Dados, Consultoria">
-
-                <label for="habilidades">Habilidades</label>
-
-                <input type="text" id="habilidades" name="habilidades"
-                       value="Excel avançado, Power BI, SQL básico, Inglês fluente, Lean">
 
             </div>
 
             <div class="caixa">
 
-                <h2>Experiências e formação</h2>
+                <h2>Currículo</h2>
 
-                <div class="experiencia">
-                    <p class="cinza">Acadêmica · 2026 — atual</p>
-                    <b>Monitora de Cálculo a Várias Variáveis</b>
-                    <p class="cinza">Departamento de Matemática</p>
-                </div>
+                <p class="cinza">
+                    É o que o recrutador lê quando você se candidata. Escreva um resumo,
+                    as áreas de interesse, as habilidades e as experiências, uma por linha.
+                </p>
 
-                <div class="experiencia">
-                    <p class="cinza">Acadêmica · 2025 — 2026</p>
-                    <b>Liga de Empreendedorismo — diretoria de projetos</b>
-                    <p class="cinza">Liga de Empreendedorismo</p>
-                </div>
+                <label for="{{ form.curriculo.id_for_label }}">Currículo</label>
+                {{ form.curriculo }}
+                {{ form.curriculo.errors }}
 
             </div>
 
