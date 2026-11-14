@@ -52,6 +52,7 @@ urlpatterns = [
     path('candidatura/<int:candidatura_id>/desistir/', desistir, name='desistir'),
     path('favoritar/<int:oportunidade_id>/', favoritar, name='favoritar'),
     path('favorito/<int:favorito_id>/remover/', remover_favorito, name='remover_favorito'),
+    path('candidatura/<int:candidatura_id>/status/', mudar_status, name='mudar_status'),
     path('templates/tela-monitoria.html', tela_monitoria, name='tela_monitoria'),
     path('templates/tela-equipe-competicao.html', tela_equipe_competicao, name='tela_equipe_competicao'),
     path('templates/tela-perfil.html', tela_perfil, name='tela_perfil'),

@@ -409,3 +409,55 @@ class CurriculoDoAlunoTests(BaseTarefasSprint11):
         self.entrar("rafael@example.com")
         resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.aluno.id]))
         self.assertRedirects(resposta, reverse("tela_candidaturas_recebidas"), fetch_redirect_response=False)
+
+
+class StatusDaCandidaturaTests(BaseTarefasSprint11):
+
+    def mudar(self, status):
+        return self.client.post(reverse("mudar_status", args=[self.candidatura.id]), {"status": status})
+
+    def test_recrutador_dono_muda_o_status(self):
+        self.entrar("carla@example.com")
+        self.mudar("entrevista")
+        self.candidatura.refresh_from_db()
+        self.assertEqual(self.candidatura.status, "entrevista")
+
+    def test_aluno_ve_o_status_novo_na_aba_dele(self):
+        self.entrar("carla@example.com")
+        self.mudar("aprovada")
+        self.client.logout()
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("tela_historico"))
+        self.assertContains(resposta, "Aprovada")
+
+    def test_outro_recrutador_nao_muda_o_status(self):
+        self.entrar("rafael@example.com")
+        self.mudar("recusada")
+        self.candidatura.refresh_from_db()
+        self.assertEqual(self.candidatura.status, "inscrita")
+
+    def test_aluno_nao_muda_o_status(self):
+        self.entrar("ana@example.com")
+        self.mudar("aprovada")
+        self.candidatura.refresh_from_db()
+        self.assertEqual(self.candidatura.status, "inscrita")
+
+    def test_status_invalido_ou_desistiu_nao_salva(self):
+        self.entrar("carla@example.com")
+        self.mudar("qualquer-coisa")
+        self.mudar("desistiu")
+        self.candidatura.refresh_from_db()
+        self.assertEqual(self.candidatura.status, "inscrita")
+
+    def test_candidatura_desistida_nao_muda_mais(self):
+        self.candidatura.status = "desistiu"
+        self.candidatura.save()
+        self.entrar("carla@example.com")
+        self.mudar("aprovada")
+        self.candidatura.refresh_from_db()
+        self.assertEqual(self.candidatura.status, "desistiu")
+
+    def test_mudar_status_so_aceita_post(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("mudar_status", args=[self.candidatura.id]))
+        self.assertEqual(resposta.status_code, 405)
