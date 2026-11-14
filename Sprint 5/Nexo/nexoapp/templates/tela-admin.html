@@ -1,45 +1,13 @@
-
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>NEXO · Administração</title>
-    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
+{% block titulo %}NEXO · Administração{% endblock %}
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+{% block css %}
     <link href="{% static 'css/tela-admin.css' %}" rel="stylesheet">
-</head>
-<body>
+{% endblock %}
 
-    <div id="topo">
-        <div class="menu">
-
-            <a href="{% url 'tela_painel' %}" class="logo">
-                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
-            </a>
-
-            <span class="papel">ADMINISTRAÇÃO</span>
-
-            <a href="{% url 'tela_admin' %}" class="ativo">
-                Verificação de contas
-            </a>
-
-        </div>
-
-        <div class="menu">
-            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
-
-            <a href="{% url 'logout' %}" class="botao-contorno">
-                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
-                Sair
-            </a>
-        </div>
-    </div>
-
+{% block conteudo %}
     <div class="pagina-estreita">
 
         <h1>Verificação de contas</h1>
@@ -95,7 +63,4 @@
         {% endfor %}
 
     </div>
-
-</body>
-</html>
-
+{% endblock %}

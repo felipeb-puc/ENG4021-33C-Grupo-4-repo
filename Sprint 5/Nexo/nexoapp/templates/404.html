@@ -1,27 +1,12 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO · Página não encontrada</title>
-    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
-</head>
-<body>
 
-    <div id="topo">
-        <div class="menu">
-            <a href="{% url 'inicio' %}" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}" alt="Nexo"></a>
-        </div>
-    </div>
+{% block titulo %}NEXO · Página não encontrada{% endblock %}
 
+{% block conteudo %}
     <div class="pagina-estreita">
         <h1>Página não encontrada</h1>
         <p class="cinza">O link pode estar quebrado ou a oportunidade foi removida.</p>
         <a href="{% url 'inicio' %}" class="botao">Voltar ao início</a>
     </div>
-
-</body>
-</html>
+{% endblock %}

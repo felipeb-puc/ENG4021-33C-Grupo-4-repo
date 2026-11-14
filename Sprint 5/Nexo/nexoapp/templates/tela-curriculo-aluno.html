@@ -1,47 +1,13 @@
-
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO · Currículo</title>
-    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/geral.css' %}">
-    <link rel="stylesheet" href="{% static 'css/tela-curriculo-aluno.css' %}">
-</head>
-<body>
+{% block titulo %}NEXO · Currículo{% endblock %}
 
-    <div id="topo">
-        <div class="menu">
-            <a href="{% url 'tela_painel' %}" class="logo">
-                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
-            </a>
+{% block css %}
+    <link href="{% static 'css/tela-curriculo-aluno.css' %}" rel="stylesheet">
+{% endblock %}
 
-            <span class="papel">RECRUTADOR</span>
-
-            <a href="{% url 'tela_painel' %}">Visão geral</a>
-            <a href="{% url 'tela_candidaturas_recebidas' %}">Candidaturas</a>
-            <a href="{% url 'tela_banco_talentos' %}" class="ativo">Buscar candidatos</a>
-            <a href="{% url 'tela_instituicao' %}">Perfil da instituição</a>
-        </div>
-
-        <div class="menu">
-            <span class="cinza">Visagio</span>
-
-            <a href="{% url 'tela_instituicao' %}" class="avatar escuro">CD</a>
-
-            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
-
-            <a href="{% url 'logout' %}" class="botao-contorno">
-                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
-                Sair
-            </a>
-        </div>
-    </div>
-
+{% block conteudo %}
     <main class="pagina-estreita">
 
         <a href="{% url 'tela_banco_talentos' %}" class="cinza">
@@ -138,7 +104,4 @@
 
         </section>
     </main>
-
-</body>
-</html>
-
+{% endblock %}

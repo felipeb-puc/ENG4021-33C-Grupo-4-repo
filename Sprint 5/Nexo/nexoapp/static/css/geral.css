@@ -458,3 +458,8 @@ input, select, textarea {
 .prazo-restante.urgente {
   color: #b4540f;
 }
+
+/* Cabeçalho: ícone branco no link ativo */
+.menu a.ativo .ic {
+  filter: brightness(0) invert(1);
+}
