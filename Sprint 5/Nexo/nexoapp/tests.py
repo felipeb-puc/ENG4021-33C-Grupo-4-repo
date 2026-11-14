@@ -461,3 +461,22 @@ class StatusDaCandidaturaTests(BaseTarefasSprint11):
         self.entrar("carla@example.com")
         resposta = self.client.get(reverse("mudar_status", args=[self.candidatura.id]))
         self.assertEqual(resposta.status_code, 405)
+
+
+class PeriodoMinimoTests(BaseTarefasSprint11):
+
+    def test_aluno_abaixo_do_periodo_minimo_nao_se_candidata(self):
+        self.entrar("bia@example.com")  # 2º período, vaga a partir do 5º
+        self.client.post(reverse("candidatar", args=[self.vaga_visagio.id]))
+        self.assertFalse(Candidatura.objects.filter(aluno=self.calouro, oportunidade=self.vaga_visagio).exists())
+
+    def test_tela_da_vaga_avisa_o_periodo_minimo(self):
+        self.entrar("bia@example.com")
+        resposta = self.client.get(reverse("tela_oportunidade", args=[self.vaga_visagio.id]))
+        self.assertContains(resposta, "A partir do 5º período")
+        self.assertNotContains(resposta, "Candidatar-se")
+
+    def test_aluno_no_periodo_certo_se_candidata(self):
+        self.entrar("bia@example.com")  # monitoria a partir do 2º
+        self.client.post(reverse("candidatar", args=[self.vaga_puc.id]))
+        self.assertTrue(Candidatura.objects.filter(aluno=self.calouro, oportunidade=self.vaga_puc).exists())

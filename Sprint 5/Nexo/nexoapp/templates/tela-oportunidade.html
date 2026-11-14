@@ -121,6 +121,9 @@
                     <span class="botao enviada">Candidatura enviada</span>
                     {% elif encerrada %}
                     <span class="botao desativado">Inscrições encerradas</span>
+                    {% elif periodo_insuficiente %}
+                    <span class="botao desativado">A partir do {{ oportunidade.periodo_minimo }}º período</span>
+                    <p class="cinza">Você está no {{ user.aluno.periodo }}º período. Se mudou de período, atualize no seu <a href="{% url 'tela_perfil' %}">perfil</a>.</p>
                     {% else %}
                     <form method="post" action="{% url 'candidatar' oportunidade.id %}">
                         {% csrf_token %}
