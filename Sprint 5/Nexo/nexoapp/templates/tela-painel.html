@@ -1,62 +1,13 @@
-
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>NEXO · Painel</title>
-    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
+{% block titulo %}NEXO · Painel{% endblock %}
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+{% block css %}
     <link href="{% static 'css/tela-painel.css' %}" rel="stylesheet">
-</head>
+{% endblock %}
 
-<body>
-
-    <div id="topo">
-        <div class="menu">
-            <a href="{% url 'tela_painel' %}" class="logo">
-                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
-            </a>
-
-            <span class="papel">RECRUTADOR</span>
-
-            <a href="{% url 'tela_painel' %}" class="ativo">
-                Visão geral
-            </a>
-
-            <a href="../templates/tela-candidaturas-recebidas.html">
-                Candidaturas
-            </a>
-
-            <a href="../templates/tela-banco-talentos.html">
-                Buscar candidatos
-            </a>
-
-            <a href="../templates/tela-instituicao.html">
-                Perfil da instituição
-            </a>
-        </div>
-
-        <div class="menu">
-            <span class="cinza">{{ instituicao }}</span>
-
-            <a href="../templates/tela-instituicao.html" class="avatar escuro">
-                {{ iniciais }}
-            </a>
-
-            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
-
-            <a href="{% url 'logout' %}" class="botao-contorno">
-                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
-                Sair
-            </a>
-        </div>
-    </div>
-
+{% block conteudo %}
     <div class="pagina">
                 {% for mensagem in messages %}
         <p class="mensagem">{{ mensagem }}</p>
@@ -161,6 +112,4 @@
         {% endfor %}
 
     </div>
-
-</body>
-</html>
+{% endblock %}

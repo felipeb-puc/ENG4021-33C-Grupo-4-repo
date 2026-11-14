@@ -258,3 +258,73 @@ class FiltrosDaBuscaTests(TestCase):
     def test_filtros_combinados(self):
         titulos = self.buscar({"curso": self.engenharia.id, "remuneradas": "1", "abertas": "1", "modalidade": "presencial"})
         self.assertEqual(titulos, ["Monitoria de Python"])
+
+
+class BaseTarefasSprint11(TestCase):
+    """Dados que os testes das tarefas da Sprint 11 usam: alunos, recrutadores, representante, admin e duas vagas."""
+
+    def setUp(self):
+        self.puc = Instituicao.objects.create(tipo="faculdade", nome="PUC-Rio", sede="Rio de Janeiro")
+        self.visagio = Instituicao.objects.create(tipo="empresa", nome="Visagio", sede="Rio de Janeiro")
+        self.petrobras = Instituicao.objects.create(tipo="empresa", nome="Petrobras", sede="Rio de Janeiro")
+        self.curso = Curso.objects.create(nome="Engenharia")
+        hoje = date.today()
+
+        self.vaga_visagio = Oportunidade.objects.create(
+            instituicao=self.visagio, curso=self.curso, tipo="estagio", titulo="Estágio em Dados",
+            descricao="Relatórios.", requisitos="Excel.", carga_horaria=30, remuneracao=2000,
+            prazo_inscricao=hoje + timedelta(days=20), modalidade="hibrido", periodo_minimo=5,
+        )
+        self.vaga_puc = Oportunidade.objects.create(
+            instituicao=self.puc, curso=self.curso, tipo="monitoria", titulo="Monitoria de Cálculo",
+            descricao="Plantões.", requisitos="Ter feito Cálculo.", carga_horaria=8, remuneracao=600,
+            prazo_inscricao=hoje + timedelta(days=10), modalidade="presencial", periodo_minimo=2,
+        )
+
+        self.aluno = self.criar_aluno("ana@example.com", "Ana", periodo=6)
+        self.calouro = self.criar_aluno("bia@example.com", "Bia", periodo=2)
+        self.carla = self.criar_recrutador("carla@example.com", "Carla", self.visagio)
+        self.rafael = self.criar_recrutador("rafael@example.com", "Rafael", self.petrobras)
+        usuario = User.objects.create_user(username="lucas@example.com", email="lucas@example.com", first_name="Lucas", password="senha-segura-123")
+        Representante.objects.create(user=usuario, instituicao=self.puc, cargo="Coordenador")
+        User.objects.create_user(username="admin@example.com", email="admin@example.com", password="senha-segura-123", is_staff=True)
+
+        # a Ana se candidatou à vaga da Visagio
+        self.candidatura = Candidatura.objects.create(aluno=self.aluno, oportunidade=self.vaga_visagio)
+
+    def criar_aluno(self, email, nome, periodo):
+        usuario = User.objects.create_user(username=email, email=email, first_name=nome, password="senha-segura-123")
+        return Aluno.objects.create(user=usuario, instituicao=self.puc, curso=self.curso, matricula=email[:3],
+                                    periodo=periodo, curriculo="Monitora de Cálculo.", cr=8)
+
+    def criar_recrutador(self, email, nome, empresa):
+        usuario = User.objects.create_user(username=email, email=email, first_name=nome, password="senha-segura-123")
+        return Recrutador.objects.create(user=usuario, empresa=empresa, cargo="RH")
+
+    def entrar(self, email):
+        self.client.login(username=email, password="senha-segura-123")
+
+
+class CabecalhoUnicoTests(BaseTarefasSprint11):
+
+    def test_aluno_ve_o_cabecalho_do_aluno(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("inicio"))
+        self.assertContains(resposta, "Minhas oportunidades")
+        self.assertNotContains(resposta, "RECRUTADOR")
+
+    def test_recrutador_e_representante_veem_o_papel_certo(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_painel"))
+        self.assertContains(resposta, "RECRUTADOR")
+        self.assertContains(resposta, "Visagio")
+        self.assertNotContains(resposta, "Minhas oportunidades")
+        self.client.logout()
+        self.entrar("lucas@example.com")
+        resposta = self.client.get(reverse("tela_painel"))
+        self.assertContains(resposta, "REPRESENTANTE")
+
+    def test_visitante_ve_entrar_e_criar_conta(self):
+        resposta = self.client.get(reverse("home"))
+        self.assertContains(resposta, "Entrar")
+        self.assertContains(resposta, "Criar conta")

@@ -1,34 +1,13 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO · Início</title>
-    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
-    <link href="../static/css/Inicio.css" rel="stylesheet">
-</head>
-<body>
 
-    <div id="topo">
-        <div class="menu">
-            <a href="../templates/Inicio.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
-            <a href="../templates/Inicio.html" class="ativo">Início</a>
-            <a href="../templates/tela-busca.html"><img class="ic" src="../static/imagens/icone-search.svg">Buscar</a>
-            <a href="../templates/tela-minha-oportunidades-canditaturas-ativas.html">Minhas oportunidades {% if user.aluno %}<span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>{% endif %}</a>
-        </div>
-        <div class="menu">
-            {% if user.aluno %}
-            <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
-            <a href="../templates/tela-perfil.html" class="avatar">{{ user.aluno.iniciais }}</a>
-            {% endif %}
-            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="../static/imagens/icone-log-out.svg">Sair</a>
-        </div>
-    </div>
+{% block titulo %}NEXO · Início{% endblock %}
 
+{% block css %}
+    <link href="{% static 'css/Inicio.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block conteudo %}
     <div class="pagina">
                 {% for mensagem in messages %}
         <p class="mensagem">{{ mensagem }}</p>
@@ -106,6 +85,4 @@
             {% endfor %}
         </div>
     </div>
-
-</body>
-</html>
+{% endblock %}
