@@ -687,3 +687,28 @@ def desistir(request, candidatura_id):
     candidatura.save(update_fields=["status"])
     messages.success(request, "Você desistiu da candidatura.")
     return redirect("tela_minha_oportunidades")
+
+@login_required(login_url='login')
+@require_POST
+def mudar_status(request, candidatura_id):
+    candidatura = get_object_or_404(Candidatura, id=candidatura_id)
+    instituicao = instituicao_do_usuario(request.user)
+
+    # só quem publicou a oportunidade muda o status da candidatura
+    if instituicao is None or candidatura.oportunidade.instituicao != instituicao:
+        messages.error(request, "Você não pode mudar o status desta candidatura.")
+        return redirect("tela_candidaturas_recebidas")
+
+    # "desistiu" é escolha do aluno: o recrutador não marca e não muda depois
+    status_permitidos = ["inscrita", "em_analise", "entrevista", "aprovada", "recusada"]
+    novo_status = request.POST.get("status", "")
+    if candidatura.status == "desistiu":
+        messages.error(request, "O aluno desistiu desta candidatura, então o status não muda mais.")
+    elif novo_status not in status_permitidos:
+        messages.error(request, "Status inválido.")
+    else:
+        candidatura.status = novo_status
+        candidatura.save()
+        nome = candidatura.aluno.user.first_name
+        messages.success(request, "Status de " + nome + " mudado para " + candidatura.get_status_display() + ".")
+    return redirect("tela_candidaturas_recebidas")
