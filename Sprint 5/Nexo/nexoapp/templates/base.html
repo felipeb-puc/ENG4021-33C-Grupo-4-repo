@@ -30,9 +30,16 @@
         </div>
         <div class="menu">
             <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
-            <a href="{% url 'tela_perfil' %}" class="avatar">{{ user.aluno.iniciais }}</a>
-            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">Sair</a>
+            <div class="perfil" id="perfil">
+                <button type="button" class="avatar" id="botao-perfil" aria-haspopup="true" aria-expanded="false" title="Abrir o menu do perfil">{{ user.aluno.iniciais }}</button>
+                <div class="menu-perfil" id="menu-perfil">
+                    <p class="nome">{{ user.first_name }}</p>
+                    <p class="cinza">{{ user.email }}</p>
+                    <a href="{% url 'tela_perfil' %}">Meu perfil e currículo</a>
+                    <a href="{% url 'trocar_senha' %}">Trocar senha</a>
+                    <a href="{% url 'logout' %}" class="sair">Sair</a>
+                </div>
+            </div>
         </div>
 
         {% elif user.recrutador or user.representante %}
@@ -43,13 +50,19 @@
             <a href="{% url 'tela_painel' %}" {% if pagina == 'tela_painel' or pagina == 'tela_nova_oportunidade' %}class="ativo"{% endif %}>Visão geral</a>
             <a href="{% url 'tela_candidaturas_recebidas' %}" {% if pagina == 'tela_candidaturas_recebidas' %}class="ativo"{% endif %}>Candidaturas</a>
             <a href="{% url 'tela_banco_talentos' %}" {% if pagina == 'tela_banco_talentos' or pagina == 'tela_curriculo_aluno' %}class="ativo"{% endif %}>Buscar candidatos</a>
-            <a href="{% url 'tela_instituicao' %}" {% if pagina == 'tela_instituicao' %}class="ativo"{% endif %}>Perfil da instituição</a>
         </div>
         <div class="menu">
             <span class="cinza">{% if user.recrutador %}{{ user.recrutador.empresa.nome }}{% else %}{{ user.representante.instituicao.nome }}{% endif %}</span>
-            <a href="{% url 'tela_instituicao' %}" class="avatar escuro">{{ user.first_name|first|upper }}</a>
-            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">Sair</a>
+            <div class="perfil" id="perfil">
+                <button type="button" class="avatar escuro" id="botao-perfil" aria-haspopup="true" aria-expanded="false" title="Abrir o menu do perfil">{{ user.first_name|first|upper }}</button>
+                <div class="menu-perfil" id="menu-perfil">
+                    <p class="nome">{{ user.first_name }}</p>
+                    <p class="cinza">{% if user.recrutador %}{{ user.recrutador.cargo }}{% else %}{{ user.representante.cargo }}{% endif %}</p>
+                    <a href="{% url 'tela_instituicao' %}">Perfil da instituição</a>
+                    <a href="{% url 'trocar_senha' %}">Trocar senha</a>
+                    <a href="{% url 'logout' %}" class="sair">Sair</a>
+                </div>
+            </div>
         </div>
 
         {% elif user.is_staff %}
@@ -60,8 +73,16 @@
             <a href="{% url 'tela_admin' %}" {% if pagina == 'tela_admin' %}class="ativo"{% endif %}>Verificação de contas</a>
         </div>
         <div class="menu">
-            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
-            <a href="{% url 'logout' %}" class="botao-contorno"><img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">Sair</a>
+            <div class="perfil" id="perfil">
+                <button type="button" class="avatar escuro" id="botao-perfil" aria-haspopup="true" aria-expanded="false" title="Abrir o menu do perfil">{{ user.first_name|default:user.username|first|upper }}</button>
+                <div class="menu-perfil" id="menu-perfil">
+                    <p class="nome">{{ user.first_name|default:"Administrador" }}</p>
+                    <p class="cinza">{{ user.email }}</p>
+                    <a href="/admin/">Admin do Django</a>
+                    <a href="{% url 'trocar_senha' %}">Trocar senha</a>
+                    <a href="{% url 'logout' %}" class="sair">Sair</a>
+                </div>
+            </div>
         </div>
 
         {% elif user.is_authenticated %}
@@ -89,6 +110,7 @@
 
     {% block conteudo %}{% endblock %}
 
+    <script src="{% static 'js/menu-perfil.js' %}"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
