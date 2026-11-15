@@ -1,27 +1,13 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO</title>
-    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../static/css/geral.css" rel="stylesheet">
-    <link href="../static/css/tela-inicial.css" rel="stylesheet">
-</head>
-<body>
 
-    <div id="topo">
-        <div class="menu">
-            <a href="../templates/tela-inicial.html" class="logo"><img src="../static/imagens/logoNEXO.png"></a>
-        </div>
-        <div class="menu">
-            <a href="../templates/tela-login.html">Entrar</a>
-            <a href="../templates/PROJETOtela_escolha_login.html" class="ativo">Criar conta →</a>
-        </div>
-    </div>
+{% block titulo %}NEXO{% endblock %}
 
+{% block css %}
+    <link href="{% static 'css/tela-inicial.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block conteudo %}
     <div id="principal" class="pagina">
         <div id="texto-principal">
             <p class="texto-acima-do-titulo">ESTUDANTES, UNIVERSIDADES E CONTRATANTES</p>
@@ -74,6 +60,4 @@
             </ul>
         </div>
     </div>
-
-</body>
-</html>
+{% endblock %}

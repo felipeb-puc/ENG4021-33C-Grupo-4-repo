@@ -1,31 +1,13 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trocar senha - Nexo</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+{% block titulo %}NEXO · Trocar senha{% endblock %}
+
+{% block css %}
     <link href="{% static 'css/tela-trocar-senha.css' %}" rel="stylesheet">
-</head>
-<body>
+{% endblock %}
 
-    <div id="topo">
-        <div class="menu">
-            <a href="{% if user.aluno %}{% url 'inicio' %}{% else %}{% url 'tela_painel' %}{% endif %}" class="logo">
-                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
-            </a>
-        </div>
-        <div class="menu">
-            <a href="{% url 'logout' %}" class="botao-contorno">
-                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
-                Sair
-            </a>
-        </div>
-    </div>
-
+{% block conteudo %}
     <div id="centro">
         <a href="{% if user.aluno %}{% url 'inicio' %}{% else %}{% url 'tela_painel' %}{% endif %}" class="cinza">← Voltar</a>
 
@@ -56,6 +38,4 @@
             <button type="submit" class="botao">Salvar nova senha</button>
         </form>
     </div>
-
-</body>
-</html>
+{% endblock %}

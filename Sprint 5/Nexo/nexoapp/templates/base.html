@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}NEXO{% endblock %}</title>
+    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+</head>
+<body>
+
+    {% with pagina=request.resolver_match.url_name %}
+    <div id="topo">
+
+        {% if user.aluno %}
+        {# Cabeçalho do aluno #}
+        <div class="menu">
+            <a href="{% url 'inicio' %}" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}" alt="NEXO"></a>
+            <a href="{% url 'inicio' %}" {% if pagina == 'inicio' %}class="ativo"{% endif %}>Início</a>
+            <a href="{% url 'tela_busca' %}" {% if pagina == 'tela_busca' or pagina == 'tela_estagio' or pagina == 'tela_monitoria' or pagina == 'tela_iniciacao_cientifica' or pagina == 'tela_liga_academica' or pagina == 'tela_equipe_competicao' or pagina == 'tela_oportunidade' %}class="ativo"{% endif %}>
+                <img class="ic" src="{% static 'imagens/icone-search.svg' %}" alt="">Buscar
+            </a>
+            <a href="{% url 'tela_minha_oportunidades' %}" {% if pagina == 'tela_minha_oportunidades' or pagina == 'tela_favoritos' or pagina == 'tela_historico' %}class="ativo"{% endif %}>
+                Minhas oportunidades
+                <span class="contador">{{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}</span>
+            </a>
+        </div>
+        <div class="menu">
+            <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
+            <div class="perfil" id="perfil">
+                <button type="button" class="avatar" id="botao-perfil" aria-haspopup="true" aria-expanded="false" title="Abrir o menu do perfil">{{ user.aluno.iniciais }}</button>
+                <div class="menu-perfil" id="menu-perfil">
+                    <p class="nome">{{ user.first_name }}</p>
+                    <p class="cinza">{{ user.email }}</p>
+                    <a href="{% url 'tela_perfil' %}">Meu perfil e currículo</a>
+                    <a href="{% url 'trocar_senha' %}">Trocar senha</a>
+                    <a href="{% url 'logout' %}" class="sair">Sair</a>
+                </div>
+            </div>
+        </div>
+
+        {% elif user.recrutador or user.representante %}
+        {# Cabeçalho de quem publica: recrutador ou representante #}
+        <div class="menu">
+            <a href="{% url 'tela_painel' %}" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}" alt="NEXO"></a>
+            <span class="papel">{% if user.recrutador %}RECRUTADOR{% else %}REPRESENTANTE{% endif %}</span>
+            <a href="{% url 'tela_painel' %}" {% if pagina == 'tela_painel' or pagina == 'tela_nova_oportunidade' %}class="ativo"{% endif %}>Visão geral</a>
+            <a href="{% url 'tela_candidaturas_recebidas' %}" {% if pagina == 'tela_candidaturas_recebidas' %}class="ativo"{% endif %}>Candidaturas</a>
+            <a href="{% url 'tela_banco_talentos' %}" {% if pagina == 'tela_banco_talentos' or pagina == 'tela_curriculo_aluno' %}class="ativo"{% endif %}>Buscar candidatos</a>
+        </div>
+        <div class="menu">
+            <span class="cinza">{% if user.recrutador %}{{ user.recrutador.empresa.nome }}{% else %}{{ user.representante.instituicao.nome }}{% endif %}</span>
+            <div class="perfil" id="perfil">
+                <button type="button" class="avatar escuro" id="botao-perfil" aria-haspopup="true" aria-expanded="false" title="Abrir o menu do perfil">{{ user.first_name|first|upper }}</button>
+                <div class="menu-perfil" id="menu-perfil">
+                    <p class="nome">{{ user.first_name }}</p>
+                    <p class="cinza">{% if user.recrutador %}{{ user.recrutador.cargo }}{% else %}{{ user.representante.cargo }}{% endif %}</p>
+                    <a href="{% url 'tela_instituicao' %}">Perfil da instituição</a>
+                    <a href="{% url 'trocar_senha' %}">Trocar senha</a>
+                    <a href="{% url 'logout' %}" class="sair">Sair</a>
+                </div>
+            </div>
+        </div>
+
+        {% elif user.is_staff %}
+        {# Cabeçalho do administrador #}
+        <div class="menu">
+            <a href="{% url 'tela_admin' %}" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}" alt="NEXO"></a>
+            <span class="papel">ADMINISTRAÇÃO</span>
+            <a href="{% url 'tela_admin' %}" {% if pagina == 'tela_admin' %}class="ativo"{% endif %}>Verificação de contas</a>
+        </div>
+        <div class="menu">
+            <div class="perfil" id="perfil">
+                <button type="button" class="avatar escuro" id="botao-perfil" aria-haspopup="true" aria-expanded="false" title="Abrir o menu do perfil">{{ user.first_name|default:user.username|first|upper }}</button>
+                <div class="menu-perfil" id="menu-perfil">
+                    <p class="nome">{{ user.first_name|default:"Administrador" }}</p>
+                    <p class="cinza">{{ user.email }}</p>
+                    <a href="/admin/">Admin do Django</a>
+                    <a href="{% url 'trocar_senha' %}">Trocar senha</a>
+                    <a href="{% url 'logout' %}" class="sair">Sair</a>
+                </div>
+            </div>
+        </div>
+
+        {% elif user.is_authenticated %}
+        {# Conta sem papel (não deveria acontecer, mas deixa sair) #}
+        <div class="menu">
+            <a href="{% url 'home' %}" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}" alt="NEXO"></a>
+        </div>
+        <div class="menu">
+            <a href="{% url 'logout' %}" class="botao-contorno">Sair</a>
+        </div>
+
+        {% else %}
+        {# Cabeçalho de quem não entrou #}
+        <div class="menu">
+            <a href="{% url 'home' %}" class="logo"><img src="{% static 'imagens/logoNEXO.png' %}" alt="NEXO"></a>
+        </div>
+        <div class="menu">
+            <a href="{% url 'login' %}" {% if pagina == 'login' %}class="ativo"{% endif %}>Entrar</a>
+            <a href="{% url 'criar_conta' %}" {% if pagina != 'login' %}class="ativo"{% endif %}>Criar conta →</a>
+        </div>
+        {% endif %}
+
+    </div>
+    {% endwith %}
+
+    {% block conteudo %}{% endblock %}
+
+    <script src="{% static 'js/menu-perfil.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

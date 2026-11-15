@@ -1,7 +1,7 @@
 
 from django import forms
 from django.contrib.auth.models import User
-from .models import Instituicao, Curso, Oportunidade
+from .models import Instituicao, Curso, Oportunidade, Aluno
 
 
 TIPOS_INSTITUICAO_REPRESENTANTE = [
@@ -289,3 +289,35 @@ class OportunidadeForm(forms.ModelForm):
             "requisitos": forms.Textarea(attrs={"rows": 3}),
             "prazo_inscricao": forms.DateInput(attrs={"type": "date"}),
         }
+
+
+class PerfilAlunoForm(forms.ModelForm):
+    # Só os campos que o aluno pode mudar. Universidade, curso e matrícula vêm do cadastro e não se editam.
+    class Meta:
+        model = Aluno
+        fields = ["periodo", "cr", "curriculo"]
+        labels = {
+            "periodo": "Período",
+            "cr": "CR",
+            "curriculo": "Currículo",
+        }
+        widgets = {
+            "periodo": forms.NumberInput(attrs={"min": 1, "max": 12}),
+            "cr": forms.NumberInput(attrs={"min": 0, "max": 10, "step": "0.1"}),
+            "curriculo": forms.Textarea(attrs={
+                "rows": 10,
+                "placeholder": "Resumo, áreas de interesse, habilidades e experiências (monitoria, liga, estágio, projetos...)",
+            }),
+        }
+
+    def clean_periodo(self):
+        periodo = self.cleaned_data["periodo"]
+        if periodo < 1 or periodo > 12:
+            raise forms.ValidationError("O período tem que ser de 1 a 12.")
+        return periodo
+
+    def clean_cr(self):
+        cr = self.cleaned_data["cr"]
+        if cr is not None and (cr < 0 or cr > 10):
+            raise forms.ValidationError("O CR tem que ser de 0 a 10.")
+        return cr

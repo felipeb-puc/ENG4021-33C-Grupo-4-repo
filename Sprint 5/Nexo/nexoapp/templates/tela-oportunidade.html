@@ -1,56 +1,13 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO · {{ oportunidade.titulo }}</title>
-    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{% static 'css/geral.css' %}" rel="stylesheet">
+{% block titulo %}NEXO · {{ oportunidade.titulo }}{% endblock %}
+
+{% block css %}
     <link href="{% static 'css/tela-oportunidade.css' %}" rel="stylesheet">
-</head>
-<body>
+{% endblock %}
 
-    <div id="topo">
-        <div class="menu">
-            <a href="{% url 'inicio' %}" class="logo">
-                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
-            </a>
-
-            <a href="{% url 'inicio' %}">Início</a>
-
-            <a href="{% url 'tela_busca' %}" class="ativo">
-                <img class="ic" src="{% static 'imagens/icone-search-branco.svg' %}" alt="">
-                Buscar
-            </a>
-
-            <a href="/templates/tela-minha-oportunidades-canditaturas-ativas.html">
-                Minhas oportunidades
-                {% if user.aluno %}
-                    <span class="contador">
-                        {{ user.aluno.candidatura_set.count|add:user.aluno.favorito_set.count }}
-                    </span>
-                {% endif %}
-            </a>
-        </div>
-
-        <div class="menu">
-            {% if user.aluno %}
-            <span class="cinza">{{ user.aluno.instituicao.nome }}</span>
-            <a href="{% url 'tela_perfil' %}" class="avatar">{{ user.aluno.iniciais }}</a>
-            {% endif %}
-
-            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
-
-            <a href="{% url 'logout' %}" class="botao-contorno">
-                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
-                Sair
-            </a>
-        </div>
-    </div>
-
+{% block conteudo %}
     <div class="pagina">
 
         {% for mensagem in messages %}
@@ -164,6 +121,9 @@
                     <span class="botao enviada">Candidatura enviada</span>
                     {% elif encerrada %}
                     <span class="botao desativado">Inscrições encerradas</span>
+                    {% elif periodo_insuficiente %}
+                    <span class="botao desativado">A partir do {{ oportunidade.periodo_minimo }}º período</span>
+                    <p class="cinza">Você está no {{ user.aluno.periodo }}º período. Se mudou de período, atualize no seu <a href="{% url 'tela_perfil' %}">perfil</a>.</p>
                     {% else %}
                     <form method="post" action="{% url 'candidatar' oportunidade.id %}">
                         {% csrf_token %}
@@ -210,6 +170,4 @@
             </div>
         </div>
     </div>
-
-</body>
-</html>
+{% endblock %}

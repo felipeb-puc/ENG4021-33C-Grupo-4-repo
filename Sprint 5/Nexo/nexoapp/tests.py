@@ -258,3 +258,225 @@ class FiltrosDaBuscaTests(TestCase):
     def test_filtros_combinados(self):
         titulos = self.buscar({"curso": self.engenharia.id, "remuneradas": "1", "abertas": "1", "modalidade": "presencial"})
         self.assertEqual(titulos, ["Monitoria de Python"])
+
+
+class BaseTarefasSprint11(TestCase):
+    """Dados que os testes das tarefas da Sprint 11 usam: alunos, recrutadores, representante, admin e duas vagas."""
+
+    def setUp(self):
+        self.puc = Instituicao.objects.create(tipo="faculdade", nome="PUC-Rio", sede="Rio de Janeiro")
+        self.visagio = Instituicao.objects.create(tipo="empresa", nome="Visagio", sede="Rio de Janeiro")
+        self.petrobras = Instituicao.objects.create(tipo="empresa", nome="Petrobras", sede="Rio de Janeiro")
+        self.curso = Curso.objects.create(nome="Engenharia")
+        hoje = date.today()
+
+        self.vaga_visagio = Oportunidade.objects.create(
+            instituicao=self.visagio, curso=self.curso, tipo="estagio", titulo="Estágio em Dados",
+            descricao="Relatórios.", requisitos="Excel.", carga_horaria=30, remuneracao=2000,
+            prazo_inscricao=hoje + timedelta(days=20), modalidade="hibrido", periodo_minimo=5,
+        )
+        self.vaga_puc = Oportunidade.objects.create(
+            instituicao=self.puc, curso=self.curso, tipo="monitoria", titulo="Monitoria de Cálculo",
+            descricao="Plantões.", requisitos="Ter feito Cálculo.", carga_horaria=8, remuneracao=600,
+            prazo_inscricao=hoje + timedelta(days=10), modalidade="presencial", periodo_minimo=2,
+        )
+
+        self.aluno = self.criar_aluno("ana@example.com", "Ana", periodo=6)
+        self.calouro = self.criar_aluno("bia@example.com", "Bia", periodo=2)
+        self.carla = self.criar_recrutador("carla@example.com", "Carla", self.visagio)
+        self.rafael = self.criar_recrutador("rafael@example.com", "Rafael", self.petrobras)
+        usuario = User.objects.create_user(username="lucas@example.com", email="lucas@example.com", first_name="Lucas", password="senha-segura-123")
+        Representante.objects.create(user=usuario, instituicao=self.puc, cargo="Coordenador")
+        User.objects.create_user(username="admin@example.com", email="admin@example.com", password="senha-segura-123", is_staff=True)
+
+        # a Ana se candidatou à vaga da Visagio
+        self.candidatura = Candidatura.objects.create(aluno=self.aluno, oportunidade=self.vaga_visagio)
+
+    def criar_aluno(self, email, nome, periodo):
+        usuario = User.objects.create_user(username=email, email=email, first_name=nome, password="senha-segura-123")
+        return Aluno.objects.create(user=usuario, instituicao=self.puc, curso=self.curso, matricula=email[:3],
+                                    periodo=periodo, curriculo="Monitora de Cálculo.", cr=8)
+
+    def criar_recrutador(self, email, nome, empresa):
+        usuario = User.objects.create_user(username=email, email=email, first_name=nome, password="senha-segura-123")
+        return Recrutador.objects.create(user=usuario, empresa=empresa, cargo="RH")
+
+    def entrar(self, email):
+        self.client.login(username=email, password="senha-segura-123")
+
+
+class CabecalhoUnicoTests(BaseTarefasSprint11):
+
+    def test_aluno_ve_o_cabecalho_do_aluno(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("inicio"))
+        self.assertContains(resposta, "Minhas oportunidades")
+        self.assertNotContains(resposta, "RECRUTADOR")
+
+    def test_recrutador_e_representante_veem_o_papel_certo(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_painel"))
+        self.assertContains(resposta, "RECRUTADOR")
+        self.assertContains(resposta, "Visagio")
+        self.assertNotContains(resposta, "Minhas oportunidades")
+        self.client.logout()
+        self.entrar("lucas@example.com")
+        resposta = self.client.get(reverse("tela_painel"))
+        self.assertContains(resposta, "REPRESENTANTE")
+
+    def test_visitante_ve_entrar_e_criar_conta(self):
+        resposta = self.client.get(reverse("home"))
+        self.assertContains(resposta, "Entrar")
+        self.assertContains(resposta, "Criar conta")
+
+
+class MenuDoPerfilTests(BaseTarefasSprint11):
+
+    def test_menu_do_aluno(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("inicio"))
+        self.assertContains(resposta, 'id="menu-perfil"')
+        self.assertContains(resposta, "Meu perfil e currículo")
+        self.assertContains(resposta, "menu-perfil.js")
+
+    def test_perfil_da_instituicao_so_no_menu_de_quem_publica(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_painel"))
+        self.assertContains(resposta, 'id="menu-perfil"')
+        self.assertContains(resposta, "Perfil da instituição", count=1)
+        self.assertNotContains(resposta, "Meu perfil e currículo")
+
+
+class TelasPorPapelTests(BaseTarefasSprint11):
+
+    def test_recrutador_nao_abre_telas_do_aluno(self):
+        self.entrar("carla@example.com")
+        for nome in ["inicio", "tela_perfil", "tela_favoritos", "tela_minha_oportunidades", "tela_historico"]:
+            resposta = self.client.get(reverse(nome))
+            self.assertRedirects(resposta, reverse("tela_painel"), fetch_redirect_response=False)
+
+    def test_admin_nao_abre_telas_do_aluno(self):
+        self.entrar("admin@example.com")
+        resposta = self.client.get(reverse("inicio"))
+        self.assertRedirects(resposta, reverse("tela_admin"), fetch_redirect_response=False)
+
+    def test_aluno_continua_abrindo_as_telas_dele(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("inicio"))
+        self.assertEqual(resposta.status_code, 200)
+
+
+class PerfilDoAlunoTests(BaseTarefasSprint11):
+
+    def test_aluno_salva_periodo_cr_e_curriculo(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.post(reverse("tela_perfil"), {"periodo": "7", "cr": "9.1", "curriculo": "Estágio na Exacta."})
+        self.assertRedirects(resposta, reverse("tela_perfil"))
+        self.aluno.refresh_from_db()
+        self.assertEqual(self.aluno.periodo, 7)
+        self.assertEqual(str(self.aluno.cr), "9.1")
+        self.assertEqual(self.aluno.curriculo, "Estágio na Exacta.")
+
+    def test_perfil_recusa_periodo_e_cr_fora_do_limite(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.post(reverse("tela_perfil"), {"periodo": "15", "cr": "11", "curriculo": "x"})
+        self.assertEqual(resposta.status_code, 200)
+        self.assertTrue(resposta.context["form"].errors)
+        self.aluno.refresh_from_db()
+        self.assertEqual(self.aluno.periodo, 6)
+
+
+class CurriculoDoAlunoTests(BaseTarefasSprint11):
+
+    def test_aluno_ve_o_proprio_curriculo(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.aluno.id]))
+        self.assertEqual(resposta.status_code, 200)
+        self.assertContains(resposta, "Monitora de Cálculo.")
+
+    def test_aluno_nao_ve_curriculo_de_outro_aluno(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.calouro.id]))
+        self.assertRedirects(resposta, reverse("tela_perfil"))
+
+    def test_recrutador_ve_curriculo_de_quem_se_candidatou(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.aluno.id]))
+        self.assertEqual(resposta.status_code, 200)
+        self.assertContains(resposta, "Estágio em Dados")
+
+    def test_recrutador_nao_ve_curriculo_de_quem_nao_se_candidatou(self):
+        self.entrar("rafael@example.com")
+        resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.aluno.id]))
+        self.assertRedirects(resposta, reverse("tela_candidaturas_recebidas"), fetch_redirect_response=False)
+
+
+class StatusDaCandidaturaTests(BaseTarefasSprint11):
+
+    def mudar(self, status):
+        return self.client.post(reverse("mudar_status", args=[self.candidatura.id]), {"status": status})
+
+    def test_recrutador_dono_muda_o_status(self):
+        self.entrar("carla@example.com")
+        self.mudar("entrevista")
+        self.candidatura.refresh_from_db()
+        self.assertEqual(self.candidatura.status, "entrevista")
+
+    def test_aluno_ve_o_status_novo_na_aba_dele(self):
+        self.entrar("carla@example.com")
+        self.mudar("aprovada")
+        self.client.logout()
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("tela_historico"))
+        self.assertContains(resposta, "Aprovada")
+
+    def test_outro_recrutador_nao_muda_o_status(self):
+        self.entrar("rafael@example.com")
+        self.mudar("recusada")
+        self.candidatura.refresh_from_db()
+        self.assertEqual(self.candidatura.status, "inscrita")
+
+    def test_aluno_nao_muda_o_status(self):
+        self.entrar("ana@example.com")
+        self.mudar("aprovada")
+        self.candidatura.refresh_from_db()
+        self.assertEqual(self.candidatura.status, "inscrita")
+
+    def test_status_invalido_ou_desistiu_nao_salva(self):
+        self.entrar("carla@example.com")
+        self.mudar("qualquer-coisa")
+        self.mudar("desistiu")
+        self.candidatura.refresh_from_db()
+        self.assertEqual(self.candidatura.status, "inscrita")
+
+    def test_candidatura_desistida_nao_muda_mais(self):
+        self.candidatura.status = "desistiu"
+        self.candidatura.save()
+        self.entrar("carla@example.com")
+        self.mudar("aprovada")
+        self.candidatura.refresh_from_db()
+        self.assertEqual(self.candidatura.status, "desistiu")
+
+    def test_mudar_status_so_aceita_post(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("mudar_status", args=[self.candidatura.id]))
+        self.assertEqual(resposta.status_code, 405)
+
+
+class PeriodoMinimoTests(BaseTarefasSprint11):
+
+    def test_aluno_abaixo_do_periodo_minimo_nao_se_candidata(self):
+        self.entrar("bia@example.com")  # 2º período, vaga a partir do 5º
+        self.client.post(reverse("candidatar", args=[self.vaga_visagio.id]))
+        self.assertFalse(Candidatura.objects.filter(aluno=self.calouro, oportunidade=self.vaga_visagio).exists())
+
+    def test_tela_da_vaga_avisa_o_periodo_minimo(self):
+        self.entrar("bia@example.com")
+        resposta = self.client.get(reverse("tela_oportunidade", args=[self.vaga_visagio.id]))
+        self.assertContains(resposta, "A partir do 5º período")
+        self.assertNotContains(resposta, "Candidatar-se")
+
+    def test_aluno_no_periodo_certo_se_candidata(self):
+        self.entrar("bia@example.com")  # monitoria a partir do 2º
+        self.client.post(reverse("candidatar", args=[self.vaga_puc.id]))
+        self.assertTrue(Candidatura.objects.filter(aluno=self.calouro, oportunidade=self.vaga_puc).exists())

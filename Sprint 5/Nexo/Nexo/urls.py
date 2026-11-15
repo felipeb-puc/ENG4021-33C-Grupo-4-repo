@@ -20,7 +20,7 @@ from nexoapp.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home),
+    path('', home, name='home'),
     path('templates/tela-inicial.html', home),
     path('templates/PROJETOtela_escolha_login.html', criar_conta, name='criar_conta'),
     path('templates/PROJETOtela_informacoes_estudante.html', cadastro_estudante),
@@ -41,7 +41,7 @@ urlpatterns = [
     path('templates/tela-liga-academica.html', liga_academica, name='tela_liga_academica'),
     path('templates/tela-minha-oportunidades-canditaturas-ativas.html', minha_oportunidade_candidaturas_ativas, name='tela_minha_oportunidades'),
     path('templates/tela-minha-oportunidades-favoritos.html', minha_oportunidade_favoritos, name='tela_favoritos'),
-    path('templates/tela-minha-oportunidades-historico.html', minha_oportunidade_historico),
+    path('templates/tela-minha-oportunidades-historico.html', minha_oportunidade_historico, name='tela_historico'),
     path('templates/tela-banco-talentos.html',tela_banco_talentos,name='tela_banco_talentos'),
     path('templates/tela-candidaturas-recebidas.html',tela_candidaturas_recebidas, name='tela_candidaturas_recebidas'),
     path('templates/tela-admin.html', tela_admin, name='tela_admin'),
@@ -52,10 +52,11 @@ urlpatterns = [
     path('candidatura/<int:candidatura_id>/desistir/', desistir, name='desistir'),
     path('favoritar/<int:oportunidade_id>/', favoritar, name='favoritar'),
     path('favorito/<int:favorito_id>/remover/', remover_favorito, name='remover_favorito'),
+    path('candidatura/<int:candidatura_id>/status/', mudar_status, name='mudar_status'),
     path('templates/tela-monitoria.html', tela_monitoria, name='tela_monitoria'),
     path('templates/tela-equipe-competicao.html', tela_equipe_competicao, name='tela_equipe_competicao'),
     path('templates/tela-perfil.html', tela_perfil, name='tela_perfil'),
-    path('templates/tela-curriculo-aluno.html', tela_curriculo_aluno, name='tela_curriculo_aluno'),
+    path('aluno/<int:id>/curriculo/', tela_curriculo_aluno, name='tela_curriculo_aluno'),
     path('templates/tela-instituicao.html', tela_instituicao, name='tela_instituicao'),
     path('templates/tela-nova-oportunidade.html', tela_nova_oportunidade, name='tela_nova_oportunidade'),
 ]

@@ -1,144 +1,59 @@
-
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO · Currículo</title>
-    <link rel="icon" href="{% static 'imagens/logo.svg' %}">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/geral.css' %}">
-    <link rel="stylesheet" href="{% static 'css/tela-curriculo-aluno.css' %}">
-</head>
-<body>
+{% block titulo %}NEXO · Currículo de {{ aluno.user.first_name }}{% endblock %}
 
-    <div id="topo">
-        <div class="menu">
-            <a href="{% url 'tela_painel' %}" class="logo">
-                <img src="{% static 'imagens/logoNEXO.png' %}" alt="Logo Nexo">
-            </a>
+{% block css %}
+    <link href="{% static 'css/tela-curriculo-aluno.css' %}" rel="stylesheet">
+{% endblock %}
 
-            <span class="papel">RECRUTADOR</span>
-
-            <a href="{% url 'tela_painel' %}">Visão geral</a>
-            <a href="{% url 'tela_candidaturas_recebidas' %}">Candidaturas</a>
-            <a href="{% url 'tela_banco_talentos' %}" class="ativo">Buscar candidatos</a>
-            <a href="{% url 'tela_instituicao' %}">Perfil da instituição</a>
-        </div>
-
-        <div class="menu">
-            <span class="cinza">Visagio</span>
-
-            <a href="{% url 'tela_instituicao' %}" class="avatar escuro">CD</a>
-
-            <a href="{% url 'trocar_senha' %}">Trocar senha</a>
-
-            <a href="{% url 'logout' %}" class="botao-contorno">
-                <img class="ic" src="{% static 'imagens/icone-log-out.svg' %}" alt="">
-                Sair
-            </a>
-        </div>
-    </div>
-
+{% block conteudo %}
     <main class="pagina-estreita">
 
-        <a href="{% url 'tela_banco_talentos' %}" class="cinza">
-            ← Voltar
-        </a>
+        {% if e_o_proprio_aluno %}
+        <a href="{% url 'tela_perfil' %}" class="cinza">← Voltar para o perfil</a>
+        <p class="mensagem">É assim que um recrutador vê o seu currículo quando você se candidata.</p>
+        {% else %}
+        <a href="{% url 'tela_candidaturas_recebidas' %}" class="cinza">← Voltar</a>
+        {% endif %}
 
-        <section class="caixa-cinza linha" id="candidaturas">
-            <div>
-                <b>Candidaturas às suas oportunidades</b>
-
-                <p class="cinza">
-                    Estágio em análise de dados de operações · 09/09/2026
-                </p>
+        {% if candidaturas %}
+        <section class="caixa-cinza" id="candidaturas">
+            <b>Candidaturas às suas oportunidades</b>
+            {% for candidatura in candidaturas %}
+            <div class="linha">
+                <p class="cinza">{{ candidatura.oportunidade.titulo }} · {{ candidatura.data|date:"d/m/Y" }}</p>
+                <span class="etiqueta etiqueta-status-{{ candidatura.status }}">{{ candidatura.get_status_display }}</span>
             </div>
-
-            <span class="etiqueta-verde">
-                <img class="ic" src="{% static 'imagens/icone-calendar-branco.svg' %}" alt="">
-                Entrevista marcada
-            </span>
+            {% endfor %}
         </section>
+        {% endif %}
 
         <section class="caixa">
 
-            <h1>Isabela Corrêa</h1>
+            <h1>{{ aluno.user.first_name }}</h1>
 
             <p class="cinza">
-                Engenharia de Produção · 5º período · PUC-Rio
+                {{ aluno.curso.nome }} · {{ aluno.periodo }}º período · {{ aluno.instituicao.nome }}
             </p>
 
-            <span class="etiqueta-verde">CR 8.4</span>
+            {% if aluno.cr %}
+            <span class="etiqueta-verde">CR {{ aluno.cr }}</span>
+            {% endif %}
 
             <span class="etiqueta">
                 <img class="ic" src="{% static 'imagens/icone-mail.svg' %}" alt="">
-                isabela.correa@aluno.puc-rio.br
+                {{ aluno.user.email }}
             </span>
 
-            <p>
-                Monitora de Cálculo e integrante da Liga de
-                Empreendedorismo. Busca estágio em operações.
-            </p>
+            <h2>Currículo</h2>
 
-            <h2>Áreas de interesse</h2>
-
-            <span class="pilula">Operações</span>
-            <span class="pilula">Dados</span>
-            <span class="pilula">Consultoria</span>
-
-            <h2>Habilidades</h2>
-
-            <span class="pilula">Excel avançado</span>
-            <span class="pilula">Power BI</span>
-            <span class="pilula">SQL básico</span>
-            <span class="pilula">Inglês fluente</span>
-            <span class="pilula">Lean</span>
-
-            <h2>Experiências e formação</h2>
-
-            <div class="experiencia">
-                <p class="cinza">Acadêmica · 2026 — atual</p>
-                <b>Monitora de Cálculo a Várias Variáveis</b>
-                <p class="cinza">Departamento de Matemática</p>
-                <p>
-                    Plantão de dúvidas e correção de listas para duas
-                    turmas do diurno, 12h por semana.
-                </p>
-            </div>
-
-            <div class="experiencia">
-                <p class="cinza">Acadêmica · 2025 — 2026</p>
-                <b>Liga de Empreendedorismo — diretoria de projetos</b>
-                <p class="cinza">Liga de Empreendedorismo</p>
-                <p>
-                    Condução de dois projetos de consultoria com
-                    empresas parceiras do Rio.
-                </p>
-            </div>
-
-            <div class="experiencia">
-                <p class="cinza">Formação · 2024 — atual</p>
-                <b>Engenharia de Produção — PUC-Rio</b>
-                <p class="cinza">PUC-Rio</p>
-                <p>5º período, ingresso em 2024.1.</p>
-            </div>
-
-            <div class="experiencia">
-                <p class="cinza">Profissional · 2023 — 2024</p>
-                <b>Jovem aprendiz</b>
-                <p class="cinza">Opportunity</p>
-                <p>
-                    Apoio na rotina de conciliação e nos relatórios
-                    da área de operações.
-                </p>
-            </div>
+            {% if aluno.curriculo %}
+            <p>{{ aluno.curriculo|linebreaksbr }}</p>
+            {% else %}
+            <p class="cinza">O aluno ainda não preencheu o currículo.</p>
+            {% endif %}
 
         </section>
     </main>
-
-</body>
-</html>
-
+{% endblock %}

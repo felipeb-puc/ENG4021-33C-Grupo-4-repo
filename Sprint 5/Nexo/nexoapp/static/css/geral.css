@@ -458,3 +458,85 @@ input, select, textarea {
 .prazo-restante.urgente {
   color: #b4540f;
 }
+
+/* Cabeçalho: ícone branco no link ativo */
+.menu a.ativo .ic {
+  filter: brightness(0) invert(1);
+}
+
+/* Menu do perfil (abre ao passar o mouse na bolinha) */
+.perfil {
+  position: relative;
+}
+
+.perfil .avatar {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background-color: #4b6e65;
+  color: #ffffff;
+  font-family: Inter;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.perfil .avatar.escuro {
+  background-color: #22332f;
+}
+
+.menu-perfil {
+  display: none;
+  position: absolute;
+  right: 0px;
+  top: 44px;
+  width: 230px;
+  padding: 12px;
+  background-color: #ffffff;
+  border: 1px solid #dde4e2;
+  border-radius: 14px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+
+.menu-perfil.aberto {
+  display: block;
+}
+
+.menu-perfil .nome {
+  font-weight: 600;
+  margin: 0px 4px;
+}
+
+.menu-perfil .cinza {
+  margin: 0px 4px 8px 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #dde4e2;
+  overflow-wrap: anywhere;
+}
+
+.menu-perfil a {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  white-space: normal;
+}
+
+.menu-perfil a:hover {
+  background-color: #eef2f1;
+}
+
+.menu-perfil a.sair {
+  color: #b42318;
+}
+
+/* no celular a bolinha do perfil fica à esquerda, então o menu abre para a direita */
+@media (max-width: 600px) {
+  .menu-perfil {
+    left: 0px;
+    right: auto;
+    max-width: calc(100vw - 32px);
+  }
+}
