@@ -4,6 +4,11 @@ from django.contrib.auth.models import User
 from .models import Instituicao, Curso, Oportunidade, Aluno
 
 
+TIPOS_INSTITUICAO_REPRESENTANTE = [
+    tipo for tipo in Instituicao.TIPOS if tipo[0] != "empresa"
+]
+
+
 class CadastroRecrutadorForm(forms.Form):
     nome = forms.CharField(
         label="Nome completo",
@@ -87,6 +92,30 @@ class CadastroRepresentanteForm(forms.Form):
         choices=[("", "Selecione")]
     )
 
+    nova_instituicao = forms.CharField(
+        label="Nome da nova instituição",
+        max_length=150,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "placeholder": "Digite o nome da instituição",
+        }),
+    )
+
+    tipo_nova_instituicao = forms.ChoiceField(
+        label="Tipo da instituição",
+        choices=[("", "Selecione")] + TIPOS_INSTITUICAO_REPRESENTANTE,
+        required=False,
+    )
+
+    sede_nova_instituicao = forms.CharField(
+        label="Sede",
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "placeholder": "Cidade ou localidade",
+        }),
+    )
+
     aceita_termos = forms.BooleanField(
         label="Aceito os termos e a política de privacidade",
         required=True
@@ -97,6 +126,24 @@ class CadastroRepresentanteForm(forms.Form):
         if User.objects.filter(username=email).exists():
             raise forms.ValidationError("Já existe uma conta com este e-mail.")
         return email
+
+    def clean_nova_instituicao(self):
+        nome = self.cleaned_data["nova_instituicao"].strip()
+        if self.cleaned_data.get("empresa") == "outro" and not nome:
+            raise forms.ValidationError("Informe o nome da instituição.")
+        return nome
+
+    def clean_tipo_nova_instituicao(self):
+        tipo = self.cleaned_data["tipo_nova_instituicao"]
+        if self.cleaned_data.get("empresa") == "outro" and not tipo:
+            raise forms.ValidationError("Selecione o tipo da instituição.")
+        return tipo
+
+    def clean_sede_nova_instituicao(self):
+        sede = self.cleaned_data["sede_nova_instituicao"].strip()
+        if self.cleaned_data.get("empresa") == "outro" and not sede:
+            raise forms.ValidationError("Informe a sede da instituição.")
+        return sede
 
 
 class CadastroAlunoForm(forms.Form):

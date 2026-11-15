@@ -51,8 +51,28 @@
                             {% for instituicao in instituicoes %}
                             <option value="{{ instituicao.pk }}" {% if form.empresa.value|stringformat:"s" == instituicao.pk|stringformat:"s" %}selected{% endif %}>{{ instituicao.nome }}</option>
                             {% endfor %}
+                            <option value="outro" {% if form.empresa.value == "outro" %}selected{% endif %}>Outro</option>
                         </select>
                         {{ form.empresa.errors }}
+                    </div>
+                </div>
+                <div id="campos-nova-instituicao" {% if form.empresa.value != "outro" %}hidden{% endif %}>
+                    <div class="campos">
+                        <div>
+                            <label for="nova_instituicao">Nome da nova instituição</label>
+                            <input type="text" id="nova_instituicao" name="nova_instituicao" value="{{ form.nova_instituicao.value|default:'' }}" maxlength="150" placeholder="Digite o nome da instituição">
+                            {{ form.nova_instituicao.errors }}
+                        </div>
+                        <div>
+                            <label for="{{ form.tipo_nova_instituicao.id_for_label }}">Tipo da instituição</label>
+                            {{ form.tipo_nova_instituicao }}
+                            {{ form.tipo_nova_instituicao.errors }}
+                        </div>
+                        <div>
+                            <label for="sede_nova_instituicao">Sede</label>
+                            <input type="text" id="sede_nova_instituicao" name="sede_nova_instituicao" value="{{ form.sede_nova_instituicao.value|default:'' }}" maxlength="100" placeholder="Cidade ou localidade">
+                            {{ form.sede_nova_instituicao.errors }}
+                        </div>
                     </div>
                 </div>
 
@@ -74,4 +94,24 @@
             <p><b>3. Acompanhar candidaturas</b><br>Status de cada candidato em um só painel.</p>
         </div>
     </div>
-{% endblock %}
+
+    <script>
+        const seletorInstituicao = document.getElementById("instituicao");
+        const camposNovaInstituicao = document.getElementById("campos-nova-instituicao");
+        const nomeNovaInstituicao = document.getElementById("nova_instituicao");
+        const tipoNovaInstituicao = document.getElementById("{{ form.tipo_nova_instituicao.id_for_label }}");
+        const sedeNovaInstituicao = document.getElementById("sede_nova_instituicao");
+
+        function atualizarCamposNovaInstituicao() {
+            const selecionouOutro = seletorInstituicao.value === "outro";
+            camposNovaInstituicao.hidden = !selecionouOutro;
+            nomeNovaInstituicao.required = selecionouOutro;
+            tipoNovaInstituicao.required = selecionouOutro;
+            sedeNovaInstituicao.required = selecionouOutro;
+        }
+
+        seletorInstituicao.addEventListener("change", atualizarCamposNovaInstituicao);
+        atualizarCamposNovaInstituicao();
+    </script>
+</body>
+</html>
