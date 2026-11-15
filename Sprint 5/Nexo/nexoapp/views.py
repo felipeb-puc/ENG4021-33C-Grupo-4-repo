@@ -22,15 +22,15 @@ from .models import (
 from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm, OportunidadeForm, PerfilAlunoForm
 # Create your views here.
 def home(request):
+    sair(request)
     return render(request, "tela-inicial.html")
 
 def criar_conta(request):
+    sair(request)
     return render(request, "PROJETOtela_escolha_login.html")
 
-def cadastro_estudante(request):
-    return cadastro_aluno(request)
-
 def cadastro_aluno(request):
+    sair(request)
     if request.method == "POST":
         form = CadastroAlunoForm(request.POST)
         if form.is_valid():
@@ -297,6 +297,7 @@ def liga_academica(request):
     return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
     
 def cadastro_recrutador(request):
+    sair(request)
     empresas = Instituicao.objects.filter(tipo="empresa")
     form = CadastroRecrutadorForm(request.POST or None)
     form.fields["empresa"].choices = [("", "Selecione")] + [
@@ -339,6 +340,7 @@ def cadastro_recrutador(request):
 
 
 def cadastro_representante(request):
+    sair(request)
     instituicoes = Instituicao.objects.exclude(tipo="empresa")
     form = CadastroRepresentanteForm(request.POST or None)
     form.fields["empresa"].choices = [("", "Selecione")] + [
@@ -483,6 +485,7 @@ def tela_candidaturas_recebidas(request):
         "tela-candidaturas-recebidas.html",
         context
     )    
+
 @login_required
 def tela_admin(request):
     if not request.user.is_staff:
@@ -522,6 +525,7 @@ def tela_admin(request):
 
 
 def entrar(request):
+    sair(request)
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():

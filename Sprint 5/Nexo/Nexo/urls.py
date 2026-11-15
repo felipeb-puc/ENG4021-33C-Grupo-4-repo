@@ -23,12 +23,10 @@ urlpatterns = [
     path('', home, name='home'),
     path('templates/tela-inicial.html', home),
     path('templates/PROJETOtela_escolha_login.html', criar_conta, name='criar_conta'),
-    path('templates/PROJETOtela_informacoes_estudante.html', cadastro_estudante),
+    path('templates/PROJETOtela_informacoes_estudante.html', cadastro_aluno, name='cadastro_aluno'),
     path('templates/PROJETOtela_informacoes_recrutador.html', cadastro_recrutador),
     path('templates/PROJETOtela_informacoes_representante.html', cadastro_representante),
 
-    # Cadastro de aluno
-    path('cadastro-aluno/', cadastro_aluno, name='cadastro_aluno'),
 
     # Login e logout
     path('templates/tela-login.html', entrar, name='login'),
