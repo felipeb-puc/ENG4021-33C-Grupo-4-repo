@@ -319,22 +319,31 @@ def cadastro_representante(request):
     form = CadastroRepresentanteForm(request.POST or None)
     form.fields["empresa"].choices = [("", "Selecione")] + [
         (str(instituicao.pk), instituicao.nome) for instituicao in instituicoes
-    ]
+    ] + [("outro", "Outro")]
 
     if request.method == "POST" and form.is_valid():
         dados = form.cleaned_data
         email = dados["email"].strip().lower()
-        usuario = User.objects.create_user(
-            username=email,
-            email=email,
-            first_name=dados["nome"].strip(),
-            password=dados["senha"],
-        )
-        Representante.objects.create(
-            user=usuario,
-            instituicao=Instituicao.objects.get(pk=dados["empresa"]),
-            cargo=dados["cargo"].strip(),
-        )
+        with transaction.atomic():
+            if dados["empresa"] == "outro":
+                instituicao, _ = Instituicao.objects.get_or_create(
+                    tipo=dados["tipo_nova_instituicao"],
+                    nome=dados["nova_instituicao"].strip(),
+                    defaults={"sede": dados["sede_nova_instituicao"].strip()},
+                )
+            else:
+                instituicao = Instituicao.objects.get(pk=dados["empresa"])
+            usuario = User.objects.create_user(
+                username=email,
+                email=email,
+                first_name=dados["nome"].strip(),
+                password=dados["senha"],
+            )
+            Representante.objects.create(
+                user=usuario,
+                instituicao=instituicao,
+                cargo=dados["cargo"].strip(),
+            )
         messages.success(request, "Conta de representante criada. Faça login para continuar.")
         return redirect("login")
 
