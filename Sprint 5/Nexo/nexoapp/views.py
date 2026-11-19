@@ -324,7 +324,24 @@ def encerrar_oportunidade(request, id):
     oportunidade.save(update_fields=["prazo_inscricao"])
     messages.success(request, "Oportunidade encerrada.")
     return redirect("tela_painel")
-    
+
+
+@login_required(login_url='login')
+@require_POST
+def excluir_oportunidade(request, id):
+    oportunidade = get_object_or_404(Oportunidade, pk=id)
+    instituicao = instituicao_do_usuario(request.user)
+    if instituicao is None:
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
+    if oportunidade.instituicao_id != instituicao.id:
+        messages.error(request, "Você não tem permissão para excluir essa oportunidade.")
+        return redirect("tela_painel_encerradas")
+
+    oportunidade.delete()
+    messages.success(request, "Oportunidade excluída.")
+    return redirect("tela_painel_encerradas")
+
 @login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):
     bloqueio = tela_so_de_aluno(request)
@@ -452,14 +469,29 @@ def tela_painel(request):
     if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
         messages.error(request, "Você não tem acesso a essa página.")
         return redirect("inicio")
+    return render(request, "tela-painel.html", contexto_painel(request, mostrar_encerradas=False))
+
+
+@login_required
+def tela_painel_encerradas(request):
+    if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
+    return render(request, "tela-painel-encerradas.html", contexto_painel(request, mostrar_encerradas=True))
+
+
+def contexto_painel(request, mostrar_encerradas):
     instituicao = instituicao_do_usuario(request.user)
-    oportunidades = Oportunidade.objects.filter(
-        instituicao=instituicao,
-    ).order_by("-id")
-    total_abertas = oportunidades.filter(
+    oportunidades_instituicao = Oportunidade.objects.filter(instituicao=instituicao)
+    oportunidades_abertas = oportunidades_instituicao.filter(
         prazo_inscricao__gte=date.today(),
-    ).count()
-    total_oportunidades = oportunidades.count()
+    )
+    oportunidades_encerradas = oportunidades_instituicao.filter(
+        prazo_inscricao__lt=date.today(),
+    )
+    total_oportunidades = oportunidades_instituicao.count()
+    total_abertas = oportunidades_abertas.count()
+    total_encerradas = oportunidades_encerradas.count()
     total_candidaturas = Candidatura.objects.filter(
         oportunidade__instituicao=instituicao,
     ).count()
@@ -468,18 +500,17 @@ def tela_painel(request):
     if len(partes_nome) == 1:
         iniciais = partes_nome[0][0].upper()
 
-    context = {
+    return {
         "instituicao": instituicao,
         "iniciais": iniciais,
-        "oportunidades": oportunidades,
+        "oportunidades": (
+            oportunidades_encerradas if mostrar_encerradas else oportunidades_abertas
+        ).order_by("-id"),
         "total_oportunidades": total_oportunidades,
         "total_abertas": total_abertas,
         "total_candidaturas": total_candidaturas,
-        "total_rascunhos": 0,
-        "total_encerradas": total_oportunidades - total_abertas,
+        "total_encerradas": total_encerradas,
     }
-
-    return render(request, "tela-painel.html", context)
 
 @login_required
 def tela_candidaturas_recebidas(request):
