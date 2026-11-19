@@ -54,7 +54,7 @@
         <div class="menu">
             <span class="cinza">{% if user.recrutador %}{{ user.recrutador.empresa.nome }}{% else %}{{ user.representante.instituicao.nome }}{% endif %}</span>
             <div class="perfil" id="perfil">
-                <button type="button" class="avatar escuro" id="botao-perfil" aria-haspopup="true" aria-expanded="false" title="Abrir o menu do perfil">{{ user.first_name|first|upper }}</button>
+                <button type="button" class="avatar escuro" id="botao-perfil" aria-haspopup="true" aria-expanded="false" title="Abrir o menu do perfil">{% if pagina == 'tela_painel' and iniciais %}{{ iniciais }}{% else %}{{ user.first_name|first|upper }}{% endif %}</button>
                 <div class="menu-perfil" id="menu-perfil">
                     <p class="nome">{{ user.first_name }}</p>
                     <p class="cinza">{% if user.recrutador %}{{ user.recrutador.cargo }}{% else %}{{ user.representante.cargo }}{% endif %}</p>

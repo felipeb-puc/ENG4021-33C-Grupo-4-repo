@@ -399,39 +399,31 @@ def tela_painel(request):
     if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
         messages.error(request, "Você não tem acesso a essa página.")
         return redirect("inicio")
-    oportunidades = [
-        {
-            "id": 1,
-            "tipo": "Estágio",
-            "status": "Aberta",
-            "titulo": "Estágio em tecnologia e automação",
-            "data_limite": "20/11/2026",
-            "data_publicacao": "08/09/2026",
-            "inscritos": 0,
-        },
-        {
-            "id": 2,
-            "tipo": "Estágio",
-            "status": "Aberta",
-            "titulo": "Estágio em análise de dados de operações",
-            "data_limite": "09/11/2026",
-            "data_publicacao": "01/09/2026",
-            "inscritos": 5,
-        },
-    ]
+    instituicao = instituicao_do_usuario(request.user)
+    oportunidades = Oportunidade.objects.filter(
+        instituicao=instituicao,
+    ).order_by("-id")
+    total_abertas = oportunidades.filter(
+        prazo_inscricao__gte=date.today(),
+    ).count()
+    total_oportunidades = oportunidades.count()
+    total_candidaturas = Candidatura.objects.filter(
+        oportunidade__instituicao=instituicao,
+    ).count()
+    partes_nome = (request.user.get_full_name() or request.user.username).split()
+    iniciais = (partes_nome[0][0] + partes_nome[-1][0]).upper()
+    if len(partes_nome) == 1:
+        iniciais = partes_nome[0][0].upper()
 
     context = {
-        "instituicao": "Visagio",
-        "iniciais": "CD",
+        "instituicao": instituicao,
+        "iniciais": iniciais,
         "oportunidades": oportunidades,
-        "total_abertas": len(oportunidades),
-        "total_candidaturas": sum(
-            oportunidade["inscritos"]
-            for oportunidade in oportunidades
-        ),
-        "aguardando_analise": 1,
+        "total_oportunidades": total_oportunidades,
+        "total_abertas": total_abertas,
+        "total_candidaturas": total_candidaturas,
         "total_rascunhos": 0,
-        "total_encerradas": 0,
+        "total_encerradas": total_oportunidades - total_abertas,
     }
 
     return render(request, "tela-painel.html", context)
