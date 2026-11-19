@@ -15,7 +15,7 @@
 
         <div class="linha">
             <div>
-                <h1>{{ instituicao }}</h1>
+                <h1>{{ instituicao.nome }}</h1>
                 <p class="cinza">
                     Você publica estágios e escolhe para quais universidades.
                 </p>
@@ -30,6 +30,11 @@
         <div id="numeros">
 
             <div>
+                <p class="numero">{{ total_oportunidades }}</p>
+                <p class="cinza">total de oportunidades</p>
+            </div>
+
+            <div>
                 <p class="numero">{{ total_abertas }}</p>
                 <p class="cinza">oportunidades abertas</p>
             </div>
@@ -37,11 +42,6 @@
             <div>
                 <p class="numero">{{ total_candidaturas }}</p>
                 <p class="cinza">candidaturas recebidas</p>
-            </div>
-
-            <div>
-                <p class="numero">{{ aguardando_analise }}</p>
-                <p class="cinza">aguardando primeira análise</p>
             </div>
 
         </div>
@@ -52,10 +52,6 @@
                 <span class="contador">{{ total_abertas }}</span>
             </a>
 
-            <a href="{% url 'tela_painel' %}">
-                Rascunhos
-                <span class="contador">{{ total_rascunhos }}</span>
-            </a>
 
             <a href="{% url 'tela_painel' %}">
                 Encerradas
@@ -68,21 +64,24 @@
             <div class="caixa linha">
 
                 <div>
-                    <span class="etiqueta">{{ oportunidade.tipo }}</span>
-                    <span class="etiqueta">{{ oportunidade.status }}</span>
+                    <span class="etiqueta">{{ oportunidade.get_tipo_display }}</span>
+                    {% if oportunidade.encerrada %}
+                    <span class="etiqueta">Encerrada</span>
+                    {% else %}
+                    <span class="etiqueta">Aberta</span>
+                    {% endif %}
 
                     <p class="titulo">{{ oportunidade.titulo }}</p>
 
                     <p class="cinza">
-                        Inscrições até {{ oportunidade.data_limite }}
-                        · publicada em {{ oportunidade.data_publicacao }}
+                        Inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}
                     </p>
                 </div>
 
                 <div class="acoes">
 
                     <div class="inscritos">
-                        <b>{{ oportunidade.inscritos }}</b>
+                        <b>{{ oportunidade.candidatura_set.count }}</b>
                         <p class="cinza">inscritos</p>
                     </div>
 
