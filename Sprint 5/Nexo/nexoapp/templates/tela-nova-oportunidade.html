@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block titulo %}NEXO · Publicar oportunidade{% endblock %}
+{% block titulo %}
+    {% if edicao %}NEXO · Editar oportunidade{% else %}NEXO · Publicar oportunidade{% endif %}
+{% endblock %}
 
 {% block css %}
     <link href="{% static 'css/tela-nova-oportunidade.css' %}" rel="stylesheet">
@@ -10,13 +12,13 @@
 {% block conteudo %}
     <div class="pagina-estreita">
 
-        <h1>Publicar oportunidade</h1>
+        <h1>{% if edicao %}Editar oportunidade{% else %}Publicar oportunidade{% endif %}</h1>
 
         <p class="cinza">
             Como empresa, você publica estágios e escolhe para quais universidades.
         </p>
 
-               <form method="POST" action="{% url 'tela_nova_oportunidade' %}">
+        <form method="POST" action="{% if edicao %}{% url 'editar_oportunidade' form.instance.id %}{% else %}{% url 'tela_nova_oportunidade' %}{% endif %}">
             {% csrf_token %}
 
             <div class="caixa">
@@ -93,7 +95,7 @@
 
             <div class="linha">
                 <a href="{% url 'tela_painel' %}">Cancelar</a>
-                <button type="submit" class="botao">Publicar</button>
+                <button type="submit" class="botao">{% if edicao %}Salvar alterações{% else %}Publicar{% endif %}</button>
             </div>
 
         </form>

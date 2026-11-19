@@ -271,6 +271,41 @@ def tela_nova_oportunidade(request):
         return redirect("tela_painel")
 
     return render(request, "tela-nova-oportunidade.html", {"form": form})
+
+
+@login_required(login_url='login')
+def editar_oportunidade(request, id):
+    oportunidade = get_object_or_404(Oportunidade, pk=id)
+    instituicao = instituicao_do_usuario(request.user)
+    if instituicao is None:
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
+    if oportunidade.instituicao_id != instituicao.id:
+        messages.error(request, "Você não tem permissão para editar essa oportunidade.")
+        return redirect("tela_painel")
+
+    form = OportunidadeForm(request.POST or None, instance=oportunidade)
+    if hasattr(request.user, "recrutador"):
+        form.fields["tipo"].choices = [
+            ("estagio", "Estágio"),
+        ]
+    else:
+        form.fields["tipo"].choices = [
+            ("monitoria", "Monitoria"),
+            ("ic", "Iniciação científica"),
+            ("equipe", "Equipe de competição"),
+            ("liga", "Liga acadêmica"),
+        ]
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Oportunidade atualizada!")
+        return redirect("tela_painel")
+
+    return render(request, "tela-nova-oportunidade.html", {
+        "form": form,
+        "edicao": True,
+    })
     
 @login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):

@@ -85,7 +85,7 @@
                         <p class="cinza">inscritos</p>
                     </div>
 
-                    <a href="../templates/tela-nova-oportunidade.html"
+                    <a href="{% url 'editar_oportunidade' oportunidade.id %}"
                        class="botao-contorno">
                         <img class="ic" src="{% static 'imagens/icone-pencil.svg' %}" alt="">
                         Editar
