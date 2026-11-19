@@ -53,7 +53,7 @@
             </a>
 
 
-            <a href="{% url 'tela_painel' %}">
+            <a href="{% url 'tela_painel_encerradas' %}">
                 Encerradas
                 <span class="contador">{{ total_encerradas }}</span>
             </a>
@@ -91,9 +91,12 @@
                         Editar
                     </a>
 
-                    <a href="{% url 'tela_painel' %}">
+                    <form method="POST" action="{% url 'encerrar_oportunidade' oportunidade.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-contorno">
                         Encerrar
-                    </a>
+                        </button>
+                    </form>
 
                 </div>
 
