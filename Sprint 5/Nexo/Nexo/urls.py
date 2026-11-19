@@ -47,6 +47,7 @@ urlpatterns = [
     path('templates/tela-busca.html', busca, name='tela_busca'),
     path('oportunidade/<int:id>/', tela_oportunidade, name='tela_oportunidade'),
     path('oportunidade/<int:id>/editar/', editar_oportunidade, name='editar_oportunidade'),
+    path('oportunidade/<int:id>/encerrar/', encerrar_oportunidade, name='encerrar_oportunidade'),
     path('candidatar/<int:oportunidade_id>/', candidatar, name='candidatar'),
     path('candidatura/<int:candidatura_id>/desistir/', desistir, name='desistir'),
     path('favoritar/<int:oportunidade_id>/', favoritar, name='favoritar'),

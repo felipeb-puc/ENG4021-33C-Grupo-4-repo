@@ -306,6 +306,24 @@ def editar_oportunidade(request, id):
         "form": form,
         "edicao": True,
     })
+
+
+@login_required(login_url='login')
+@require_POST
+def encerrar_oportunidade(request, id):
+    oportunidade = get_object_or_404(Oportunidade, pk=id)
+    instituicao = instituicao_do_usuario(request.user)
+    if instituicao is None:
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
+    if oportunidade.instituicao_id != instituicao.id:
+        messages.error(request, "Você não tem permissão para encerrar essa oportunidade.")
+        return redirect("tela_painel")
+
+    oportunidade.prazo_inscricao = date.today() - timedelta(days=1)
+    oportunidade.save(update_fields=["prazo_inscricao"])
+    messages.success(request, "Oportunidade encerrada.")
+    return redirect("tela_painel")
     
 @login_required(login_url='login')
 def minha_oportunidade_candidaturas_ativas(request):
