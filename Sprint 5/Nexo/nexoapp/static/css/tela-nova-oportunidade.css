@@ -13,3 +13,16 @@
     gap: 0px;
   }
 }
+
+/* checkboxes das universidades-alvo: o geral.css deixa todo input com 100% de largura */
+#universidades-alvo input[type="checkbox"] {
+  width: auto;
+  margin: 0px 8px 0px 0px;
+}
+
+#universidades-alvo .opcao {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  margin-bottom: 6px;
+}

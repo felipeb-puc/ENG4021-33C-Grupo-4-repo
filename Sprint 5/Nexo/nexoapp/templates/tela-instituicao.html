@@ -9,24 +9,50 @@
 
 {% block conteudo %}
     <div class="pagina-estreita">
-        <div class="linha">
-            <div id="cabecalho">
-                <img src="../static/imagens/visagio.png">
-                <div>
-                    <span class="etiqueta">Empresa</span>
-                    <h1>Visagio</h1>
-                    <p class="cinza">Rio de Janeiro, RJ · visagio.com</p>
-                </div>
+        <div id="cabecalho">
+            <div class="selo">{{ instituicao.nome|first|upper }}</div>
+            <div>
+                <span class="etiqueta">{{ instituicao.get_tipo_display }}</span>
+                <h1>{{ instituicao.nome }}</h1>
+                <p class="cinza">
+                    {{ instituicao.sede }}
+                    {% if instituicao.site %} · <a href="{{ instituicao.site }}" target="_blank" rel="noopener">{{ instituicao.site }}</a>{% endif %}
+                </p>
             </div>
-            <a href="../templates/tela-instituicao.html" class="botao-contorno"><img class="ic" src="../static/imagens/icone-pencil.svg">Editar perfil</a>
         </div>
 
-        <p>Consultoria de gestão e tecnologia com atuação em operações, supply chain e analytics.</p>
+        {% if instituicao.descricao %}
+            <p>{{ instituicao.descricao|linebreaksbr }}</p>
+        {% else %}
+            <p class="cinza">Esta instituição ainda não escreveu uma descrição.</p>
+        {% endif %}
 
         <h2>Oportunidades abertas</h2>
         <ul>
-            <li><a href="../templates/Estagio.html">Estágio em análise de dados de operações</a></li>
-            <li><a href="../templates/Estagio.html">Estágio em tecnologia e automação</a></li>
+            {% for oportunidade in oportunidades %}
+                <li>
+                    <a href="{% url 'tela_oportunidade' oportunidade.id %}">{{ oportunidade.titulo }}</a>
+                    <span class="cinza">· {{ oportunidade.get_tipo_display }} · inscrições até {{ oportunidade.prazo_inscricao|date:"d/m/Y" }}</span>
+                </li>
+            {% empty %}
+                <li class="cinza">Nenhuma oportunidade aberta no momento.</li>
+            {% endfor %}
         </ul>
+
+        {% if e_membro %}
+            <h2>Editar perfil</h2>
+            <form method="POST" class="caixa">
+                {% csrf_token %}
+                <label for="{{ form.descricao.id_for_label }}">{{ form.descricao.label }}</label>
+                {{ form.descricao }}
+                {{ form.descricao.errors }}
+
+                <label for="{{ form.site.id_for_label }}">{{ form.site.label }}</label>
+                {{ form.site }}
+                {{ form.site.errors }}
+
+                <button type="submit" class="botao">Salvar</button>
+            </form>
+        {% endif %}
     </div>
 {% endblock %}

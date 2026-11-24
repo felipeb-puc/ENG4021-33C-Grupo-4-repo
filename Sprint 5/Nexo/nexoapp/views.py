@@ -19,7 +19,7 @@ from .models import (
     Candidatura,
     Favorito,
 )
-from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm, OportunidadeForm, PerfilAlunoForm
+from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm, OportunidadeForm, PerfilAlunoForm, InstituicaoForm
 # Create your views here.
 def home(request):
     sair(request)
@@ -87,6 +87,25 @@ def instituicao_do_usuario(user):
     return None
 
 
+def oportunidades_para_aluno(user):
+    """Oportunidades que aparecem nas listagens: nunca rascunho, e estágio direcionado só para as universidades escolhidas."""
+    oportunidades = Oportunidade.objects.filter(rascunho=False)
+    if hasattr(user, "aluno"):
+        universidade = user.aluno.instituicao
+        # universidades_alvo=None: lista vazia, todas veem. distinct porque o ManyToMany repete linhas
+        oportunidades = oportunidades.filter(
+            Q(universidades_alvo=None) | Q(universidades_alvo=universidade)
+        ).distinct()
+    return oportunidades
+
+
+def pode_ver_oportunidade(user, oportunidade):
+    # quem publicou sempre vê a sua, inclusive rascunho
+    if oportunidade.instituicao == instituicao_do_usuario(user):
+        return True
+    return oportunidades_para_aluno(user).filter(id=oportunidade.id).exists()
+
+
 def ids_dos_favoritos(request):
     ids = []
     if request.user.is_authenticated:
@@ -99,7 +118,7 @@ def inicio(request):
     bloqueio = tela_so_de_aluno(request)
     if bloqueio:
         return bloqueio
-    abertas = Oportunidade.objects.filter(prazo_inscricao__gte=date.today()).order_by("prazo_inscricao")
+    abertas = oportunidades_para_aluno(request.user).filter(prazo_inscricao__gte=date.today()).order_by("prazo_inscricao")
     oportunidades = abertas[:4]
     favoritos = Favorito.objects.filter(aluno__user=request.user)
     candidaturas = Candidatura.objects.filter(aluno__user=request.user)
@@ -153,7 +172,7 @@ def minha_oportunidade_favoritos(request):
     })
 
 def iniciacao_cientifica(request):
-    oportunidades = Oportunidade.objects.filter(tipo="ic")
+    oportunidades = oportunidades_para_aluno(request.user).filter(tipo="ic")
     return render(request, "Iniciacao-Cientifica.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
 
 @login_required(login_url='login')
@@ -177,17 +196,17 @@ def minha_oportunidade_historico(request):
     })
 
 def estagio(request):
-    oportunidades = Oportunidade.objects.filter(tipo="estagio")
+    oportunidades = oportunidades_para_aluno(request.user).filter(tipo="estagio")
     return render(request, "estagio.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
 
 @login_required(login_url='login')
 def tela_monitoria(request):
-    oportunidades = Oportunidade.objects.filter(tipo="monitoria")
+    oportunidades = oportunidades_para_aluno(request.user).filter(tipo="monitoria")
     return render(request, "tela-monitoria.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
 
 @login_required(login_url='login')
 def tela_equipe_competicao(request):
-    oportunidades = Oportunidade.objects.filter(tipo="equipe")
+    oportunidades = oportunidades_para_aluno(request.user).filter(tipo="equipe")
     return render(request, "tela-equipe-competicao.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
 
 @login_required(login_url='login')
@@ -237,8 +256,28 @@ def tela_curriculo_aluno(request, id):
     })
 
 @login_required(login_url='login')
-def tela_instituicao(request):
-    return render(request, "tela-instituicao.html")
+def tela_instituicao(request, id):
+    instituicao = get_object_or_404(Instituicao, id=id)
+    # só quem é membro da instituição edita a descrição e o site
+    e_membro = instituicao_do_usuario(request.user) == instituicao
+    form = None
+    if e_membro:
+        form = InstituicaoForm(request.POST or None, instance=instituicao)
+        if request.method == "POST" and form.is_valid():
+            form.save()
+            messages.success(request, "Perfil da instituição atualizado!")
+            return redirect("tela_instituicao", id=instituicao.id)
+    # as oportunidades da lista passam pela mesma regra das listagens do aluno
+    oportunidades = oportunidades_para_aluno(request.user).filter(
+        instituicao=instituicao,
+        prazo_inscricao__gte=date.today(),
+    ).order_by("prazo_inscricao")
+    return render(request, "tela-instituicao.html", {
+        "instituicao": instituicao,
+        "oportunidades": oportunidades,
+        "e_membro": e_membro,
+        "form": form,
+    })
 
 @login_required(login_url='login')
 def tela_nova_oportunidade(request):
@@ -266,8 +305,15 @@ def tela_nova_oportunidade(request):
     if request.method == "POST" and form.is_valid():
         oportunidade = form.save(commit=False)
         oportunidade.instituicao = instituicao
+        # o botão "Salvar rascunho" manda name="rascunho" no POST; o "Publicar" não
+        oportunidade.rascunho = "rascunho" in request.POST
         oportunidade.save()
-        messages.success(request, "Oportunidade publicada!")
+        # com commit=False o ManyToMany (universidades_alvo) só é gravado aqui
+        form.save_m2m()
+        if oportunidade.rascunho:
+            messages.success(request, "Rascunho salvo. Ele só aparece no seu painel até ser publicado.")
+        else:
+            messages.success(request, "Oportunidade publicada!")
         return redirect("tela_painel")
 
     return render(request, "tela-nova-oportunidade.html", {"form": form})
@@ -297,9 +343,17 @@ def editar_oportunidade(request, id):
             ("liga", "Liga acadêmica"),
         ]
 
+    rascunho_antes = oportunidade.rascunho
     if request.method == "POST" and form.is_valid():
-        form.save()
-        messages.success(request, "Oportunidade atualizada!")
+        editada = form.save(commit=False)
+        # só um rascunho pode continuar rascunho; publicada não volta a ser rascunho
+        editada.rascunho = rascunho_antes and "rascunho" in request.POST
+        editada.save()
+        form.save_m2m()
+        if editada.rascunho:
+            messages.success(request, "Rascunho salvo.")
+        else:
+            messages.success(request, "Oportunidade atualizada!")
         return redirect("tela_painel")
 
     return render(request, "tela-nova-oportunidade.html", {
@@ -323,6 +377,19 @@ def encerrar_oportunidade(request, id):
     oportunidade.prazo_inscricao = date.today() - timedelta(days=1)
     oportunidade.save(update_fields=["prazo_inscricao"])
     messages.success(request, "Oportunidade encerrada.")
+    return redirect("tela_painel")
+
+
+@login_required(login_url='login')
+@require_POST
+def publicar_oportunidade(request, id):
+    oportunidade = get_object_or_404(Oportunidade, pk=id)
+    if oportunidade.instituicao != instituicao_do_usuario(request.user):
+        messages.error(request, "Você não tem permissão para publicar essa oportunidade.")
+        return redirect("tela_painel")
+    oportunidade.rascunho = False
+    oportunidade.save(update_fields=["rascunho"])
+    messages.success(request, "Oportunidade publicada!")
     return redirect("tela_painel")
 
 
@@ -363,7 +430,7 @@ def minha_oportunidade_candidaturas_ativas(request):
     })
 
 def liga_academica(request):
-    oportunidades = Oportunidade.objects.filter(tipo="liga")
+    oportunidades = oportunidades_para_aluno(request.user).filter(tipo="liga")
     return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
     
 def cadastro_recrutador(request):
@@ -663,7 +730,7 @@ def sair(request):
 def busca(request):
     q = request.GET.get("q", "")
     ordem = request.GET.get("ordem", "encerrando")
-    oportunidades = Oportunidade.objects.all()
+    oportunidades = oportunidades_para_aluno(request.user)
     if q:
         # Q permite juntar condições com | (OU): acha o texto no título, na instituição ou na descrição
         oportunidades = oportunidades.filter(
@@ -732,6 +799,9 @@ def link_whatsapp(request, oportunidade):
 @login_required(login_url='login')
 def tela_oportunidade(request, id):
     oportunidade = get_object_or_404(Oportunidade, id=id)
+    if not pode_ver_oportunidade(request.user, oportunidade):
+        messages.error(request, "Essa oportunidade não está disponível para você.")
+        return redirect("tela_busca")
     encerrada = oportunidade.prazo_inscricao < date.today()
     ja_candidatou = Candidatura.objects.filter(aluno__user=request.user, oportunidade=oportunidade).exists()
     favoritada = Favorito.objects.filter(aluno__user=request.user, oportunidade=oportunidade).exists()
@@ -753,6 +823,8 @@ def candidatar(request, oportunidade_id):
     if request.method == "POST":
         if not hasattr(request.user, "aluno"):
             messages.error(request, "Só estudantes podem se candidatar.")
+        elif not pode_ver_oportunidade(request.user, oportunidade):
+            messages.error(request, "Essa oportunidade não está disponível para você.")
         elif oportunidade.prazo_inscricao < date.today():
             messages.error(request, "As inscrições para esta oportunidade já foram encerradas.")
         elif Candidatura.objects.filter(aluno=request.user.aluno, oportunidade=oportunidade).exists():

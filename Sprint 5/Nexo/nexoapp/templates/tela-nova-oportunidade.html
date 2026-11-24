@@ -15,7 +15,7 @@
         <h1>{% if edicao %}Editar oportunidade{% else %}Publicar oportunidade{% endif %}</h1>
 
         <p class="cinza">
-            Como empresa, você publica estágios e escolhe para quais universidades.
+            {% if user.recrutador %}Como empresa, você publica estágios e escolhe para quais universidades.{% else %}Como representante acadêmico, você publica monitoria, iniciação científica, liga e equipe.{% endif %}
         </p>
 
         <form method="POST" action="{% if edicao %}{% url 'editar_oportunidade' form.instance.id %}{% else %}{% url 'tela_nova_oportunidade' %}{% endif %}">
@@ -59,6 +59,16 @@
                         {{ form.periodo_minimo.errors }}
                     </div>
                 </div>
+
+                {% if user.recrutador %}
+                <p><b>{{ form.universidades_alvo.label }}</b></p>
+                <div id="universidades-alvo">
+                    {% for opcao in form.universidades_alvo %}
+                        <label class="opcao">{{ opcao.tag }} {{ opcao.choice_label }}</label>
+                    {% endfor %}
+                </div>
+                {{ form.universidades_alvo.errors }}
+                {% endif %}
             </div>
 
             <div class="caixa">
@@ -91,11 +101,20 @@
                         {{ form.modalidade.errors }}
                     </div>
                 </div>
+
+                <label for="{{ form.link_externo.id_for_label }}">Link de inscrição externo (opcional)</label>
+                {{ form.link_externo }}
+                {{ form.link_externo.errors }}
+                <p class="cinza">Preencha só se a inscrição for feita no site da instituição.</p>
             </div>
 
             <div class="linha">
                 <a href="{% url 'tela_painel' %}">Cancelar</a>
-                <button type="submit" class="botao">{% if edicao %}Salvar alterações{% else %}Publicar{% endif %}</button>
+                {# rascunho: só na criação ou enquanto a oportunidade ainda é rascunho #}
+                {% if not edicao or form.instance.rascunho %}
+                <button type="submit" name="rascunho" value="1" class="botao-contorno">Salvar rascunho</button>
+                {% endif %}
+                <button type="submit" class="botao">{% if edicao and not form.instance.rascunho %}Salvar alterações{% else %}Publicar{% endif %}</button>
             </div>
 
         </form>

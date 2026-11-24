@@ -17,6 +17,9 @@ class Instituicao(models.Model):
     tipo = models.CharField(max_length=20, choices=TIPOS)
     nome = models.CharField(max_length=150)
     sede = models.CharField(max_length=100)
+    # opcionais: preenchidos pelo próprio membro na página da instituição
+    descricao = models.TextField(blank=True)
+    site = models.URLField(blank=True)
 
     def __str__(self):
         return self.nome
@@ -99,6 +102,17 @@ class Oportunidade(models.Model):
     prazo_inscricao = models.DateField()
     modalidade = models.CharField(max_length=20, choices=MODALIDADES)
     periodo_minimo = models.IntegerField(default=1)
+    # se preenchido, a inscrição é feita no site da instituição (RF10)
+    link_externo = models.URLField(blank=True)
+    # rascunho só aparece no painel de quem publicou, nunca para o aluno
+    rascunho = models.BooleanField(default=False)
+    # só para estágio: lista vazia = todas as universidades veem
+    universidades_alvo = models.ManyToManyField(
+        Instituicao,
+        blank=True,
+        related_name="estagios_direcionados",
+        limit_choices_to={"tipo": "faculdade"},
+    )
 
     def dias_restantes(self):
         return (self.prazo_inscricao - date.today()).days

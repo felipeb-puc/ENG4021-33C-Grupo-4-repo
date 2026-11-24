@@ -5,11 +5,18 @@
   margin-bottom: 16px;
 }
 
-#cabecalho img {
+#cabecalho .selo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   width: 76px;
   height: 76px;
-  border: 1px solid #dde4e2;
   border-radius: 50%;
+  background: #4b6e65;
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 700;
 }
 
 h2 {

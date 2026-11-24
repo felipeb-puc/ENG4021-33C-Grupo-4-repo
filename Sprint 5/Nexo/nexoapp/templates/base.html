@@ -58,7 +58,7 @@
                 <div class="menu-perfil" id="menu-perfil">
                     <p class="nome">{{ user.first_name }}</p>
                     <p class="cinza">{% if user.recrutador %}{{ user.recrutador.cargo }}{% else %}{{ user.representante.cargo }}{% endif %}</p>
-                    <a href="{% url 'tela_instituicao' %}">Perfil da instituição</a>
+                    <a href="{% if user.recrutador %}{% url 'tela_instituicao' user.recrutador.empresa.id %}{% else %}{% url 'tela_instituicao' user.representante.instituicao.id %}{% endif %}">Perfil da instituição</a>
                     <a href="{% url 'trocar_senha' %}">Trocar senha</a>
                     <a href="{% url 'logout' %}" class="sair">Sair</a>
                 </div>

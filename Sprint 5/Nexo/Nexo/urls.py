@@ -49,6 +49,7 @@ urlpatterns = [
     path('oportunidade/<int:id>/', tela_oportunidade, name='tela_oportunidade'),
     path('oportunidade/<int:id>/editar/', editar_oportunidade, name='editar_oportunidade'),
     path('oportunidade/<int:id>/encerrar/', encerrar_oportunidade, name='encerrar_oportunidade'),
+    path('oportunidade/<int:id>/publicar/', publicar_oportunidade, name='publicar_oportunidade'),
     path('oportunidade/<int:id>/excluir/', excluir_oportunidade, name='excluir_oportunidade'),
     path('candidatar/<int:oportunidade_id>/', candidatar, name='candidatar'),
     path('candidatura/<int:candidatura_id>/desistir/', desistir, name='desistir'),
@@ -59,7 +60,7 @@ urlpatterns = [
     path('templates/tela-equipe-competicao.html', tela_equipe_competicao, name='tela_equipe_competicao'),
     path('templates/tela-perfil.html', tela_perfil, name='tela_perfil'),
     path('aluno/<int:id>/curriculo/', tela_curriculo_aluno, name='tela_curriculo_aluno'),
-    path('templates/tela-instituicao.html', tela_instituicao, name='tela_instituicao'),
+    path('instituicao/<int:id>/', tela_instituicao, name='tela_instituicao'),
     path('templates/tela-nova-oportunidade.html', tela_nova_oportunidade, name='tela_nova_oportunidade'),
 ]
 

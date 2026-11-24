@@ -1,3 +1,5 @@
+from datetime import date
+
 
 from django import forms
 from django.contrib.auth.models import User
@@ -270,6 +272,13 @@ class LoginForm(forms.Form):
 
 
 class OportunidadeForm(forms.ModelForm):
+    universidades_alvo = forms.ModelMultipleChoiceField(
+        queryset=Instituicao.objects.filter(tipo="faculdade").order_by("nome"),
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label="Universidades que podem ver (só estágio; nenhuma marcada = todas)",
+    )
+
     class Meta:
         model = Oportunidade
         fields = [
@@ -283,12 +292,54 @@ class OportunidadeForm(forms.ModelForm):
             "prazo_inscricao",
             "remuneracao",
             "modalidade",
+            "link_externo",
+            "universidades_alvo",
         ]
         widgets = {
             "descricao": forms.Textarea(attrs={"rows": 4}),
             "requisitos": forms.Textarea(attrs={"rows": 3}),
             "prazo_inscricao": forms.DateInput(attrs={"type": "date"}),
         }
+
+    def clean_prazo_inscricao(self):
+        prazo = self.cleaned_data["prazo_inscricao"]
+        # só na criação: na edição de uma oportunidade antiga o prazo pode já ter passado
+        if self.instance.pk is None and prazo < date.today():
+            raise forms.ValidationError("O prazo não pode ser anterior a hoje.")
+        return prazo
+
+    def clean_carga_horaria(self):
+        carga = self.cleaned_data["carga_horaria"]
+        if carga < 1 or carga > 44:
+            raise forms.ValidationError("A carga horária deve ficar entre 1 e 44 horas por semana.")
+        return carga
+
+    def clean_remuneracao(self):
+        remuneracao = self.cleaned_data["remuneracao"]
+        if remuneracao < 0:
+            raise forms.ValidationError("A remuneração não pode ser negativa. Use 0 para voluntária.")
+        return remuneracao
+
+    def clean_periodo_minimo(self):
+        periodo = self.cleaned_data["periodo_minimo"]
+        if periodo < 1 or periodo > 12:
+            raise forms.ValidationError("O período mínimo deve ficar entre 1 e 12.")
+        return periodo
+
+    def clean(self):
+        dados = super().clean()
+        # universidades-alvo só valem para estágio; nos outros tipos a lista fica vazia
+        if dados.get("tipo") != "estagio":
+            dados["universidades_alvo"] = Instituicao.objects.none()
+        return dados
+
+
+class InstituicaoForm(forms.ModelForm):
+    class Meta:
+        model = Instituicao
+        fields = ["descricao", "site"]
+        labels = {"descricao": "Descrição", "site": "Site"}
+        widgets = {"descricao": forms.Textarea(attrs={"rows": 4})}
 
 
 class PerfilAlunoForm(forms.ModelForm):

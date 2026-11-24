@@ -65,7 +65,9 @@
 
                 <div>
                     <span class="etiqueta">{{ oportunidade.get_tipo_display }}</span>
-                    {% if oportunidade.encerrada %}
+                    {% if oportunidade.rascunho %}
+                    <span class="etiqueta">Rascunho</span>
+                    {% elif oportunidade.encerrada %}
                     <span class="etiqueta">Encerrada</span>
                     {% else %}
                     <span class="etiqueta">Aberta</span>
@@ -90,6 +92,13 @@
                         <img class="ic" src="{% static 'imagens/icone-pencil.svg' %}" alt="">
                         Editar
                     </a>
+
+                    {% if oportunidade.rascunho %}
+                    <form method="POST" action="{% url 'publicar_oportunidade' oportunidade.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="botao">Publicar</button>
+                    </form>
+                    {% endif %}
 
                     <form method="POST" action="{% url 'encerrar_oportunidade' oportunidade.id %}">
                         {% csrf_token %}

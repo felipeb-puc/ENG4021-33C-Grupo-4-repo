@@ -121,6 +121,9 @@
                     <span class="botao enviada">Candidatura enviada</span>
                     {% elif encerrada %}
                     <span class="botao desativado">Inscrições encerradas</span>
+                    {% elif oportunidade.link_externo %}
+                    {# RF10: a inscrição é feita no site de quem publicou; target="_blank" abre em outra aba #}
+                    <a href="{{ oportunidade.link_externo }}" target="_blank" rel="noopener" class="botao">Inscrever-se no site da instituição</a>
                     {% elif periodo_insuficiente %}
                     <span class="botao desativado">A partir do {{ oportunidade.periodo_minimo }}º período</span>
                     <p class="cinza">Você está no {{ user.aluno.periodo }}º período. Se mudou de período, atualize no seu <a href="{% url 'tela_perfil' %}">perfil</a>.</p>
@@ -163,7 +166,7 @@
 
                 <div class="caixa">
                     <p class="cinza">Publicada por</p>
-                    <b>{{ oportunidade.instituicao.nome }}</b>
+                    <a href="{% url 'tela_instituicao' oportunidade.instituicao.id %}"><b>{{ oportunidade.instituicao.nome }}</b></a>
                     <p class="cinza">{{ oportunidade.instituicao.get_tipo_display }}{% if oportunidade.instituicao.sede %} · {{ oportunidade.instituicao.sede }}{% endif %}</p>
                 </div>
 
