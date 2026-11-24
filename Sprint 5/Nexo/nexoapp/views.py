@@ -517,50 +517,67 @@ def tela_candidaturas_recebidas(request):
     if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
         messages.error(request, "Você não tem acesso a essa página.")
         return redirect("inicio")
-    candidaturas = [
-        {
-            "nome": "Juliana Peixoto",
-            "universidade": "UFRJ",
-            "curso": "Engenharia de Produção",
-            "periodo": 6,
-            "cr": 8.6,
-            "oportunidade": "Estágio em análise de dados de operações",
-            "data": "03/09/2026",
-            "status": "Em análise",
-        },
-        {
-            "nome": "Isabela Corrêa",
-            "universidade": "PUC-Rio",
-            "curso": "Engenharia de Produção",
-            "periodo": 5,
-            "cr": 8.4,
-            "oportunidade": "Estágio em análise de dados de operações",
-            "data": "09/09/2026",
-            "status": "Entrevista marcada",
-        },
-        {
-            "nome": "Rafael Sampaio",
-            "universidade": "PUC-Rio",
-            "curso": "Engenharia de Produção",
-            "periodo": 7,
-            "cr": 8.1,
-            "oportunidade": "Estágio em análise de dados de operações",
-            "data": "05/09/2026",
-            "status": "Em análise",
-        },
-    ]
+    instituicao = instituicao_do_usuario(request.user)
+    # só as candidaturas das oportunidades desta instituição: outro recrutador não vê
+    candidaturas = Candidatura.objects.filter(oportunidade__instituicao=instituicao)
+
+    # os filtros chegam pela URL (GET), igual à tela de busca
+    nome = request.GET.get("nome", "").strip()
+    universidade = request.GET.get("universidade", "")
+    curso = request.GET.get("curso", "")
+    periodo = request.GET.get("periodo", "")
+    cr = request.GET.get("cr", "").replace(",", ".")
+    oportunidade = request.GET.get("oportunidade", "")
+    status = request.GET.get("status", "")
+
+    if nome:
+        candidaturas = candidaturas.filter(aluno__user__first_name__icontains=nome)
+    if universidade:
+        candidaturas = candidaturas.filter(aluno__instituicao__id=universidade)
+    if curso:
+        candidaturas = candidaturas.filter(aluno__curso__id=curso)
+    if periodo:
+        candidaturas = candidaturas.filter(aluno__periodo__gte=periodo)
+    if cr:
+        try:
+            candidaturas = candidaturas.filter(aluno__cr__gte=float(cr))
+        except ValueError:
+            # texto que não é número no CR: ignora o filtro em vez de dar erro 500
+            cr = ""
+    if oportunidade:
+        candidaturas = candidaturas.filter(oportunidade__id=oportunidade)
+    if status:
+        candidaturas = candidaturas.filter(status=status)
+
+    # opções dos selects: só o que existe nas candidaturas desta instituição
+    recebidas = Candidatura.objects.filter(oportunidade__instituicao=instituicao)
+    universidades = Instituicao.objects.filter(aluno__candidatura__in=recebidas).distinct().order_by("nome")
+    cursos = Curso.objects.filter(aluno__candidatura__in=recebidas).distinct().order_by("nome")
+    oportunidades = Oportunidade.objects.filter(instituicao=instituicao).order_by("titulo")
 
     context = {
-        "instituicao": "Visagio",
-        "iniciais": "CD",
-        "candidaturas": candidaturas,
+        "candidaturas": candidaturas.order_by("-data"),
+        "universidades": universidades,
+        "cursos": cursos,
+        "oportunidades": oportunidades,
+        "periodos": range(1, 11),
+        "status_opcoes": Candidatura.STATUS_CHOICES,
+        "filtro": {
+            "nome": nome,
+            "universidade": universidade,
+            "curso": curso,
+            "periodo": periodo,
+            "cr": cr,
+            "oportunidade": oportunidade,
+            "status": status,
+        },
     }
 
     return render(
         request,
         "tela-candidaturas-recebidas.html",
         context
-    )    
+    )
 
 @login_required
 def tela_admin(request):

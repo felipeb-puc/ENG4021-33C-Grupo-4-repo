@@ -1,6 +1,6 @@
 #filtros {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0px 12px;
   padding-bottom: 8px;
 }
@@ -18,8 +18,12 @@
 }
 
 .status {
+  display: inline-block;
   width: 180px;
   margin: 0px;
+  text-align: right;
+  font-weight: 600;
+  color: #4b6e65;
 }
 
 @media (max-width: 900px) {

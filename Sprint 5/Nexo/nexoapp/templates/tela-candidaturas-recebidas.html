@@ -13,187 +13,119 @@
         <h1>Candidaturas recebidas</h1>
 
         <p class="cinza">
-            Candidatos de todas as universidades para as quais você publicou.
+            Quem se candidatou às oportunidades de {{ user.recrutador.empresa.nome|default:user.representante.instituicao.nome }}.
         </p>
 
-        <div class="caixa" id="filtros">
+        {# GET: os filtros ficam na URL; onchange envia o form sozinho a cada mudança #}
+        <form method="get" class="caixa" id="filtros" onchange="this.submit()">
 
             <div>
-                <label for="nome">Nome ou habilidade</label>
-                <input type="search" id="nome" class="com-lupa">
+                <label for="nome">Nome</label>
+                <input type="search" id="nome" name="nome" class="com-lupa" value="{{ filtro.nome }}">
             </div>
 
             <div>
                 <label for="universidade">Universidade</label>
-                <select id="universidade">
+                <select id="universidade" name="universidade">
                     <option value="">Todas</option>
-                    <option value="PUC-Rio">PUC-Rio</option>
-                    <option value="UFRJ">UFRJ</option>
-                    <option value="UERJ">UERJ</option>
+                    {% for universidade in universidades %}
+                        <option value="{{ universidade.id }}" {% if universidade.id|stringformat:"s" == filtro.universidade %}selected{% endif %}>{{ universidade.nome }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
             <div>
                 <label for="curso">Curso</label>
-                <select id="curso">
+                <select id="curso" name="curso">
                     <option value="">Todos</option>
-                    <option value="Engenharia de Produção">Engenharia de Produção</option>
-                    <option value="Economia">Economia</option>
+                    {% for curso in cursos %}
+                        <option value="{{ curso.id }}" {% if curso.id|stringformat:"s" == filtro.curso %}selected{% endif %}>{{ curso.nome }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
             <div>
                 <label for="periodo">A partir do período</label>
-                <select id="periodo">
+                <select id="periodo" name="periodo">
                     <option value="">Qualquer</option>
-                    <option value="5">5º período</option>
-                    <option value="6">6º período</option>
-                    <option value="7">7º período</option>
+                    {% for numero in periodos %}
+                        <option value="{{ numero }}" {% if numero|stringformat:"s" == filtro.periodo %}selected{% endif %}>{{ numero }}º período</option>
+                    {% endfor %}
                 </select>
             </div>
 
             <div>
                 <label for="cr">CR mínimo</label>
-                <input type="number" id="cr" min="0" max="10" step="0.1">
+                <input type="number" id="cr" name="cr" min="0" max="10" step="0.1" value="{{ filtro.cr }}">
             </div>
 
-        </div>
+            <div>
+                <label for="oportunidade">Oportunidade</label>
+                <select id="oportunidade" name="oportunidade">
+                    <option value="">Todas</option>
+                    {% for oportunidade in oportunidades %}
+                        <option value="{{ oportunidade.id }}" {% if oportunidade.id|stringformat:"s" == filtro.oportunidade %}selected{% endif %}>{{ oportunidade.titulo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="">Todos</option>
+                    {% for valor, texto in status_opcoes %}
+                        <option value="{{ valor }}" {% if valor == filtro.status %}selected{% endif %}>{{ texto }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <a href="{% url 'tela_candidaturas_recebidas' %}">Limpar filtros</a>
+            </div>
+
+        </form>
 
         <p class="cinza">
-            <span id="contador">{{ candidaturas|length }}</span> candidaturas
+            {{ candidaturas|length }} candidatura{{ candidaturas|length|pluralize }}
         </p>
 
         <div id="lista-candidaturas">
 
             {% for candidatura in candidaturas %}
 
-                <div class="caixa linha candidatura"
-                     data-nome="{{ candidatura.nome|lower }}"
-                     data-universidade="{{ candidatura.universidade }}"
-                     data-curso="{{ candidatura.curso }}"
-                     data-periodo="{{ candidatura.periodo }}"
-                     data-cr="{{ candidatura.cr }}">
+                <div class="caixa linha candidatura">
 
                     <div>
-                        {# o link para o currículo entra quando a lista vier do banco: {% url 'tela_curriculo_aluno' candidatura.aluno.id %} #}
-                        <span class="titulo">
-                            {{ candidatura.nome }}
-                        </span>
+                        <a class="titulo" href="{% url 'tela_curriculo_aluno' candidatura.aluno.id %}">
+                            {{ candidatura.aluno.user.get_full_name|default:candidatura.aluno.user.username }}
+                        </a>
 
                         <p class="cinza">
-                            {{ candidatura.universidade }}
-                            · {{ candidatura.curso }}
-                            · {{ candidatura.periodo }}º período
-                            · CR {{ candidatura.cr }}
+                            {{ candidatura.aluno.instituicao.nome }}
+                            · {{ candidatura.aluno.curso.nome }}
+                            · {{ candidatura.aluno.periodo }}º período
+                            · CR {{ candidatura.aluno.cr|default:"não informado" }}
                         </p>
 
                         <p class="cinza">
-                            {{ candidatura.oportunidade }}
-                            · em {{ candidatura.data }}
+                            {{ candidatura.oportunidade.titulo }}
+                            · em {{ candidatura.data|date:"d/m/Y" }}
                         </p>
                     </div>
 
-                    <select class="status" aria-label="Status da candidatura de {{ candidatura.nome }}">
-                        <option value="Em análise"
-                            {% if candidatura.status == "Em análise" %}selected{% endif %}>
-                            Em análise
-                        </option>
-
-                        <option value="Entrevista marcada"
-                            {% if candidatura.status == "Entrevista marcada" %}selected{% endif %}>
-                            Entrevista marcada
-                        </option>
-
-                        <option value="Aprovada"
-                            {% if candidatura.status == "Aprovada" %}selected{% endif %}>
-                            Aprovada
-                        </option>
-
-                        <option value="Recusada"
-                            {% if candidatura.status == "Recusada" %}selected{% endif %}>
-                            Recusada
-                        </option>
-                    </select>
+                    <span class="status">{{ candidatura.get_status_display }}</span>
 
                 </div>
 
             {% empty %}
 
                 <div class="caixa">
-                    <p class="cinza">Nenhuma candidatura recebida.</p>
+                    <p class="cinza">Nenhuma candidatura encontrada.</p>
                 </div>
 
             {% endfor %}
 
-            <p id="sem-resultados" class="cinza" hidden>
-                Nenhuma candidatura corresponde aos filtros.
-            </p>
-
         </div>
 
     </div>
-
-    <script>
-        const campoNome = document.getElementById("nome");
-        const campoUniversidade = document.getElementById("universidade");
-        const campoCurso = document.getElementById("curso");
-        const campoPeriodo = document.getElementById("periodo");
-        const campoCR = document.getElementById("cr");
-
-        const candidaturas = document.querySelectorAll(".candidatura");
-        const contador = document.getElementById("contador");
-        const semResultados = document.getElementById("sem-resultados");
-
-        function filtrarCandidaturas() {
-            const nome = campoNome.value.trim().toLowerCase();
-            const universidade = campoUniversidade.value;
-            const curso = campoCurso.value;
-            const periodo = campoPeriodo.value;
-            const crMinimo = campoCR.value === ""
-                ? null
-                : Number(campoCR.value);
-
-            let quantidade = 0;
-
-            candidaturas.forEach(function(candidatura) {
-                const nomeCandidato = candidatura.dataset.nome;
-                const nomeCurso = candidatura.dataset.curso;
-                const nomeUniversidade = candidatura.dataset.universidade;
-                const periodoCandidato = Number(candidatura.dataset.periodo);
-                const crCandidato = Number(candidatura.dataset.cr);
-
-                const correspondeNome = nomeCandidato.includes(nome);
-                const correspondeUniversidade =
-                    !universidade || nomeUniversidade === universidade;
-                const correspondeCurso =
-                    !curso || nomeCurso === curso;
-                const correspondePeriodo =
-                    !periodo || periodoCandidato >= Number(periodo);
-                const correspondeCR =
-                    crMinimo === null || crCandidato >= crMinimo;
-
-                const mostrar =
-                    correspondeNome &&
-                    correspondeUniversidade &&
-                    correspondeCurso &&
-                    correspondePeriodo &&
-                    correspondeCR;
-
-                candidatura.hidden = !mostrar;
-
-                if (mostrar) {
-                    quantidade++;
-                }
-            });
-
-            contador.textContent = quantidade;
-            semResultados.hidden = quantidade !== 0;
-        }
-
-        campoNome.addEventListener("input", filtrarCandidaturas);
-        campoUniversidade.addEventListener("change", filtrarCandidaturas);
-        campoCurso.addEventListener("change", filtrarCandidaturas);
-        campoPeriodo.addEventListener("change", filtrarCandidaturas);
-        campoCR.addEventListener("input", filtrarCandidaturas);
-    </script>
 {% endblock %}
