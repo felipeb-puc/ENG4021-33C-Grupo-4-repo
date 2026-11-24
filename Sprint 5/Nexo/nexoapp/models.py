@@ -54,6 +54,7 @@ class Recrutador(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     empresa = models.ForeignKey(Instituicao, on_delete=models.CASCADE, limit_choices_to={"tipo": "empresa"},)
     cargo = models.CharField(max_length=100)
+    verificado = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.get_full_name() or self.user.email
