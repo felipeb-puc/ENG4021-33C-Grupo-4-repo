@@ -106,6 +106,13 @@ def pode_ver_oportunidade(user, oportunidade):
     return oportunidades_para_aluno(user).filter(id=oportunidade.id).exists()
 
 
+def conta_verificada(user):
+    if hasattr(user, "recrutador"):
+        return user.recrutador.verificado
+    if hasattr(user, "representante"):
+        return user.representante.verificado
+    return False
+
 def ids_dos_favoritos(request):
     ids = []
     if request.user.is_authenticated:
@@ -289,6 +296,10 @@ def tela_nova_oportunidade(request):
         messages.error(request, "Você não tem acesso a essa página.")
         return redirect("inicio")
 
+    if not conta_verificada(request.user):
+        messages.error(request, "Sua conta ainda está em análise pela equipe do NEXO.")
+        return redirect("tela_painel")
+
     form = OportunidadeForm(request.POST or None)
     if hasattr(request.user, "recrutador"):
         form.fields["tipo"].choices = [
@@ -386,6 +397,9 @@ def publicar_oportunidade(request, id):
     oportunidade = get_object_or_404(Oportunidade, pk=id)
     if oportunidade.instituicao != instituicao_do_usuario(request.user):
         messages.error(request, "Você não tem permissão para publicar essa oportunidade.")
+        return redirect("tela_painel")
+    if not conta_verificada(request.user):
+        messages.error(request, "Sua conta ainda está em análise pela equipe do NEXO.")
         return redirect("tela_painel")
     oportunidade.rascunho = False
     oportunidade.save(update_fields=["rascunho"])
@@ -577,6 +591,7 @@ def contexto_painel(request, mostrar_encerradas):
         "total_abertas": total_abertas,
         "total_candidaturas": total_candidaturas,
         "total_encerradas": total_encerradas,
+        "verificado": conta_verificada(request.user),
     }
 
 @login_required
@@ -653,35 +668,52 @@ def tela_admin(request):
         if hasattr(request.user, "aluno"):
             return redirect("inicio")
         return redirect("tela_painel")
-    contas = [
-        {
-            "nome": "Rodrigo Paes",
-            "instituicao": "Opportunity",
+    contas = []
+    for recrutador in Recrutador.objects.all():
+        contas.append({
+            "user_id": recrutador.user.id,
+            "nome": recrutador.user.first_name,
+            "instituicao": recrutador.empresa.nome,
             "tipo": "Recrutador",
-            "data_cadastro": "10/09/2026",
-            "verificada": False,
-        },
-        {
-            "nome": "Camila Duarte",
-            "instituicao": "Visagio",
-            "tipo": "Recrutador",
-            "data_cadastro": None,
-            "verificada": True,
-        },
-        {
-            "nome": "Prof. Rafael Amorim",
-            "instituicao": "Departamento de Informática",
+            "data_cadastro": recrutador.user.date_joined,
+            "verificada": recrutador.verificado,
+        })
+    for representante in Representante.objects.all():
+        contas.append({
+            "user_id": representante.user.id,
+            "nome": representante.user.first_name,
+            "instituicao": representante.instituicao.nome,
             "tipo": "Representante acadêmico",
-            "data_cadastro": None,
-            "verificada": True,
-        },
-    ]
+            "data_cadastro": representante.user.date_joined,
+            "verificada": representante.verificado,
+        })
+    contas = sorted(contas, key=lambda conta: conta["verificada"])
 
     context = {
         "contas": contas,
     }
 
     return render(request, "tela-admin.html", context)
+
+
+@login_required
+@require_POST
+def aprovar_conta(request, user_id):
+    if not request.user.is_staff:
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
+    usuario = get_object_or_404(User, pk=user_id)
+    if hasattr(usuario, "recrutador"):
+        conta = usuario.recrutador
+    elif hasattr(usuario, "representante"):
+        conta = usuario.representante
+    else:
+        messages.error(request, "Essa conta não é de recrutador nem de representante.")
+        return redirect("tela_admin")
+    conta.verificado = True
+    conta.save()
+    messages.success(request, "Conta de " + usuario.first_name + " aprovada.")
+    return redirect("tela_admin")
 
 
 def entrar(request):
