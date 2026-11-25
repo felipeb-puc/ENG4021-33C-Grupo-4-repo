@@ -13,6 +13,10 @@
         <p class="mensagem">{{ mensagem }}</p>
         {% endfor %}
 
+        {% if not verificado %}
+        <p class="mensagem">Sua conta ainda está em análise pela equipe do NEXO. Você poderá publicar oportunidades assim que ela for aprovada.</p>
+        {% endif %}
+
         <div class="linha">
             <div>
                 <h1>{{ instituicao.nome }}</h1>
