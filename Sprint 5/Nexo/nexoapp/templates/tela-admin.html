@@ -16,6 +16,10 @@
             Empresas e instituições só publicam depois de aprovadas.
         </p>
 
+        {% for mensagem in messages %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
+
         {% for conta in contas %}
 
             <div class="caixa linha">
@@ -26,7 +30,7 @@
                     <p class="cinza">
                         {{ conta.tipo }}
                         {% if conta.data_cadastro %}
-                            · cadastrado em {{ conta.data_cadastro }}
+                            · cadastrado em {{ conta.data_cadastro|date:"d/m/Y" }}
                         {% endif %}
                     </p>
                 </div>
@@ -44,9 +48,10 @@
 
                 {% else %}
 
-                    <a href="{% url 'tela_admin' %}" class="botao">
-                        Aprovar
-                    </a>
+                    <form method="POST" action="{% url 'aprovar_conta' conta.user_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="botao">Aprovar</button>
+                    </form>
 
                 {% endif %}
 
