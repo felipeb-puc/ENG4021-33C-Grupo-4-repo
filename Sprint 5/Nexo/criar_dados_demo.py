@@ -36,11 +36,11 @@ exacta = Instituicao.objects.create(tipo="empresa", nome="Exacta", sede="Gávea,
 petrobras = Instituicao.objects.create(tipo="empresa", nome="Petrobras", sede="Centro, Rio de Janeiro")
 visagio = Instituicao.objects.create(tipo="empresa", nome="Visagio", sede="Botafogo, Rio de Janeiro")
 
-liga_financas = Instituicao.objects.create(tipo="liga", nome="Liga de Mercado Financeiro", sede="PUC-Rio")
-liga_empreend = Instituicao.objects.create(tipo="liga", nome="Liga de Empreendedorismo", sede="UFRJ")
+liga_financas = Instituicao.objects.create(tipo="liga", nome="Liga de Mercado Financeiro", sede="PUC-Rio", universidade=puc)
+liga_empreend = Instituicao.objects.create(tipo="liga", nome="Liga de Empreendedorismo", sede="UFRJ", universidade=ufrj)
 
-pegasus = Instituicao.objects.create(tipo="equipe", nome="Pegasus", sede="PUC-Rio")
-baja = Instituicao.objects.create(tipo="equipe", nome="Baja", sede="PUC-Rio")
+pegasus = Instituicao.objects.create(tipo="equipe", nome="Pegasus", sede="PUC-Rio", universidade=puc)
+baja = Instituicao.objects.create(tipo="equipe", nome="Baja", sede="PUC-Rio", universidade=puc)
 
 
 engenharia = Curso.objects.create(nome="Engenharia")
@@ -203,17 +203,17 @@ beatriz = Aluno.objects.create(
 
 Recrutador.objects.create(
     user=novo_usuario("carla@nexo.teste", "Carla", "Mendes"),
-    empresa=visagio, cargo="Analista de RH")
+    empresa=visagio, cargo="Analista de RH", verificado=True)
 Recrutador.objects.create(
     user=novo_usuario("rafael@nexo.teste", "Rafael", "Souza"),
     empresa=petrobras, cargo="Coordenador de Estágios")
 
 Representante.objects.create(
     user=novo_usuario("lucas@nexo.teste", "Lucas", "Ferreira"),
-    instituicao=puc, cargo="Coordenação de Monitoria")
+    instituicao=puc, cargo="Coordenação de Monitoria", verificado=True)
 Representante.objects.create(
     user=novo_usuario("marina@nexo.teste", "Marina", "Lopes"),
-    instituicao=liga_financas, cargo="Presidente da Liga")
+    instituicao=liga_financas, cargo="Presidente da Liga", verificado=True)
 
 
 Candidatura.objects.create(aluno=miguel, oportunidade=mon_eng4021)
