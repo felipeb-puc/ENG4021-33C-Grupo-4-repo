@@ -43,6 +43,7 @@ urlpatterns = [
     path('templates/tela-banco-talentos.html',tela_banco_talentos,name='tela_banco_talentos'),
     path('templates/tela-candidaturas-recebidas.html',tela_candidaturas_recebidas, name='tela_candidaturas_recebidas'),
     path('templates/tela-admin.html', tela_admin, name='tela_admin'),
+    path('conta/<int:user_id>/aprovar/', aprovar_conta, name='aprovar_conta'),
     path('templates/tela-painel.html', tela_painel, name='tela_painel'),
     path('templates/tela-painel-encerradas.html', tela_painel_encerradas, name='tela_painel_encerradas'),
     path('templates/tela-busca.html', busca, name='tela_busca'),

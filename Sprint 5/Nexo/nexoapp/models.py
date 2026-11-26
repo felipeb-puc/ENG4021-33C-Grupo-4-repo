@@ -71,6 +71,7 @@ class Representante(models.Model):
         limit_choices_to={"tipo__in": ["faculdade", "equipe", "liga", "empresa_junior", "departamento"]},
     )
     cargo = models.CharField(max_length=100)
+    verificado = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.get_full_name() or self.user.email
