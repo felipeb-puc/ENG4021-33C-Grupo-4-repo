@@ -20,6 +20,16 @@ class Instituicao(models.Model):
     # opcionais: preenchidos pelo próprio membro na página da instituição
     descricao = models.TextField(blank=True)
     site = models.URLField(blank=True)
+    # liga, equipe, empresa júnior e departamento pertencem a uma universidade.
+    # Fica vazio para faculdade e empresa.
+    universidade = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"tipo": "faculdade"},
+        related_name="grupos",
+    )
 
     def __str__(self):
         return self.nome
