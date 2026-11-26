@@ -88,7 +88,8 @@ def instituicao_do_usuario(user):
 
 
 def oportunidades_para_aluno(user):
-    """Oportunidades que aparecem nas listagens: nunca rascunho, e estágio direcionado só para as universidades escolhidas."""
+    """Oportunidades que aparecem nas listagens: nunca rascunho, estágio direcionado só para as universidades
+    escolhidas, e monitoria, IC, liga e equipe só da universidade do aluno."""
     oportunidades = Oportunidade.objects.filter(rascunho=False)
     if hasattr(user, "aluno"):
         universidade = user.aluno.instituicao
@@ -96,6 +97,13 @@ def oportunidades_para_aluno(user):
         oportunidades = oportunidades.filter(
             Q(universidades_alvo=None) | Q(universidades_alvo=universidade)
         ).distinct()
+        # estágio: todos veem. Acadêmicas: só as publicadas pela universidade do aluno
+        # ou por uma liga, equipe etc. que pertence a ela.
+        oportunidades = oportunidades.filter(
+            Q(tipo="estagio")
+            | Q(instituicao=universidade)
+            | Q(instituicao__universidade=universidade)
+        )
     return oportunidades
 
 

@@ -248,7 +248,8 @@
   "fields": {
     "tipo": "liga",
     "nome": "Liga de Mercado Financeiro",
-    "sede": "PUC-Rio"
+    "sede": "PUC-Rio",
+    "universidade": 1
   }
 },
 {
@@ -257,7 +258,8 @@
   "fields": {
     "tipo": "liga",
     "nome": "Liga de Empreendedorismo",
-    "sede": "UFRJ"
+    "sede": "UFRJ",
+    "universidade": 2
   }
 },
 {
@@ -266,7 +268,8 @@
   "fields": {
     "tipo": "equipe",
     "nome": "Pegasus",
-    "sede": "PUC-Rio"
+    "sede": "PUC-Rio",
+    "universidade": 1
   }
 },
 {
@@ -275,7 +278,8 @@
   "fields": {
     "tipo": "equipe",
     "nome": "Baja",
-    "sede": "PUC-Rio"
+    "sede": "PUC-Rio",
+    "universidade": 1
   }
 },
 {
