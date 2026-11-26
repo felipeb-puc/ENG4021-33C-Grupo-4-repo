@@ -122,11 +122,15 @@ def inicio(request):
     oportunidades = abertas[:4]
     favoritos = Favorito.objects.filter(aluno__user=request.user)
     candidaturas = Candidatura.objects.filter(aluno__user=request.user)
+    candidaturas_ativas = candidaturas.filter(
+            status__in=["inscrita", "em_analise", "entrevista"],
+    )
     return render(request, "Inicio.html", {
         "oportunidades": oportunidades,
         "total_abertas": abertas.count(),
         "favoritos": favoritos,
         "candidaturas": candidaturas,
+        "candidaturas_ativas": candidaturas_ativas,
         "ids_favoritos": ids_dos_favoritos(request),
     })
 
