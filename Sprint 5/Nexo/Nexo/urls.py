@@ -44,6 +44,8 @@ urlpatterns = [
     path('templates/tela-candidaturas-recebidas.html',tela_candidaturas_recebidas, name='tela_candidaturas_recebidas'),
     path('templates/tela-admin.html', tela_admin, name='tela_admin'),
     path('conta/<int:user_id>/aprovar/', aprovar_conta, name='aprovar_conta'),
+    path('conta/<int:user_id>/revogar/', revogar_conta, name='revogar_conta'),
+    path('conta/<int:user_id>/recusar/', recusar_conta, name='recusar_conta'),
     path('templates/tela-painel.html', tela_painel, name='tela_painel'),
     path('templates/tela-painel-encerradas.html', tela_painel_encerradas, name='tela_painel_encerradas'),
     path('templates/tela-busca.html', busca, name='tela_busca'),
@@ -63,6 +65,9 @@ urlpatterns = [
     path('aluno/<int:id>/curriculo/', tela_curriculo_aluno, name='tela_curriculo_aluno'),
     path('instituicao/<int:id>/', tela_instituicao, name='tela_instituicao'),
     path('templates/tela-nova-oportunidade.html', tela_nova_oportunidade, name='tela_nova_oportunidade'),
+    path('tipo/sugerir/', sugerir_tipo, name='sugerir_tipo'),
+    path('tipo/<int:id>/aprovar/', aprovar_tipo, name='aprovar_tipo'),
+    path('tipo/<int:id>/recusar/', recusar_tipo, name='recusar_tipo'),
 ]
 
 

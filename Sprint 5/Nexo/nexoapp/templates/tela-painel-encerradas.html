@@ -81,6 +81,8 @@
                         Editar
                     </a>
 
+                    {# com candidaturas não dá para excluir: elas fazem parte do histórico dos alunos #}
+                    {% if oportunidade.candidatura_set.count == 0 %}
                     <form method="POST" action="{% url 'excluir_oportunidade' oportunidade.id %}">
                         {% csrf_token %}
                         <button type="submit" class="botao-contorno"
@@ -88,6 +90,7 @@
                             Excluir
                         </button>
                     </form>
+                    {% endif %}
                 </div>
             </div>
         {% empty %}

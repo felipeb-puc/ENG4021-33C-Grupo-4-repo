@@ -73,6 +73,11 @@
                             <input type="text" id="sede_nova_instituicao" name="sede_nova_instituicao" value="{{ form.sede_nova_instituicao.value|default:'' }}" maxlength="100" placeholder="Cidade ou localidade">
                             {{ form.sede_nova_instituicao.errors }}
                         </div>
+                        <div id="campo-universidade">
+                            <label for="{{ form.universidade_nova_instituicao.id_for_label }}">Universidade</label>
+                            {{ form.universidade_nova_instituicao }}
+                            {{ form.universidade_nova_instituicao.errors }}
+                        </div>
                     </div>
                 </div>
 
@@ -101,6 +106,8 @@
         const nomeNovaInstituicao = document.getElementById("nova_instituicao");
         const tipoNovaInstituicao = document.getElementById("{{ form.tipo_nova_instituicao.id_for_label }}");
         const sedeNovaInstituicao = document.getElementById("sede_nova_instituicao");
+        const campoUniversidade = document.getElementById("campo-universidade");
+        const universidadeNovaInstituicao = document.getElementById("{{ form.universidade_nova_instituicao.id_for_label }}");
 
         function atualizarCamposNovaInstituicao() {
             const selecionouOutro = seletorInstituicao.value === "outro";
@@ -108,11 +115,15 @@
             nomeNovaInstituicao.required = selecionouOutro;
             tipoNovaInstituicao.required = selecionouOutro;
             sedeNovaInstituicao.required = selecionouOutro;
+
+            // a universidade só aparece para liga, equipe, empresa júnior e departamento
+            const precisaUniversidade = selecionouOutro && tipoNovaInstituicao.value !== "" && tipoNovaInstituicao.value !== "faculdade";
+            campoUniversidade.hidden = !precisaUniversidade;
+            universidadeNovaInstituicao.required = precisaUniversidade;
         }
 
         seletorInstituicao.addEventListener("change", atualizarCamposNovaInstituicao);
+        tipoNovaInstituicao.addEventListener("change", atualizarCamposNovaInstituicao);
         atualizarCamposNovaInstituicao();
     </script>
-</body>
-</html>
 {% endblock %}

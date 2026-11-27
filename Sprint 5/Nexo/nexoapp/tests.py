@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-from .models import Instituicao, Curso, Aluno, Recrutador, Representante, Oportunidade, Candidatura
+from .models import Instituicao, Curso, Aluno, Recrutador, Representante, Oportunidade, Candidatura, Favorito, TipoOportunidade
 
 
 class CadastroEmailDuplicadoTests(TestCase):
@@ -406,6 +406,9 @@ class CurriculoDoAlunoTests(BaseTarefasSprint11):
         self.assertContains(resposta, "Estágio em Dados")
 
     def test_recrutador_nao_ve_curriculo_de_quem_nao_se_candidatou(self):
+        # a Ana desligou "aparecer em buscas", então só quem recebeu candidatura dela vê o currículo
+        self.aluno.aparecer_em_buscas = False
+        self.aluno.save()
         self.entrar("rafael@example.com")
         resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.aluno.id]))
         self.assertRedirects(resposta, reverse("tela_candidaturas_recebidas"), fetch_redirect_response=False)
@@ -525,3 +528,412 @@ class StatusNaTelaDeCandidaturasTests(BaseTarefasSprint11):
             {"status": "entrevista", "voltar": "https://outro-site.com/"},
         )
         self.assertEqual(resposta["Location"], reverse("tela_candidaturas_recebidas"))
+
+
+class FiltrosComTextoTests(BaseTarefasSprint11):
+
+    def test_filtro_com_texto_nao_da_erro(self):
+        self.entrar("carla@example.com")
+        url = reverse("tela_candidaturas_recebidas")
+        resposta = self.client.get(url + "?periodo=abc&universidade=abc&curso=abc&oportunidade=abc&cr=abc")
+        self.assertEqual(resposta.status_code, 200)
+        # o filtro com texto é ignorado, então a candidatura da Ana continua aparecendo
+        self.assertContains(resposta, "Ana")
+
+
+class BotoesDaTelaDaVagaTests(BaseTarefasSprint11):
+
+    def test_aluno_ve_candidatar_e_salvar(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("tela_oportunidade", args=[self.vaga_puc.id]))
+        self.assertContains(resposta, "Candidatar-se")
+        self.assertContains(resposta, "Salvar para depois")
+
+    def test_dono_ve_editar_e_nao_ve_candidatar(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_oportunidade", args=[self.vaga_visagio.id]))
+        self.assertContains(resposta, "Editar oportunidade")
+        self.assertNotContains(resposta, "Candidatar-se")
+        self.assertNotContains(resposta, "Salvar para depois")
+
+    def test_outro_recrutador_nao_ve_candidatar(self):
+        self.entrar("rafael@example.com")
+        resposta = self.client.get(reverse("tela_oportunidade", args=[self.vaga_visagio.id]))
+        self.assertNotContains(resposta, "Candidatar-se")
+        self.assertNotContains(resposta, "Editar oportunidade")
+        self.assertContains(resposta, "Só estudantes se candidatam")
+
+    def test_link_externo_respeita_periodo_minimo(self):
+        self.vaga_visagio.link_externo = "https://example.com/vaga"
+        self.vaga_visagio.save()
+        # a Bia está no 2º período e a vaga é a partir do 5º
+        self.entrar("bia@example.com")
+        resposta = self.client.get(reverse("tela_oportunidade", args=[self.vaga_visagio.id]))
+        self.assertNotContains(resposta, "Inscrever-se no site da instituição")
+        self.assertContains(resposta, "A partir do 5º período")
+
+
+class ListagensSoParaAlunoTests(BaseTarefasSprint11):
+    listagens = ["tela_estagio", "tela_iniciacao_cientifica", "tela_liga_academica",
+                 "tela_monitoria", "tela_equipe_competicao", "tela_busca"]
+
+    def test_visitante_vai_para_o_login(self):
+        for nome in self.listagens:
+            resposta = self.client.get(reverse(nome))
+            self.assertRedirects(resposta, reverse("login") + "?next=" + reverse(nome), fetch_redirect_response=False)
+
+    def test_recrutador_volta_para_o_painel(self):
+        self.entrar("carla@example.com")
+        for nome in self.listagens:
+            resposta = self.client.get(reverse(nome))
+            self.assertRedirects(resposta, reverse("tela_painel"), fetch_redirect_response=False)
+
+    def test_aluno_abre_as_listagens(self):
+        self.entrar("ana@example.com")
+        for nome in self.listagens:
+            resposta = self.client.get(reverse(nome))
+            self.assertEqual(resposta.status_code, 200)
+
+
+class LoginVoltaParaPaginaTests(BaseTarefasSprint11):
+
+    def test_login_volta_para_a_vaga(self):
+        url_vaga = reverse("tela_oportunidade", args=[self.vaga_puc.id])
+        resposta = self.client.get(url_vaga)
+        self.assertRedirects(resposta, reverse("login") + "?next=" + url_vaga, fetch_redirect_response=False)
+        resposta = self.client.post(reverse("login") + "?next=" + url_vaga,
+                                    {"email": "ana@example.com", "senha": "senha-segura-123", "next": url_vaga})
+        self.assertRedirects(resposta, url_vaga, fetch_redirect_response=False)
+
+    def test_login_nao_manda_para_outro_site(self):
+        resposta = self.client.post(reverse("login"),
+                                    {"email": "ana@example.com", "senha": "senha-segura-123", "next": "https://site-falso.com/"})
+        self.assertRedirects(resposta, reverse("inicio"), fetch_redirect_response=False)
+
+    def test_sem_next_continua_indo_para_a_tela_do_papel(self):
+        resposta = self.client.post(reverse("login"), {"email": "carla@example.com", "senha": "senha-segura-123"})
+        self.assertRedirects(resposta, reverse("tela_painel"), fetch_redirect_response=False)
+
+
+class BuscarCandidatosTests(BaseTarefasSprint11):
+
+    def setUp(self):
+        super().setUp()
+        self.uff = Instituicao.objects.create(tipo="faculdade", nome="UFF", sede="Niterói")
+        self.direito = Curso.objects.create(nome="Direito")
+        usuario = User.objects.create_user(username="caio@example.com", email="caio@example.com", first_name="Caio",
+                                           password="senha-segura-123")
+        self.caio = Aluno.objects.create(user=usuario, instituicao=self.uff, curso=self.direito, matricula="999",
+                                         periodo=8, curriculo="Sabe Python.", cr=7)
+
+    def test_recrutador_ve_quem_quer_aparecer(self):
+        self.calouro.aparecer_em_buscas = False
+        self.calouro.save()
+        self.entrar("rafael@example.com")
+        resposta = self.client.get(reverse("tela_banco_talentos"))
+        nomes = [aluno.user.first_name for aluno in resposta.context["candidatos"]]
+        self.assertIn("Ana", nomes)
+        self.assertIn("Caio", nomes)
+        self.assertNotIn("Bia", nomes)
+
+    def test_filtros_vem_do_banco(self):
+        self.entrar("rafael@example.com")
+        resposta = self.client.get(reverse("tela_banco_talentos"))
+        self.assertContains(resposta, ">UFF<")
+        self.assertContains(resposta, ">Direito<")
+        resposta = self.client.get(reverse("tela_banco_talentos") + "?curso=" + str(self.direito.id))
+        self.assertEqual([aluno.user.first_name for aluno in resposta.context["candidatos"]], ["Caio"])
+
+    def test_busca_por_habilidade_e_filtro_com_texto(self):
+        self.entrar("rafael@example.com")
+        resposta = self.client.get(reverse("tela_banco_talentos") + "?nome=python&periodo=abc&curso=abc")
+        self.assertEqual(resposta.status_code, 200)
+        self.assertEqual([aluno.user.first_name for aluno in resposta.context["candidatos"]], ["Caio"])
+
+    def test_recrutador_abre_curriculo_de_quem_esta_no_banco(self):
+        self.entrar("rafael@example.com")
+        resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.caio.id]))
+        self.assertEqual(resposta.status_code, 200)
+        self.assertContains(resposta, "Sabe Python.")
+
+    def test_representante_ve_so_alunos_da_sua_universidade(self):
+        self.entrar("lucas@example.com")
+        resposta = self.client.get(reverse("tela_banco_talentos"))
+        nomes = [aluno.user.first_name for aluno in resposta.context["candidatos"]]
+        self.assertIn("Ana", nomes)
+        self.assertNotIn("Caio", nomes)
+        resposta = self.client.get(reverse("tela_curriculo_aluno", args=[self.caio.id]))
+        self.assertEqual(resposta.status_code, 302)
+
+    def test_aluno_liga_e_desliga_no_perfil(self):
+        self.entrar("ana@example.com")
+        self.client.post(reverse("tela_perfil"), {"periodo": "6", "cr": "8", "curriculo": "x"})
+        self.aluno.refresh_from_db()
+        self.assertFalse(self.aluno.aparecer_em_buscas)
+        self.client.post(reverse("tela_perfil"), {"periodo": "6", "cr": "8", "curriculo": "x", "aparecer_em_buscas": "on"})
+        self.aluno.refresh_from_db()
+        self.assertTrue(self.aluno.aparecer_em_buscas)
+
+
+class LigaNovaComUniversidadeTests(BaseTarefasSprint11):
+
+    def dados(self, tipo, universidade=""):
+        return {
+            "nome": "Rep Novo", "email": "repnovo@example.com", "cargo": "Presidente", "senha": "senha-segura-123",
+            "empresa": "outro", "nova_instituicao": "Liga de Robótica", "tipo_nova_instituicao": tipo,
+            "sede_nova_instituicao": "Gávea", "universidade_nova_instituicao": universidade, "aceita_termos": "on",
+        }
+
+    def test_liga_nova_pede_universidade(self):
+        resposta = self.client.post("/templates/PROJETOtela_informacoes_representante.html",
+                                    self.dados("liga"))
+        self.assertEqual(resposta.status_code, 200)
+        self.assertContains(resposta, "Selecione a universidade da instituição.")
+        self.assertFalse(Instituicao.objects.filter(nome="Liga de Robótica").exists())
+
+    def test_liga_nova_fica_com_a_universidade_e_aparece_para_o_aluno(self):
+        resposta = self.client.post("/templates/PROJETOtela_informacoes_representante.html",
+                                    self.dados("liga", str(self.puc.id)))
+        self.assertEqual(resposta.status_code, 302)
+        liga = Instituicao.objects.get(nome="Liga de Robótica")
+        self.assertEqual(liga.universidade, self.puc)
+        vaga = Oportunidade.objects.create(
+            instituicao=liga, curso=self.curso, tipo="liga", titulo="Processo da Liga de Robótica",
+            descricao="x", requisitos="x", carga_horaria=4, prazo_inscricao=date.today() + timedelta(days=5),
+            modalidade="presencial",
+        )
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("tela_oportunidade", args=[vaga.id]))
+        self.assertEqual(resposta.status_code, 200)
+
+    def test_faculdade_nova_nao_precisa_de_universidade(self):
+        dados = self.dados("faculdade")
+        dados["nova_instituicao"] = "UNIRIO"
+        resposta = self.client.post("/templates/PROJETOtela_informacoes_representante.html", dados)
+        self.assertEqual(resposta.status_code, 302)
+        self.assertIsNone(Instituicao.objects.get(nome="UNIRIO").universidade)
+
+
+class ExcluirComCandidaturasTests(BaseTarefasSprint11):
+
+    def test_nao_exclui_vaga_com_candidatura(self):
+        self.entrar("carla@example.com")
+        self.client.post(reverse("encerrar_oportunidade", args=[self.vaga_visagio.id]))
+        resposta = self.client.post(reverse("excluir_oportunidade", args=[self.vaga_visagio.id]), follow=True)
+        self.assertContains(resposta, "não pode ser excluída")
+        self.assertTrue(Oportunidade.objects.filter(id=self.vaga_visagio.id).exists())
+        self.assertTrue(Candidatura.objects.filter(id=self.candidatura.id).exists())
+        # o botão de excluir nem aparece para essa vaga
+        self.assertNotContains(resposta, reverse("excluir_oportunidade", args=[self.vaga_visagio.id]))
+
+    def test_exclui_vaga_sem_candidatura(self):
+        self.candidatura.delete()
+        self.entrar("carla@example.com")
+        self.client.post(reverse("encerrar_oportunidade", args=[self.vaga_visagio.id]))
+        resposta = self.client.get(reverse("tela_painel_encerradas"))
+        self.assertContains(resposta, "Excluir")
+        self.client.post(reverse("excluir_oportunidade", args=[self.vaga_visagio.id]))
+        self.assertFalse(Oportunidade.objects.filter(id=self.vaga_visagio.id).exists())
+
+
+class FavoritarSoOQueVeTests(BaseTarefasSprint11):
+
+    def test_aluno_nao_favorita_rascunho(self):
+        self.vaga_visagio.rascunho = True
+        self.vaga_visagio.save()
+        self.entrar("ana@example.com")
+        self.client.post(reverse("favoritar", args=[self.vaga_visagio.id]))
+        self.assertFalse(Favorito.objects.filter(aluno=self.aluno, oportunidade=self.vaga_visagio).exists())
+
+    def test_aluno_nao_favorita_vaga_de_outra_universidade(self):
+        uff = Instituicao.objects.create(tipo="faculdade", nome="UFF", sede="Niterói")
+        vaga_uff = Oportunidade.objects.create(
+            instituicao=uff, curso=self.curso, tipo="monitoria", titulo="Monitoria na UFF", descricao="x",
+            requisitos="x", carga_horaria=6, prazo_inscricao=date.today() + timedelta(days=5), modalidade="presencial",
+        )
+        self.entrar("ana@example.com")
+        self.client.post(reverse("favoritar", args=[vaga_uff.id]))
+        self.assertFalse(Favorito.objects.filter(aluno=self.aluno, oportunidade=vaga_uff).exists())
+
+    def test_aluno_favorita_e_desfavorita_o_que_ve(self):
+        self.entrar("ana@example.com")
+        self.client.post(reverse("favoritar", args=[self.vaga_puc.id]))
+        self.assertTrue(Favorito.objects.filter(aluno=self.aluno, oportunidade=self.vaga_puc).exists())
+        self.client.post(reverse("favoritar", args=[self.vaga_puc.id]))
+        self.assertFalse(Favorito.objects.filter(aluno=self.aluno, oportunidade=self.vaga_puc).exists())
+
+    def test_nao_volta_para_outro_site(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.post(reverse("favoritar", args=[self.vaga_puc.id]), HTTP_REFERER="https://site-falso.com/")
+        self.assertRedirects(resposta, reverse("inicio"), fetch_redirect_response=False)
+
+
+class PerfilSemCurriculoTests(BaseTarefasSprint11):
+
+    def test_salva_periodo_com_curriculo_vazio(self):
+        self.entrar("ana@example.com")
+        resposta = self.client.post(reverse("tela_perfil"), {"periodo": "7", "cr": "8", "curriculo": "", "aparecer_em_buscas": "on"})
+        self.assertRedirects(resposta, reverse("tela_perfil"))
+        self.aluno.refresh_from_db()
+        self.assertEqual(self.aluno.periodo, 7)
+        self.assertEqual(self.aluno.curriculo, "")
+
+
+class RegrasDeSenhaNoCadastroTests(BaseTarefasSprint11):
+
+    def dados_aluno(self, senha):
+        return {
+            "nome_completo": "Joana Teste", "email_academico": "joana@example.com", "senha": senha,
+            "matricula": "2410001", "universidade": str(self.puc.pk), "curso": str(self.curso.pk),
+            "periodo_atual": "3", "cr": "", "aceitar_termos": "on",
+        }
+
+    def test_aluno_nao_cadastra_senha_so_com_numeros(self):
+        resposta = self.client.post("/templates/PROJETOtela_informacoes_estudante.html", self.dados_aluno("12345678"))
+        self.assertEqual(resposta.status_code, 200)
+        self.assertTrue(resposta.context["form"].errors.get("senha"))
+        self.assertFalse(User.objects.filter(username="joana@example.com").exists())
+
+    def test_aluno_nao_cadastra_senha_comum(self):
+        resposta = self.client.post("/templates/PROJETOtela_informacoes_estudante.html", self.dados_aluno("password"))
+        self.assertTrue(resposta.context["form"].errors.get("senha"))
+
+    def test_recrutador_nao_cadastra_senha_parecida_com_o_email(self):
+        dados = {"nome": "Paulo", "email": "paulosouza@example.com", "cargo": "RH", "senha": "paulosouza",
+                 "empresa": str(self.visagio.pk), "aceita_termos": "on"}
+        resposta = self.client.post("/templates/PROJETOtela_informacoes_recrutador.html", dados)
+        self.assertEqual(resposta.status_code, 200)
+        self.assertFalse(User.objects.filter(username="paulosouza@example.com").exists())
+
+    def test_senha_boa_continua_funcionando(self):
+        resposta = self.client.post("/templates/PROJETOtela_informacoes_estudante.html", self.dados_aluno("senha-segura-123"))
+        self.assertEqual(resposta.status_code, 302)
+
+
+class AdminRecusarERevogarTests(BaseTarefasSprint11):
+
+    def test_admin_retira_aprovacao(self):
+        self.carla.verificado = True
+        self.carla.save()
+        self.entrar("admin@example.com")
+        self.client.post(reverse("revogar_conta", args=[self.carla.user.id]))
+        self.carla.refresh_from_db()
+        self.assertFalse(self.carla.verificado)
+        # sem aprovação, a Carla não publica
+        self.client.logout()
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_nova_oportunidade"))
+        self.assertRedirects(resposta, reverse("tela_painel"), fetch_redirect_response=False)
+
+    def test_admin_recusa_conta_em_analise(self):
+        self.entrar("admin@example.com")
+        self.client.post(reverse("recusar_conta", args=[self.rafael.user.id]))
+        self.assertFalse(User.objects.filter(username="rafael@example.com").exists())
+        self.assertFalse(Recrutador.objects.filter(id=self.rafael.id).exists())
+
+    def test_admin_nao_recusa_conta_aprovada(self):
+        self.carla.verificado = True
+        self.carla.save()
+        self.entrar("admin@example.com")
+        self.client.post(reverse("recusar_conta", args=[self.carla.user.id]))
+        self.assertTrue(User.objects.filter(username="carla@example.com").exists())
+
+    def test_so_admin_recusa_e_revoga(self):
+        self.entrar("carla@example.com")
+        self.client.post(reverse("recusar_conta", args=[self.rafael.user.id]))
+        self.assertTrue(User.objects.filter(username="rafael@example.com").exists())
+
+    def test_tela_mostra_os_botoes(self):
+        self.carla.verificado = True
+        self.carla.save()
+        self.entrar("admin@example.com")
+        resposta = self.client.get(reverse("tela_admin"))
+        self.assertContains(resposta, "Retirar aprovação")
+        self.assertContains(resposta, "Recusar")
+
+
+class NovoTipoDeOportunidadeTests(BaseTarefasSprint11):
+
+    def setUp(self):
+        super().setUp()
+        self.carla.verificado = True
+        self.carla.save()
+
+    def dados_vaga(self, tipo, tipo_novo=""):
+        return {
+            "tipo": tipo, "tipo_novo": tipo_novo, "titulo": "Programa de trainee 2027", "descricao": "x",
+            "requisitos": "x", "curso": str(self.curso.id), "periodo_minimo": "6", "carga_horaria": "40",
+            "prazo_inscricao": (date.today() + timedelta(days=30)).isoformat(), "remuneracao": "5000",
+            "modalidade": "presencial", "link_externo": "",
+        }
+
+    def test_sugestao_fica_padronizada_e_em_analise(self):
+        self.entrar("carla@example.com")
+        self.client.post(reverse("sugerir_tipo"), {"nome": "  PROGRAMA   de TRAINEE "})
+        tipo = TipoOportunidade.objects.get()
+        self.assertEqual(tipo.nome, "Programa de trainee")
+        self.assertFalse(tipo.aprovado)
+        self.assertEqual(tipo.sugerido_por, self.carla.user)
+
+    def test_nao_repete_tipo(self):
+        self.entrar("carla@example.com")
+        self.client.post(reverse("sugerir_tipo"), {"nome": "Programa de trainee"})
+        self.client.post(reverse("sugerir_tipo"), {"nome": "programa DE trainee"})
+        self.client.post(reverse("sugerir_tipo"), {"nome": "estágio"})
+        self.assertEqual(TipoOportunidade.objects.count(), 1)
+
+    def test_conta_em_analise_nao_sugere(self):
+        self.entrar("rafael@example.com")
+        self.client.post(reverse("sugerir_tipo"), {"nome": "Programa de trainee"})
+        self.assertEqual(TipoOportunidade.objects.count(), 0)
+
+    def test_tipo_em_analise_nao_pode_ser_usado(self):
+        tipo = TipoOportunidade.objects.create(nome="Programa de trainee", sugerido_por=self.carla.user)
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_nova_oportunidade"))
+        self.assertNotContains(resposta, 'value="outro"')
+        self.client.post(reverse("tela_nova_oportunidade"), self.dados_vaga("outro", str(tipo.id)))
+        self.assertFalse(Oportunidade.objects.filter(titulo="Programa de trainee 2027").exists())
+
+    def test_admin_aprova_e_tipo_e_usado_na_vaga(self):
+        tipo = TipoOportunidade.objects.create(nome="Programa de trainee", sugerido_por=self.carla.user)
+        self.entrar("admin@example.com")
+        resposta = self.client.get(reverse("tela_admin"))
+        self.assertContains(resposta, "Programa de trainee")
+        self.client.post(reverse("aprovar_tipo", args=[tipo.id]))
+        tipo.refresh_from_db()
+        self.assertTrue(tipo.aprovado)
+        self.client.logout()
+
+        self.entrar("carla@example.com")
+        resposta = self.client.post(reverse("tela_nova_oportunidade"), self.dados_vaga("outro", str(tipo.id)))
+        self.assertRedirects(resposta, reverse("tela_painel"), fetch_redirect_response=False)
+        vaga = Oportunidade.objects.get(titulo="Programa de trainee 2027")
+        self.assertEqual(vaga.tipo, "outro")
+        self.assertEqual(vaga.get_tipo_display(), "Programa de trainee")
+        self.client.logout()
+
+        # vaga de empresa num tipo novo aparece para o aluno, com o nome do tipo
+        self.entrar("ana@example.com")
+        resposta = self.client.get(reverse("tela_busca") + "?q=trainee")
+        self.assertContains(resposta, "Programa de trainee 2027")
+
+    def test_outro_tipo_exige_escolher_qual(self):
+        TipoOportunidade.objects.create(nome="Programa de trainee", aprovado=True)
+        self.entrar("carla@example.com")
+        resposta = self.client.post(reverse("tela_nova_oportunidade"), self.dados_vaga("outro"))
+        self.assertEqual(resposta.status_code, 200)
+        self.assertContains(resposta, "Escolha qual é o tipo.")
+
+    def test_admin_recusa_sugestao(self):
+        tipo = TipoOportunidade.objects.create(nome="Bootcamp", sugerido_por=self.carla.user)
+        self.entrar("admin@example.com")
+        self.client.post(reverse("recusar_tipo", args=[tipo.id]))
+        self.assertFalse(TipoOportunidade.objects.exists())
+
+    def test_so_admin_aprova(self):
+        tipo = TipoOportunidade.objects.create(nome="Bootcamp", sugerido_por=self.carla.user)
+        self.entrar("carla@example.com")
+        self.client.post(reverse("aprovar_tipo", args=[tipo.id]))
+        tipo.refresh_from_db()
+        self.assertFalse(tipo.aprovado)

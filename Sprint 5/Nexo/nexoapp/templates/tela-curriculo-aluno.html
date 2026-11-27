@@ -13,8 +13,10 @@
         {% if e_o_proprio_aluno %}
         <a href="{% url 'tela_perfil' %}" class="cinza">← Voltar para o perfil</a>
         <p class="mensagem">É assim que um recrutador vê o seu currículo quando você se candidata.</p>
+        {% elif candidaturas %}
+        <a href="{% url 'tela_candidaturas_recebidas' %}" class="cinza">← Voltar para as candidaturas</a>
         {% else %}
-        <a href="{% url 'tela_candidaturas_recebidas' %}" class="cinza">← Voltar</a>
+        <a href="{% url 'tela_banco_talentos' %}" class="cinza">← Voltar para a busca de candidatos</a>
         {% endif %}
 
         {% if candidaturas %}

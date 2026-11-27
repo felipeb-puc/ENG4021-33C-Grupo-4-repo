@@ -50,6 +50,8 @@ class Aluno(models.Model):
     periodo = models.IntegerField()
     curriculo = models.TextField()
     cr = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
+    # ligado: recrutadores e representantes encontram o aluno em "Buscar candidatos"
+    aparecer_em_buscas = models.BooleanField(default=True)
     
     def iniciais(self):
         partes = self.user.first_name.split()
@@ -87,6 +89,26 @@ class Representante(models.Model):
         return self.user.get_full_name() or self.user.email
 
 
+def padronizar_nome_do_tipo(texto):
+    """Deixa o nome de um tipo novo sempre escrito do mesmo jeito:
+    sem espaços sobrando e só com a primeira letra maiúscula.
+    Ex.: "  PROGRAMA   de TRAINEE " vira "Programa de trainee"."""
+    texto = " ".join(texto.split()).lower()
+    return texto[:1].upper() + texto[1:]
+
+
+class TipoOportunidade(models.Model):
+    """Tipo de oportunidade sugerido por quem publica (ex.: "Programa de trainee").
+    Só pode ser usado nas oportunidades depois que o admin aprova."""
+    nome = models.CharField(max_length=50)
+    aprovado = models.BooleanField(default=False)
+    sugerido_por = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    data = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.nome
+
+
 class Oportunidade(models.Model):
     TIPOS = [
         ("estagio", "Estágio"),
@@ -94,6 +116,8 @@ class Oportunidade(models.Model):
         ("ic", "Iniciação científica"),
         ("equipe", "Equipe de competição"),
         ("liga", "Liga acadêmica"),
+        # "outro": o nome do tipo vem de tipo_novo, que o admin aprovou
+        ("outro", "Outro tipo"),
     ]
 
     MODALIDADES = [
@@ -105,6 +129,8 @@ class Oportunidade(models.Model):
     instituicao = models.ForeignKey(Instituicao, on_delete=models.CASCADE)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     tipo = models.CharField(max_length=20, choices=TIPOS)
+    # só preenchido quando tipo é "outro"
+    tipo_novo = models.ForeignKey(TipoOportunidade, on_delete=models.SET_NULL, null=True, blank=True)
     titulo = models.CharField(max_length=200)
     descricao = models.TextField()
     requisitos = models.TextField()
@@ -124,6 +150,12 @@ class Oportunidade(models.Model):
         related_name="estagios_direcionados",
         limit_choices_to={"tipo": "faculdade"},
     )
+
+    def get_tipo_display(self):
+        # os templates usam get_tipo_display; para "outro" mostra o nome do tipo aprovado
+        if self.tipo == "outro" and self.tipo_novo:
+            return self.tipo_novo.nome
+        return dict(self.TIPOS).get(self.tipo, self.tipo)
 
     def dias_restantes(self):
         return (self.prazo_inscricao - date.today()).days

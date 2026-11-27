@@ -9,7 +9,7 @@ django.setup()
 from django.contrib.auth.models import User
 from nexoapp.models import (
     Instituicao, Curso, Aluno, Recrutador, Representante,
-    Oportunidade, Candidatura, Favorito,
+    Oportunidade, Candidatura, Favorito, TipoOportunidade,
 )
 
 SENHA_TESTE = "nexo2026"
@@ -201,7 +201,7 @@ beatriz = Aluno.objects.create(
     instituicao=uff, curso=computacao, matricula="2611234", periodo=3,
     curriculo="Monitora de Programação I. Projetos pessoais em Python.", cr=8.7)
 
-Recrutador.objects.create(
+carla = Recrutador.objects.create(
     user=novo_usuario("carla@nexo.teste", "Carla", "Mendes"),
     empresa=visagio, cargo="Analista de RH", verificado=True)
 Recrutador.objects.create(
@@ -224,6 +224,9 @@ Candidatura.objects.create(aluno=beatriz, oportunidade=ic_visao)
 Favorito.objects.create(aluno=miguel, oportunidade=est_exacta)
 Favorito.objects.create(aluno=daniel, oportunidade=eq_pegasus)
 Favorito.objects.create(aluno=ana, oportunidade=ic_direito)
+
+# sugestão de tipo novo esperando o admin aprovar, para mostrar na DEMO
+TipoOportunidade.objects.create(nome="Programa de trainee", sugerido_por=carla.user)
 
 print("Dados criados:")
 print(Instituicao.objects.count(), "instituições,", Curso.objects.count(), "cursos,",

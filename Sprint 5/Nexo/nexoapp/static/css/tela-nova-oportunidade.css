@@ -26,3 +26,16 @@
   font-weight: normal;
   margin-bottom: 6px;
 }
+
+/* sugestão de tipo novo: campo e botão na mesma linha */
+#sugerir-tipo {
+  margin-top: 16px;
+}
+
+#sugerir-tipo form {
+  gap: 8px;
+}
+
+#sugerir-tipo form input {
+  margin: 0px;
+}

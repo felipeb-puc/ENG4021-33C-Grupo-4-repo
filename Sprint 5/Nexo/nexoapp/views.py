@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models import Q
@@ -19,8 +20,9 @@ from .models import (
     Oportunidade,
     Candidatura,
     Favorito,
+    TipoOportunidade,
 )
-from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm, OportunidadeForm, PerfilAlunoForm, InstituicaoForm
+from .forms import CadastroRecrutadorForm, CadastroRepresentanteForm, CadastroAlunoForm, LoginForm, OportunidadeForm, PerfilAlunoForm, InstituicaoForm, SugerirTipoForm
 # Create your views here.
 def home(request):
     sair(request)
@@ -45,7 +47,6 @@ def cadastro_aluno(request):
                     first_name=dados["nome_completo"].strip(),
                     password=dados["senha"],
                 )
-                # "aparecer_em_buscas" não é salvo: o campo saiu do model (migration 0004)
                 Aluno.objects.create(
                     user=usuario,
                     instituicao=dados["universidade"],
@@ -54,6 +55,7 @@ def cadastro_aluno(request):
                     periodo=int(dados["periodo_atual"]),
                     curriculo="",
                     cr=dados["cr"],
+                    aparecer_em_buscas=dados["aparecer_em_buscas"],
                 )
             messages.success(request, "Conta de estudante criada. Faça login para continuar.")
             return redirect("login")
@@ -100,8 +102,10 @@ def oportunidades_para_aluno(user):
         ).distinct()
         # estágio: todos veem. Acadêmicas: só as publicadas pela universidade do aluno
         # ou por uma liga, equipe etc. que pertence a ela.
+        # O que uma empresa publica num tipo novo (ex.: programa de trainee) também aparece para todos.
         oportunidades = oportunidades.filter(
             Q(tipo="estagio")
+            | Q(instituicao__tipo="empresa")
             | Q(instituicao=universidade)
             | Q(instituicao__universidade=universidade)
         )
@@ -113,6 +117,23 @@ def pode_ver_oportunidade(user, oportunidade):
     if oportunidade.instituicao == instituicao_do_usuario(user):
         return True
     return oportunidades_para_aluno(user).filter(id=oportunidade.id).exists()
+
+
+def alunos_do_banco_de_talentos(user):
+    """Alunos que aparecem em "Buscar candidatos" para quem publica.
+    Só entra quem deixou ligado "aparecer em buscas". Recrutador vê alunos de todas as universidades;
+    representante vê só os da sua universidade (ou da universidade da sua liga, equipe etc.)."""
+    alunos = Aluno.objects.filter(aparecer_em_buscas=True)
+    if hasattr(user, "recrutador"):
+        return alunos
+    if hasattr(user, "representante"):
+        instituicao = user.representante.instituicao
+        if instituicao.tipo == "faculdade":
+            universidade = instituicao
+        else:
+            universidade = instituicao.universidade
+        return alunos.filter(instituicao=universidade)
+    return Aluno.objects.none()
 
 
 def conta_verificada(user):
@@ -191,7 +212,11 @@ def minha_oportunidade_favoritos(request):
         "candidaturas_historico": candidaturas_historico,
     })
 
+@login_required(login_url='login')
 def iniciacao_cientifica(request):
+    bloqueio = tela_so_de_aluno(request)
+    if bloqueio:
+        return bloqueio
     oportunidades = oportunidades_para_aluno(request.user).filter(tipo="ic")
     return render(request, "Iniciacao-Cientifica.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
 
@@ -215,17 +240,27 @@ def minha_oportunidade_historico(request):
         "favoritos": favoritos,
     })
 
+@login_required(login_url='login')
 def estagio(request):
+    bloqueio = tela_so_de_aluno(request)
+    if bloqueio:
+        return bloqueio
     oportunidades = oportunidades_para_aluno(request.user).filter(tipo="estagio")
     return render(request, "estagio.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
 
 @login_required(login_url='login')
 def tela_monitoria(request):
+    bloqueio = tela_so_de_aluno(request)
+    if bloqueio:
+        return bloqueio
     oportunidades = oportunidades_para_aluno(request.user).filter(tipo="monitoria")
     return render(request, "tela-monitoria.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
 
 @login_required(login_url='login')
 def tela_equipe_competicao(request):
+    bloqueio = tela_so_de_aluno(request)
+    if bloqueio:
+        return bloqueio
     oportunidades = oportunidades_para_aluno(request.user).filter(tipo="equipe")
     return render(request, "tela-equipe-competicao.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
 
@@ -253,10 +288,13 @@ def tela_curriculo_aluno(request, id):
     # candidaturas desse aluno para as oportunidades da instituição de quem está vendo
     candidaturas = Candidatura.objects.filter(aluno=aluno, oportunidade__instituicao=instituicao)
 
-    # Só podem ver o currículo: o próprio aluno, ou quem recebeu uma candidatura dele.
+    # Podem ver o currículo: o próprio aluno, quem recebeu uma candidatura dele,
+    # ou quem publica e encontra o aluno no banco de talentos (ele deixou ligado "aparecer em buscas").
     if hasattr(request.user, "aluno") and request.user.aluno == aluno:
         pode_ver = True
     elif instituicao is not None and candidaturas.exists():
+        pode_ver = True
+    elif alunos_do_banco_de_talentos(request.user).filter(id=aluno.id).exists():
         pode_ver = True
     else:
         pode_ver = False
@@ -299,6 +337,31 @@ def tela_instituicao(request, id):
         "form": form,
     })
 
+def ajustar_tipos(form, user):
+    """Tipos que aparecem no select: recrutador publica estágio, representante as acadêmicas.
+    Se o admin já aprovou algum tipo novo, aparece também "Outro tipo"."""
+    if hasattr(user, "recrutador"):
+        tipos = [("estagio", "Estágio")]
+    else:
+        tipos = [
+            ("monitoria", "Monitoria"),
+            ("ic", "Iniciação científica"),
+            ("equipe", "Equipe de competição"),
+            ("liga", "Liga acadêmica"),
+        ]
+    if TipoOportunidade.objects.filter(aprovado=True).exists():
+        tipos.append(("outro", "Outro tipo"))
+    form.fields["tipo"].choices = tipos
+
+
+def contexto_sugestao(user):
+    """Form de sugerir tipo e as sugestões dessa pessoa que ainda esperam o admin."""
+    return {
+        "sugerir_form": SugerirTipoForm(),
+        "sugestoes_em_analise": TipoOportunidade.objects.filter(sugerido_por=user, aprovado=False),
+    }
+
+
 @login_required(login_url='login')
 def tela_nova_oportunidade(request):
     if hasattr(request.user, "recrutador"):
@@ -314,17 +377,7 @@ def tela_nova_oportunidade(request):
         return redirect("tela_painel")
 
     form = OportunidadeForm(request.POST or None)
-    if hasattr(request.user, "recrutador"):
-        form.fields["tipo"].choices = [
-            ("estagio", "Estágio"),
-        ]
-    else:
-        form.fields["tipo"].choices = [
-            ("monitoria", "Monitoria"),
-            ("ic", "Iniciação científica"),
-            ("equipe", "Equipe de competição"),
-            ("liga", "Liga acadêmica"),
-        ]
+    ajustar_tipos(form, request.user)
 
     if request.method == "POST" and form.is_valid():
         oportunidade = form.save(commit=False)
@@ -340,7 +393,9 @@ def tela_nova_oportunidade(request):
             messages.success(request, "Oportunidade publicada!")
         return redirect("tela_painel")
 
-    return render(request, "tela-nova-oportunidade.html", {"form": form})
+    contexto = {"form": form}
+    contexto.update(contexto_sugestao(request.user))
+    return render(request, "tela-nova-oportunidade.html", contexto)
 
 
 @login_required(login_url='login')
@@ -355,17 +410,7 @@ def editar_oportunidade(request, id):
         return redirect("tela_painel")
 
     form = OportunidadeForm(request.POST or None, instance=oportunidade)
-    if hasattr(request.user, "recrutador"):
-        form.fields["tipo"].choices = [
-            ("estagio", "Estágio"),
-        ]
-    else:
-        form.fields["tipo"].choices = [
-            ("monitoria", "Monitoria"),
-            ("ic", "Iniciação científica"),
-            ("equipe", "Equipe de competição"),
-            ("liga", "Liga acadêmica"),
-        ]
+    ajustar_tipos(form, request.user)
 
     rascunho_antes = oportunidade.rascunho
     if request.method == "POST" and form.is_valid():
@@ -380,10 +425,60 @@ def editar_oportunidade(request, id):
             messages.success(request, "Oportunidade atualizada!")
         return redirect("tela_painel")
 
-    return render(request, "tela-nova-oportunidade.html", {
-        "form": form,
-        "edicao": True,
-    })
+    contexto = {"form": form, "edicao": True}
+    contexto.update(contexto_sugestao(request.user))
+    return render(request, "tela-nova-oportunidade.html", contexto)
+
+
+@login_required(login_url='login')
+@require_POST
+def sugerir_tipo(request):
+    if instituicao_do_usuario(request.user) is None:
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
+    if not conta_verificada(request.user):
+        messages.error(request, "Sua conta ainda está em análise pela equipe do NEXO.")
+        return redirect("tela_painel")
+    form = SugerirTipoForm(request.POST)
+    if form.is_valid():
+        TipoOportunidade.objects.create(nome=form.cleaned_data["nome"], sugerido_por=request.user)
+        messages.success(request, "Sugestão enviada. O tipo aparece em \"Outro tipo\" depois que o admin aprovar.")
+    else:
+        # mostra o erro do campo nome (ex.: tipo repetido)
+        for erro in form.errors.get("nome", []):
+            messages.error(request, erro)
+    # volta para a tela de onde veio (publicar ou editar)
+    voltar = request.META.get("HTTP_REFERER", "")
+    if voltar and url_has_allowed_host_and_scheme(voltar, allowed_hosts={request.get_host()}):
+        return redirect(voltar)
+    return redirect("tela_nova_oportunidade")
+
+
+@login_required
+@require_POST
+def aprovar_tipo(request, id):
+    if not request.user.is_staff:
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
+    tipo = get_object_or_404(TipoOportunidade, id=id)
+    tipo.aprovado = True
+    tipo.save()
+    messages.success(request, "Tipo \"" + tipo.nome + "\" aprovado.")
+    return redirect("tela_admin")
+
+
+@login_required
+@require_POST
+def recusar_tipo(request, id):
+    if not request.user.is_staff:
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
+    # só recusa o que ainda está em análise: um tipo aprovado pode já estar em uso
+    tipo = get_object_or_404(TipoOportunidade, id=id, aprovado=False)
+    nome = tipo.nome
+    tipo.delete()
+    messages.success(request, "Sugestão \"" + nome + "\" recusada.")
+    return redirect("tela_admin")
 
 
 @login_required(login_url='login')
@@ -431,6 +526,10 @@ def excluir_oportunidade(request, id):
     if oportunidade.instituicao_id != instituicao.id:
         messages.error(request, "Você não tem permissão para excluir essa oportunidade.")
         return redirect("tela_painel_encerradas")
+    # excluir apagaria as candidaturas junto, e elas sumiriam do histórico dos alunos
+    if oportunidade.candidatura_set.exists():
+        messages.error(request, "Essa oportunidade tem candidaturas, então não pode ser excluída. Ela fica encerrada para guardar o histórico dos alunos.")
+        return redirect("tela_painel_encerradas")
 
     oportunidade.delete()
     messages.success(request, "Oportunidade excluída.")
@@ -456,7 +555,11 @@ def minha_oportunidade_candidaturas_ativas(request):
         "favoritos": favoritos,
     })
 
+@login_required(login_url='login')
 def liga_academica(request):
+    bloqueio = tela_so_de_aluno(request)
+    if bloqueio:
+        return bloqueio
     oportunidades = oportunidades_para_aluno(request.user).filter(tipo="liga")
     return render(request, "tela-liga-academica.html", {"oportunidades": oportunidades, "ids_favoritos": ids_dos_favoritos(request)})
     
@@ -516,10 +619,17 @@ def cadastro_representante(request):
         email = dados["email"].strip().lower()
         with transaction.atomic():
             if dados["empresa"] == "outro":
+                # faculdade não pertence a outra universidade, então ali fica vazio
+                universidade = dados["universidade_nova_instituicao"]
+                if dados["tipo_nova_instituicao"] == "faculdade":
+                    universidade = None
                 instituicao, _ = Instituicao.objects.get_or_create(
                     tipo=dados["tipo_nova_instituicao"],
                     nome=dados["nova_instituicao"].strip(),
-                    defaults={"sede": dados["sede_nova_instituicao"].strip()},
+                    defaults={
+                        "sede": dados["sede_nova_instituicao"].strip(),
+                        "universidade": universidade,
+                    },
                 )
             else:
                 instituicao = Instituicao.objects.get(pk=dados["empresa"])
@@ -547,12 +657,52 @@ def tela_banco_talentos(request):
     if not (hasattr(request.user, "recrutador") or hasattr(request.user, "representante")):
         messages.error(request, "Você não tem acesso a essa página.")
         return redirect("inicio")
-    candidatos = Aluno.objects.order_by("-cr")
+    todos = alunos_do_banco_de_talentos(request.user)
+    candidatos = todos
+
+    # os filtros chegam pela URL (GET), igual à tela de candidaturas recebidas
+    nome = request.GET.get("nome", "").strip()
+    universidade = request.GET.get("universidade", "")
+    curso = request.GET.get("curso", "")
+    periodo = request.GET.get("periodo", "")
+    cr = request.GET.get("cr", "").replace(",", ".")
+
+    # o que não é número é ignorado, para não dar erro 500
+    if not universidade.isdigit():
+        universidade = ""
+    if not curso.isdigit():
+        curso = ""
+    if not periodo.isdigit():
+        periodo = ""
+
+    if nome:
+        # procura no nome e no texto do currículo (onde ficam as habilidades)
+        candidatos = candidatos.filter(Q(user__first_name__icontains=nome) | Q(curriculo__icontains=nome))
+    if universidade:
+        candidatos = candidatos.filter(instituicao__id=universidade)
+    if curso:
+        candidatos = candidatos.filter(curso__id=curso)
+    if periodo:
+        candidatos = candidatos.filter(periodo__gte=periodo)
+    if cr:
+        try:
+            candidatos = candidatos.filter(cr__gte=float(cr))
+        except ValueError:
+            cr = ""
 
     context = {
-        "instituicao": "Visagio",
-        "iniciais": "CD",
-        "candidatos": candidatos,
+        "candidatos": candidatos.order_by("-cr"),
+        # opções dos selects: só universidades e cursos que existem entre os alunos do banco
+        "universidades": Instituicao.objects.filter(aluno__in=todos).distinct().order_by("nome"),
+        "cursos": Curso.objects.filter(aluno__in=todos).distinct().order_by("nome"),
+        "periodos": range(1, 13),
+        "filtro": {
+            "nome": nome,
+            "universidade": universidade,
+            "curso": curso,
+            "periodo": periodo,
+            "cr": cr,
+        },
     }
 
     return render(request, "tela-banco-talentos.html", context)
@@ -624,6 +774,17 @@ def tela_candidaturas_recebidas(request):
     cr = request.GET.get("cr", "").replace(",", ".")
     oportunidade = request.GET.get("oportunidade", "")
     status = request.GET.get("status", "")
+
+    # universidade, curso, período e oportunidade têm que ser número.
+    # Se vier texto pela URL (ex.: ?periodo=abc), o filtro é ignorado em vez de dar erro 500.
+    if not universidade.isdigit():
+        universidade = ""
+    if not curso.isdigit():
+        curso = ""
+    if not periodo.isdigit():
+        periodo = ""
+    if not oportunidade.isdigit():
+        oportunidade = ""
 
     if nome:
         candidaturas = candidaturas.filter(aluno__user__first_name__icontains=nome)
@@ -704,6 +865,8 @@ def tela_admin(request):
 
     context = {
         "contas": contas,
+        "tipos_em_analise": TipoOportunidade.objects.filter(aprovado=False).order_by("data"),
+        "tipos_aprovados": TipoOportunidade.objects.filter(aprovado=True).order_by("nome"),
     }
 
     return render(request, "tela-admin.html", context)
@@ -729,8 +892,60 @@ def aprovar_conta(request, user_id):
     return redirect("tela_admin")
 
 
+def conta_de_quem_publica(usuario):
+    """Recrutador ou representante ligado a esse usuário, ou None."""
+    if hasattr(usuario, "recrutador"):
+        return usuario.recrutador
+    if hasattr(usuario, "representante"):
+        return usuario.representante
+    return None
+
+
+@login_required
+@require_POST
+def revogar_conta(request, user_id):
+    if not request.user.is_staff:
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
+    usuario = get_object_or_404(User, pk=user_id)
+    conta = conta_de_quem_publica(usuario)
+    if conta is None:
+        messages.error(request, "Essa conta não é de recrutador nem de representante.")
+        return redirect("tela_admin")
+    # a conta volta para "em análise": entra no site, mas não publica até ser aprovada de novo
+    conta.verificado = False
+    conta.save()
+    messages.success(request, "Aprovação de " + usuario.first_name + " retirada. A conta voltou para análise.")
+    return redirect("tela_admin")
+
+
+@login_required
+@require_POST
+def recusar_conta(request, user_id):
+    if not request.user.is_staff:
+        messages.error(request, "Você não tem acesso a essa página.")
+        return redirect("inicio")
+    usuario = get_object_or_404(User, pk=user_id)
+    conta = conta_de_quem_publica(usuario)
+    if conta is None:
+        messages.error(request, "Essa conta não é de recrutador nem de representante.")
+        return redirect("tela_admin")
+    # só recusa conta que ainda está em análise; conta aprovada se revoga primeiro
+    if conta.verificado:
+        messages.error(request, "Essa conta já foi aprovada. Retire a aprovação antes de recusar.")
+        return redirect("tela_admin")
+    nome = usuario.first_name
+    # apagar o User apaga junto o Recrutador ou Representante (on_delete=CASCADE)
+    usuario.delete()
+    messages.success(request, "Cadastro de " + nome + " recusado e apagado.")
+    return redirect("tela_admin")
+
+
 def entrar(request):
     sair(request)
+    # "next" é a página que a pessoa tentou abrir antes de fazer login (ex.: link de uma vaga no WhatsApp).
+    # O @login_required coloca ele na URL do login, e o form manda de volta num campo escondido.
+    proxima = request.POST.get("next") or request.GET.get("next", "")
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -739,6 +954,9 @@ def entrar(request):
             usuario = authenticate(request, username=email, password=senha)
             if usuario is not None:
                 login(request, usuario)
+                # só volta se o endereço for do próprio site, para ninguém usar o login para mandar a pessoa a outro site
+                if proxima and url_has_allowed_host_and_scheme(proxima, allowed_hosts={request.get_host()}):
+                    return redirect(proxima)
                 if usuario.is_staff:
                     return redirect("tela_admin")
                 if hasattr(usuario, "aluno"):
@@ -750,7 +968,7 @@ def entrar(request):
     else:
         form = LoginForm()
 
-    return render(request, "tela-login.html", {"form": form})
+    return render(request, "tela-login.html", {"form": form, "proxima": proxima})
 
 
 @login_required(login_url='login')
@@ -773,6 +991,9 @@ def sair(request):
 
 @login_required(login_url='login')
 def busca(request):
+    bloqueio = tela_so_de_aluno(request)
+    if bloqueio:
+        return bloqueio
     q = request.GET.get("q", "")
     ordem = request.GET.get("ordem", "encerrando")
     oportunidades = oportunidades_para_aluno(request.user)
@@ -782,6 +1003,7 @@ def busca(request):
             Q(titulo__icontains=q)
             | Q(instituicao__nome__icontains=q)
             | Q(descricao__icontains=q)
+            | Q(tipo_novo__nome__icontains=q)
         )
 
     tipos = request.GET.getlist("tipo")
@@ -852,8 +1074,13 @@ def tela_oportunidade(request, id):
     favoritada = Favorito.objects.filter(aluno__user=request.user, oportunidade=oportunidade).exists()
     # o aluno ainda não chegou no período mínimo da vaga
     periodo_insuficiente = hasattr(request.user, "aluno") and request.user.aluno.periodo < oportunidade.periodo_minimo
+    # só aluno vê os botões de candidatar e salvar; quem publicou vê o botão de editar
+    e_aluno = hasattr(request.user, "aluno")
+    e_dono = oportunidade.instituicao == instituicao_do_usuario(request.user)
     return render(request, "tela-oportunidade.html", {
         "oportunidade": oportunidade,
+        "e_aluno": e_aluno,
+        "e_dono": e_dono,
         "encerrada": encerrada,
         "periodo_insuficiente": periodo_insuficiente,
         "ja_candidatou": ja_candidatou,
@@ -888,10 +1115,18 @@ def favoritar(request, oportunidade_id):
         oportunidade = get_object_or_404(Oportunidade, id=oportunidade_id)
         favorito = Favorito.objects.filter(aluno=request.user.aluno, oportunidade=oportunidade).first()
         if favorito:
+            # tirar dos favoritos sempre pode
             favorito.delete()
-        else:
+        elif pode_ver_oportunidade(request.user, oportunidade):
             Favorito.objects.create(aluno=request.user.aluno, oportunidade=oportunidade)
-    return redirect(request.META.get("HTTP_REFERER", "inicio"))
+        else:
+            # rascunho ou vaga de outra universidade: o aluno não vê, então não favorita
+            messages.error(request, "Essa oportunidade não está disponível para você.")
+    # volta para a página de onde veio, desde que seja do próprio site
+    voltar = request.META.get("HTTP_REFERER", "")
+    if voltar and url_has_allowed_host_and_scheme(voltar, allowed_hosts={request.get_host()}):
+        return redirect(voltar)
+    return redirect("inicio")
 
 
 @login_required(login_url='login')

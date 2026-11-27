@@ -37,21 +37,41 @@
 
                 {% if conta.verificada %}
 
-                    <span class="etiqueta-verde">
-                        <img
-                            class="ic"
-                            src="{% static 'imagens/icone-circle-check-branco.svg' %}"
-                            alt=""
-                        >
-                        Verificada
-                    </span>
+                    <div class="acoes">
+                        <span class="etiqueta-verde">
+                            <img
+                                class="ic"
+                                src="{% static 'imagens/icone-circle-check-branco.svg' %}"
+                                alt=""
+                            >
+                            Verificada
+                        </span>
+
+                        <form method="POST" action="{% url 'revogar_conta' conta.user_id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="botao-contorno"
+                                    onclick="return confirm('Retirar a aprovação desta conta? Ela não vai poder publicar até ser aprovada de novo.')">
+                                Retirar aprovação
+                            </button>
+                        </form>
+                    </div>
 
                 {% else %}
 
-                    <form method="POST" action="{% url 'aprovar_conta' conta.user_id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="botao">Aprovar</button>
-                    </form>
+                    <div class="acoes">
+                        <form method="POST" action="{% url 'aprovar_conta' conta.user_id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="botao">Aprovar</button>
+                        </form>
+
+                        <form method="POST" action="{% url 'recusar_conta' conta.user_id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="botao-contorno"
+                                    onclick="return confirm('Recusar este cadastro? A conta será apagada e não dá para desfazer.')">
+                                Recusar
+                            </button>
+                        </form>
+                    </div>
 
                 {% endif %}
 
@@ -66,6 +86,52 @@
             </div>
 
         {% endfor %}
+
+        <h2>Tipos de oportunidade sugeridos</h2>
+
+        <p class="cinza">
+            Recrutadores e representantes sugerem tipos novos. Depois de aprovado,
+            o tipo aparece em "Outro tipo" na hora de publicar.
+        </p>
+
+        {% for tipo in tipos_em_analise %}
+            <div class="caixa linha">
+                <div>
+                    <b>{{ tipo.nome }}</b>
+                    <p class="cinza">
+                        Sugerido por {{ tipo.sugerido_por.first_name|default:"conta apagada" }}
+                        em {{ tipo.data|date:"d/m/Y" }}
+                    </p>
+                </div>
+
+                <div class="acoes">
+                    <form method="POST" action="{% url 'aprovar_tipo' tipo.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="botao">Aprovar</button>
+                    </form>
+
+                    <form method="POST" action="{% url 'recusar_tipo' tipo.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="botao-contorno"
+                                onclick="return confirm('Recusar esta sugestão de tipo?')">
+                            Recusar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <div class="caixa">
+                <p class="cinza">Nenhuma sugestão de tipo esperando aprovação.</p>
+            </div>
+        {% endfor %}
+
+        {% if tipos_aprovados %}
+        <p class="cinza">
+            Já aprovados:
+            {% for tipo in tipos_aprovados %}{{ tipo.nome }}{% if not forloop.last %}, {% endif %}{% endfor %}.
+            Para corrigir o nome de um tipo aprovado, use o Admin do Django.
+        </p>
+        {% endif %}
 
     </div>
 {% endblock %}

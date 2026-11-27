@@ -19,6 +19,7 @@
         
         <form class="caixa" method="POST">
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ proxima }}">
             {{ form.non_field_errors }}
             <label for="{{ form.email.id_for_label }}">E-mail</label>
             {{ form.email }}

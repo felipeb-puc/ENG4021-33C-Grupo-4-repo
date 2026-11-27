@@ -8,6 +8,7 @@ from .models import (
     Oportunidade,
     Candidatura,
     Favorito,
+    TipoOportunidade,
 )
 
 
@@ -43,3 +44,4 @@ admin.site.register(Representante)
 admin.site.register(Curso)
 admin.site.register(Oportunidade, OportunidadeAdmin)
 admin.site.register(Favorito)
+admin.site.register(TipoOportunidade)

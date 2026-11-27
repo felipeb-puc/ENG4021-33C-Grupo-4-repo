@@ -30,12 +30,12 @@
             <div class="caixa">
 
                 <div class="opcao">
-                    <input type="checkbox" id="talentos" name="talentos" checked>
-                    <label for="talentos">Aparecer no banco de talentos</label>
+                    {{ form.aparecer_em_buscas }}
+                    <label for="{{ form.aparecer_em_buscas.id_for_label }}">Aparecer no banco de talentos</label>
                 </div>
 
                 <p class="cinza">
-                    Ligado: recrutadores de empresas e representantes da PUC-Rio
+                    Ligado: recrutadores de empresas e representantes da {{ aluno.instituicao.nome }}
                     podem encontrar seu currículo em buscas. Desligado: só vê seu
                     currículo quem recebeu uma candidatura sua.
                 </p>

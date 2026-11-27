@@ -1,3 +1,13 @@
 .caixa p {
   margin: 4px 0px 0px 0px;
 }
+
+.acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+h2 {
+  margin-top: 32px;
+}

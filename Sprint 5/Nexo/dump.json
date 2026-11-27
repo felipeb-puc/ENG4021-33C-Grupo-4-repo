@@ -3,7 +3,7 @@
   "model": "auth.user",
   "pk": 1,
   "fields": {
-    "password": "pbkdf2_sha256$1000000$WgJZvkMxeyXPryIQ50USpk$NbfdgIY3dK0VXoHGBtQ22cSGkz6dvNNVz/0Y2YEciMQ=",
+    "password": "pbkdf2_sha256$1000000$5yazaN59HMbG2ayuwGMc4F$pOuxwQoB/0IayinqwUDmq5TghXhmVDXtXeHyVnV9MW4=",
     "last_login": null,
     "is_superuser": true,
     "username": "admin@nexo.teste",
@@ -12,7 +12,7 @@
     "email": "admin@nexo.teste",
     "is_staff": true,
     "is_active": true,
-    "date_joined": "2026-11-05T21:19:05.804Z",
+    "date_joined": "2026-11-27T19:13:15.305Z",
     "groups": [],
     "user_permissions": []
   }
@@ -21,7 +21,7 @@
   "model": "auth.user",
   "pk": 2,
   "fields": {
-    "password": "pbkdf2_sha256$1000000$uLoP6sWrm4wbC9plCiVKk1$uH6x3UCU1f5bN+xXXA1Pi7kT3oGA3x6Hnczz33HfkUI=",
+    "password": "pbkdf2_sha256$1000000$VBS2WUHx4XoSprgArvWd5q$CO2cIzLT+pvqzpmDklvOrm8OKxGm5wcqIOfZvfzzmKE=",
     "last_login": null,
     "is_superuser": false,
     "username": "miguel@nexo.teste",
@@ -30,7 +30,7 @@
     "email": "miguel@nexo.teste",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2026-11-05T21:19:06.015Z",
+    "date_joined": "2026-11-27T19:13:15.479Z",
     "groups": [],
     "user_permissions": []
   }
@@ -39,7 +39,7 @@
   "model": "auth.user",
   "pk": 3,
   "fields": {
-    "password": "pbkdf2_sha256$1000000$GK4QdTuGIEpMcvYuWnnriA$Gri7svddesm/QUN/IwdmC8WX+bCMnCDi70jsJYiwkhs=",
+    "password": "pbkdf2_sha256$1000000$Fue24rJpQ9A0lDSLwWex6A$FPCy3CWzQszLolwVavC3akKST6fK3Dxbbbx5NVdfCgs=",
     "last_login": null,
     "is_superuser": false,
     "username": "pedro@nexo.teste",
@@ -48,7 +48,7 @@
     "email": "pedro@nexo.teste",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2026-11-05T21:19:06.173Z",
+    "date_joined": "2026-11-27T19:13:15.606Z",
     "groups": [],
     "user_permissions": []
   }
@@ -57,7 +57,7 @@
   "model": "auth.user",
   "pk": 4,
   "fields": {
-    "password": "pbkdf2_sha256$1000000$Ye1dIYGLfhtJkrEbDZDelw$BwTYw8DbtwwqGyB/LCyjwrcalZJBeLC41UAORK2NIU0=",
+    "password": "pbkdf2_sha256$1000000$qIqtGUGlJXxbbGK5n4nGji$jl+yRyHoL6TicvcGadYN3zjpD1cDF4E9+PnvxDQT4aE=",
     "last_login": null,
     "is_superuser": false,
     "username": "daniel@nexo.teste",
@@ -66,7 +66,7 @@
     "email": "daniel@nexo.teste",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2026-11-05T21:19:06.328Z",
+    "date_joined": "2026-11-27T19:13:15.765Z",
     "groups": [],
     "user_permissions": []
   }
@@ -75,7 +75,7 @@
   "model": "auth.user",
   "pk": 5,
   "fields": {
-    "password": "pbkdf2_sha256$1000000$VlwbOag9GScDyWwQ6wHbIn$FpgPjmkTObd0UjcfdKKwJ6bQCuGZ1l6mugui/R0vRaE=",
+    "password": "pbkdf2_sha256$1000000$WOMc9CuskvMzOd2dGhR5rv$yuZH0a73aG7WbgWRbj+6Kxo2jKA7ooojb4wIdM2I4RI=",
     "last_login": null,
     "is_superuser": false,
     "username": "ana@nexo.teste",
@@ -84,7 +84,7 @@
     "email": "ana@nexo.teste",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2026-11-05T21:19:06.484Z",
+    "date_joined": "2026-11-27T19:13:15.933Z",
     "groups": [],
     "user_permissions": []
   }
@@ -93,7 +93,7 @@
   "model": "auth.user",
   "pk": 6,
   "fields": {
-    "password": "pbkdf2_sha256$1000000$8ZywT76KacJQ0QhgKP5M64$hXJvCQ5YVFcAQdLWAQTglkVgHQV+k1wQ60f4x7fO21M=",
+    "password": "pbkdf2_sha256$1000000$bFjMDiHeWKw6VfO5ZzfSXt$+MxQqp1L524NK3Qhj2fmnmAwei8pJaIH0ecz9ZqXunM=",
     "last_login": null,
     "is_superuser": false,
     "username": "beatriz@nexo.teste",
@@ -102,7 +102,7 @@
     "email": "beatriz@nexo.teste",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2026-11-05T21:19:06.640Z",
+    "date_joined": "2026-11-27T19:13:16.074Z",
     "groups": [],
     "user_permissions": []
   }
@@ -111,7 +111,7 @@
   "model": "auth.user",
   "pk": 7,
   "fields": {
-    "password": "pbkdf2_sha256$1000000$TtfbzHOEb50H7X2Yg6d3El$Jdrau7jkS3T/t5UWW8x2q2FM8MUclehybEwRYZ8uZ3g=",
+    "password": "pbkdf2_sha256$1000000$ihHuXLhunf3b6cbZ4yl7QU$WtgzPg2NBpal+YoBGQIU6TtiFE4fdcL7YC6Uv8gAoqo=",
     "last_login": null,
     "is_superuser": false,
     "username": "carla@nexo.teste",
@@ -120,7 +120,7 @@
     "email": "carla@nexo.teste",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2026-11-05T21:19:06.797Z",
+    "date_joined": "2026-11-27T19:13:16.243Z",
     "groups": [],
     "user_permissions": []
   }
@@ -129,7 +129,7 @@
   "model": "auth.user",
   "pk": 8,
   "fields": {
-    "password": "pbkdf2_sha256$1000000$1baF4tEmP9IFsVtjZvLJxA$xoZLt56V1zVRztZEfUhSrtzsqWFoHJjJtGlr740FXGo=",
+    "password": "pbkdf2_sha256$1000000$KK9zP8rkIICKQ5JYbKRcLB$+t5qXrA1LimFFdTAG4pfrBSlXQoeA17ViSy1hdgi9m8=",
     "last_login": null,
     "is_superuser": false,
     "username": "rafael@nexo.teste",
@@ -138,7 +138,7 @@
     "email": "rafael@nexo.teste",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2026-11-05T21:19:06.961Z",
+    "date_joined": "2026-11-27T19:13:16.457Z",
     "groups": [],
     "user_permissions": []
   }
@@ -147,7 +147,7 @@
   "model": "auth.user",
   "pk": 9,
   "fields": {
-    "password": "pbkdf2_sha256$1000000$g0wqmkbJmoGoPMFqAhwBDE$qV1fn0Rf2kyB7xNr035/rI5Ha9BnEC959KYzjLtqOo4=",
+    "password": "pbkdf2_sha256$1000000$2h2AYqxpWbA1p38bjYR2WJ$ngCTJjjoSnfdecF3rr9s6VyYcW3TvPRDKIoD0bDuH14=",
     "last_login": null,
     "is_superuser": false,
     "username": "lucas@nexo.teste",
@@ -156,7 +156,7 @@
     "email": "lucas@nexo.teste",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2026-11-05T21:19:07.117Z",
+    "date_joined": "2026-11-27T19:13:16.615Z",
     "groups": [],
     "user_permissions": []
   }
@@ -165,7 +165,7 @@
   "model": "auth.user",
   "pk": 10,
   "fields": {
-    "password": "pbkdf2_sha256$1000000$6ICSH2BojG9dzuEHKmYwnf$vbKvsR1CyHDbJ6XRhKMGOqnZlwGZie9hswpeUFLtFos=",
+    "password": "pbkdf2_sha256$1000000$Dbf7oSMIWwDL2MZ7S4qPRs$ASk4oFwX8lLutVUa8emlf60k/KqwJdsQhsj4iy4gzxE=",
     "last_login": null,
     "is_superuser": false,
     "username": "marina@nexo.teste",
@@ -174,7 +174,7 @@
     "email": "marina@nexo.teste",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2026-11-05T21:19:07.269Z",
+    "date_joined": "2026-11-27T19:13:16.746Z",
     "groups": [],
     "user_permissions": []
   }
@@ -185,7 +185,10 @@
   "fields": {
     "tipo": "faculdade",
     "nome": "PUC-Rio",
-    "sede": "Gávea, Rio de Janeiro"
+    "sede": "Gávea, Rio de Janeiro",
+    "descricao": "",
+    "site": "",
+    "universidade": null
   }
 },
 {
@@ -194,7 +197,10 @@
   "fields": {
     "tipo": "faculdade",
     "nome": "UFRJ",
-    "sede": "Ilha do Fundão, Rio de Janeiro"
+    "sede": "Ilha do Fundão, Rio de Janeiro",
+    "descricao": "",
+    "site": "",
+    "universidade": null
   }
 },
 {
@@ -203,7 +209,10 @@
   "fields": {
     "tipo": "faculdade",
     "nome": "UERJ",
-    "sede": "Maracanã, Rio de Janeiro"
+    "sede": "Maracanã, Rio de Janeiro",
+    "descricao": "",
+    "site": "",
+    "universidade": null
   }
 },
 {
@@ -212,7 +221,10 @@
   "fields": {
     "tipo": "faculdade",
     "nome": "UFF",
-    "sede": "Niterói"
+    "sede": "Niterói",
+    "descricao": "",
+    "site": "",
+    "universidade": null
   }
 },
 {
@@ -221,7 +233,10 @@
   "fields": {
     "tipo": "empresa",
     "nome": "Exacta",
-    "sede": "Gávea, Rio de Janeiro"
+    "sede": "Gávea, Rio de Janeiro",
+    "descricao": "",
+    "site": "",
+    "universidade": null
   }
 },
 {
@@ -230,7 +245,10 @@
   "fields": {
     "tipo": "empresa",
     "nome": "Petrobras",
-    "sede": "Centro, Rio de Janeiro"
+    "sede": "Centro, Rio de Janeiro",
+    "descricao": "",
+    "site": "",
+    "universidade": null
   }
 },
 {
@@ -239,7 +257,10 @@
   "fields": {
     "tipo": "empresa",
     "nome": "Visagio",
-    "sede": "Botafogo, Rio de Janeiro"
+    "sede": "Botafogo, Rio de Janeiro",
+    "descricao": "",
+    "site": "",
+    "universidade": null
   }
 },
 {
@@ -249,6 +270,8 @@
     "tipo": "liga",
     "nome": "Liga de Mercado Financeiro",
     "sede": "PUC-Rio",
+    "descricao": "",
+    "site": "",
     "universidade": 1
   }
 },
@@ -259,6 +282,8 @@
     "tipo": "liga",
     "nome": "Liga de Empreendedorismo",
     "sede": "UFRJ",
+    "descricao": "",
+    "site": "",
     "universidade": 2
   }
 },
@@ -269,6 +294,8 @@
     "tipo": "equipe",
     "nome": "Pegasus",
     "sede": "PUC-Rio",
+    "descricao": "",
+    "site": "",
     "universidade": 1
   }
 },
@@ -279,6 +306,8 @@
     "tipo": "equipe",
     "nome": "Baja",
     "sede": "PUC-Rio",
+    "descricao": "",
+    "site": "",
     "universidade": 1
   }
 },
@@ -341,7 +370,8 @@
     "matricula": "2616767",
     "periodo": 2,
     "curriculo": "Técnico de Informática",
-    "cr": "7.8"
+    "cr": "7.8",
+    "aparecer_em_buscas": true
   }
 },
 {
@@ -354,7 +384,8 @@
     "matricula": "2520408",
     "periodo": 4,
     "curriculo": "6 meses de Pegasus",
-    "cr": "8.4"
+    "cr": "8.4",
+    "aparecer_em_buscas": true
   }
 },
 {
@@ -367,7 +398,8 @@
     "matricula": "2310767",
     "periodo": 8,
     "curriculo": "1 ano de estágio na Apple Developer Academy",
-    "cr": "9.1"
+    "cr": "9.1",
+    "aparecer_em_buscas": true
   }
 },
 {
@@ -380,7 +412,8 @@
     "matricula": "2420067",
     "periodo": 5,
     "curriculo": "1 ano na Liga de Mercado Financeiro",
-    "cr": "8.0"
+    "cr": "8.0",
+    "aparecer_em_buscas": true
   }
 },
 {
@@ -393,7 +426,8 @@
     "matricula": "2611234",
     "periodo": 3,
     "curriculo": "Monitora de Programação I. Projetos pessoais em Python.",
-    "cr": "8.7"
+    "cr": "8.7",
+    "aparecer_em_buscas": true
   }
 },
 {
@@ -412,7 +446,8 @@
   "fields": {
     "user": 8,
     "empresa": 6,
-    "cargo": "Coordenador de Estágios"
+    "cargo": "Coordenador de Estágios",
+    "verificado": false
   }
 },
 {
@@ -436,20 +471,34 @@
   }
 },
 {
+  "model": "nexoapp.tipooportunidade",
+  "pk": 1,
+  "fields": {
+    "nome": "Programa de trainee",
+    "aprovado": false,
+    "sugerido_por": 7,
+    "data": "2026-11-27T19:13:16.959Z"
+  }
+},
+{
   "model": "nexoapp.oportunidade",
   "pk": 1,
   "fields": {
     "instituicao": 1,
     "curso": 1,
     "tipo": "monitoria",
+    "tipo_novo": null,
     "titulo": "Monitoria de ENG4021",
     "descricao": "Fazer a revisão das sprints",
     "requisitos": "Ter sido aprovado em ENG4021",
     "carga_horaria": 2,
     "remuneracao": "200.00",
-    "prazo_inscricao": "2026-11-18",
+    "prazo_inscricao": "2026-12-23",
     "modalidade": "presencial",
-    "periodo_minimo": 3
+    "periodo_minimo": 3,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -459,14 +508,18 @@
     "instituicao": 1,
     "curso": 1,
     "tipo": "monitoria",
+    "tipo_novo": null,
     "titulo": "Monitoria de Cálculo I",
     "descricao": "Tirar dúvidas dos alunos em plantões semanais.",
     "requisitos": "Ter sido aprovado em Cálculo I com nota igual ou maior que 8.",
     "carga_horaria": 8,
     "remuneracao": "600.00",
-    "prazo_inscricao": "2026-11-20",
+    "prazo_inscricao": "2026-12-25",
     "modalidade": "presencial",
-    "periodo_minimo": 3
+    "periodo_minimo": 3,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -476,14 +529,18 @@
     "instituicao": 2,
     "curso": 6,
     "tipo": "monitoria",
+    "tipo_novo": null,
     "titulo": "Monitoria de Introdução à Economia",
     "descricao": "Apoiar o professor nas aulas práticas e organizar os plantões antes das provas.",
     "requisitos": "Ter sido aprovado em Introdução à Economia.",
     "carga_horaria": 6,
     "remuneracao": "400.00",
-    "prazo_inscricao": "2026-11-27",
+    "prazo_inscricao": "2027-01-01",
     "modalidade": "presencial",
-    "periodo_minimo": 3
+    "periodo_minimo": 3,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -493,14 +550,18 @@
     "instituicao": 4,
     "curso": 5,
     "tipo": "monitoria",
+    "tipo_novo": null,
     "titulo": "Monitoria de Programação I",
     "descricao": "Acompanhar os laboratórios de Python e ajudar os alunos com os exercícios da semana.",
     "requisitos": "Ter sido aprovado em Programação I.",
     "carga_horaria": 10,
     "remuneracao": "500.00",
-    "prazo_inscricao": "2026-10-20",
+    "prazo_inscricao": "2026-11-03",
     "modalidade": "hibrido",
-    "periodo_minimo": 2
+    "periodo_minimo": 2,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -510,14 +571,18 @@
     "instituicao": 1,
     "curso": 5,
     "tipo": "ic",
+    "tipo_novo": null,
     "titulo": "IC em Visão Computacional",
     "descricao": "Pesquisa com visão computacional para inspeção de equipamentos.",
     "requisitos": "Saber programar em Python. Ter cursado Álgebra Linear.",
     "carga_horaria": 12,
     "remuneracao": "700.00",
-    "prazo_inscricao": "2026-12-05",
+    "prazo_inscricao": "2027-01-09",
     "modalidade": "presencial",
-    "periodo_minimo": 3
+    "periodo_minimo": 3,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -527,14 +592,18 @@
     "instituicao": 3,
     "curso": 2,
     "tipo": "ic",
+    "tipo_novo": null,
     "titulo": "IC em Direito Digital",
     "descricao": "Pesquisa sobre proteção de dados pessoais e a aplicação da LGPD em plataformas digitais.",
     "requisitos": "Interesse em direito digital e disponibilidade para reuniões quinzenais.",
     "carga_horaria": 10,
     "remuneracao": "700.00",
-    "prazo_inscricao": "2026-11-30",
+    "prazo_inscricao": "2027-01-04",
     "modalidade": "hibrido",
-    "periodo_minimo": 4
+    "periodo_minimo": 4,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -544,14 +613,18 @@
     "instituicao": 2,
     "curso": 4,
     "tipo": "ic",
+    "tipo_novo": null,
     "titulo": "IC em Psicologia do Desenvolvimento",
     "descricao": "Ajudar na coleta e organização de dados de uma pesquisa com crianças em idade escolar.",
     "requisitos": "Ter cursado Psicologia do Desenvolvimento I. Vaga voluntária.",
     "carga_horaria": 12,
     "remuneracao": "0.00",
-    "prazo_inscricao": "2026-12-12",
+    "prazo_inscricao": "2027-01-16",
     "modalidade": "presencial",
-    "periodo_minimo": 2
+    "periodo_minimo": 2,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -561,14 +634,18 @@
     "instituicao": 4,
     "curso": 1,
     "tipo": "ic",
+    "tipo_novo": null,
     "titulo": "IC em Energia Solar",
     "descricao": "Testar a eficiência de painéis solares em diferentes condições de temperatura no laboratório.",
     "requisitos": "Ter cursado Física II.",
     "carga_horaria": 20,
     "remuneracao": "700.00",
-    "prazo_inscricao": "2026-10-15",
+    "prazo_inscricao": "2026-10-29",
     "modalidade": "presencial",
-    "periodo_minimo": 4
+    "periodo_minimo": 4,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -578,14 +655,18 @@
     "instituicao": 5,
     "curso": 1,
     "tipo": "estagio",
+    "tipo_novo": null,
     "titulo": "Exacta - vaga para estagio",
     "descricao": "Laboratório de transformação digital do Departamento de Informática da PUC-Rio.",
     "requisitos": "Ter um conhecimento prévio da area de atuação do projeto",
     "carga_horaria": 20,
     "remuneracao": "1000.00",
-    "prazo_inscricao": "2026-10-29",
+    "prazo_inscricao": "2026-11-12",
     "modalidade": "presencial",
-    "periodo_minimo": 3
+    "periodo_minimo": 3,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -595,14 +676,18 @@
     "instituicao": 6,
     "curso": 3,
     "tipo": "estagio",
+    "tipo_novo": null,
     "titulo": "Estagio Nivel iniciante na Petrobras",
     "descricao": "Vagas para a área de back-end",
     "requisitos": "Estar entre o 3º e o 7º período.",
     "carga_horaria": 20,
     "remuneracao": "1800.00",
-    "prazo_inscricao": "2026-12-18",
+    "prazo_inscricao": "2027-01-22",
     "modalidade": "hibrido",
-    "periodo_minimo": 3
+    "periodo_minimo": 3,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -612,14 +697,18 @@
     "instituicao": 7,
     "curso": 6,
     "tipo": "estagio",
+    "tipo_novo": null,
     "titulo": "Estágio em Análise de Dados",
     "descricao": "Montar painéis e relatórios para projetos de consultoria, trabalhando com Excel, SQL e Power BI.",
     "requisitos": "Conhecimento de Excel. SQL é um diferencial.",
     "carga_horaria": 30,
     "remuneracao": "2200.00",
-    "prazo_inscricao": "2026-12-10",
+    "prazo_inscricao": "2027-01-14",
     "modalidade": "hibrido",
-    "periodo_minimo": 5
+    "periodo_minimo": 5,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -629,14 +718,18 @@
     "instituicao": 5,
     "curso": 7,
     "tipo": "estagio",
+    "tipo_novo": null,
     "titulo": "Estágio em Design de Produto",
     "descricao": "Criar protótipos de telas e participar de testes com usuários dos projetos do laboratório.",
     "requisitos": "Saber usar Figma. Ter portfólio.",
     "carga_horaria": 20,
     "remuneracao": "1200.00",
-    "prazo_inscricao": "2026-11-25",
+    "prazo_inscricao": "2026-12-30",
     "modalidade": "remoto",
-    "periodo_minimo": 3
+    "periodo_minimo": 3,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -646,14 +739,18 @@
     "instituicao": 6,
     "curso": 2,
     "tipo": "estagio",
+    "tipo_novo": null,
     "titulo": "Estágio Jurídico",
     "descricao": "Apoiar a equipe jurídica na análise de contratos e no acompanhamento de processos.",
     "requisitos": "Estar a partir do 6º período de Direito.",
     "carga_horaria": 30,
     "remuneracao": "2000.00",
-    "prazo_inscricao": "2027-01-15",
+    "prazo_inscricao": "2027-02-19",
     "modalidade": "presencial",
-    "periodo_minimo": 6
+    "periodo_minimo": 6,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -663,14 +760,18 @@
     "instituicao": 10,
     "curso": 1,
     "tipo": "equipe",
+    "tipo_novo": null,
     "titulo": "Processo Seletivo da Pegasus",
     "descricao": "Equipe que projeta e fabrica um carro estilo fórmula para a Fórmula SAE Brasil.",
     "requisitos": "Ter comprometimento com o projeto",
     "carga_horaria": 8,
     "remuneracao": "0.00",
-    "prazo_inscricao": "2026-10-29",
+    "prazo_inscricao": "2026-11-12",
     "modalidade": "hibrido",
-    "periodo_minimo": 1
+    "periodo_minimo": 1,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -680,14 +781,18 @@
     "instituicao": 11,
     "curso": 1,
     "tipo": "equipe",
+    "tipo_novo": null,
     "titulo": "Processo Seletivo da Baja",
     "descricao": "Equipe que projeta e constrói um veículo off-road para a competição Baja SAE.",
     "requisitos": "Disponibilidade para encontros aos sábados.",
     "carga_horaria": 10,
     "remuneracao": "0.00",
-    "prazo_inscricao": "2026-11-22",
+    "prazo_inscricao": "2026-12-27",
     "modalidade": "presencial",
-    "periodo_minimo": 1
+    "periodo_minimo": 1,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -697,14 +802,18 @@
     "instituicao": 8,
     "curso": 6,
     "tipo": "liga",
+    "tipo_novo": null,
     "titulo": "Processo Seletivo da Liga",
     "descricao": "Liga que aproxima os estudantes do mercado financeiro.",
     "requisitos": "Ter habilidade de grupo e estar cursando algum curso na puc",
     "carga_horaria": 6,
     "remuneracao": "0.00",
-    "prazo_inscricao": "2026-10-29",
+    "prazo_inscricao": "2026-11-12",
     "modalidade": "hibrido",
-    "periodo_minimo": 1
+    "periodo_minimo": 1,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -714,14 +823,18 @@
     "instituicao": 8,
     "curso": 6,
     "tipo": "liga",
+    "tipo_novo": null,
     "titulo": "Liga de Mercado Financeiro: Núcleo de Research",
     "descricao": "Escrever relatórios de análise de empresas e apresentar para os membros da liga.",
     "requisitos": "Ter cursado Contabilidade ou Finanças.",
     "carga_horaria": 6,
     "remuneracao": "0.00",
-    "prazo_inscricao": "2026-12-03",
+    "prazo_inscricao": "2027-01-07",
     "modalidade": "presencial",
-    "periodo_minimo": 2
+    "periodo_minimo": 2,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -731,14 +844,18 @@
     "instituicao": 9,
     "curso": 3,
     "tipo": "liga",
+    "tipo_novo": null,
     "titulo": "Processo Seletivo da Liga de Empreendedorismo",
     "descricao": "Participar de workshops e desenvolver ideias de negócio com mentoria de empreendedores.",
     "requisitos": "Vontade de aprender e de trabalhar em grupo.",
     "carga_horaria": 4,
     "remuneracao": "0.00",
-    "prazo_inscricao": "2026-11-28",
+    "prazo_inscricao": "2027-01-02",
     "modalidade": "hibrido",
-    "periodo_minimo": 1
+    "periodo_minimo": 1,
+    "link_externo": "",
+    "rascunho": false,
+    "universidades_alvo": []
   }
 },
 {
@@ -747,7 +864,8 @@
   "fields": {
     "aluno": 1,
     "oportunidade": 1,
-    "data": "2026-11-05T21:19:07.409Z"
+    "data": "2026-11-27T19:13:16.945Z",
+    "status": "inscrita"
   }
 },
 {
@@ -756,7 +874,8 @@
   "fields": {
     "aluno": 2,
     "oportunidade": 13,
-    "data": "2026-11-05T21:19:07.410Z"
+    "data": "2026-11-27T19:13:16.947Z",
+    "status": "inscrita"
   }
 },
 {
@@ -765,7 +884,8 @@
   "fields": {
     "aluno": 3,
     "oportunidade": 11,
-    "data": "2026-11-05T21:19:07.411Z"
+    "data": "2026-11-27T19:13:16.949Z",
+    "status": "inscrita"
   }
 },
 {
@@ -774,7 +894,8 @@
   "fields": {
     "aluno": 5,
     "oportunidade": 5,
-    "data": "2026-11-05T21:19:07.412Z"
+    "data": "2026-11-27T19:13:16.951Z",
+    "status": "inscrita"
   }
 },
 {
@@ -783,7 +904,7 @@
   "fields": {
     "aluno": 1,
     "oportunidade": 9,
-    "data": "2026-11-05T21:19:07.413Z"
+    "data": "2026-11-27T19:13:16.953Z"
   }
 },
 {
@@ -792,7 +913,7 @@
   "fields": {
     "aluno": 3,
     "oportunidade": 14,
-    "data": "2026-11-05T21:19:07.414Z"
+    "data": "2026-11-27T19:13:16.955Z"
   }
 },
 {
@@ -801,7 +922,7 @@
   "fields": {
     "aluno": 4,
     "oportunidade": 6,
-    "data": "2026-11-05T21:19:07.415Z"
+    "data": "2026-11-27T19:13:16.957Z"
   }
 }
 ]

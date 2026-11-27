@@ -28,6 +28,13 @@
                 {{ form.tipo }}
                 {{ form.tipo.errors }}
 
+                {# só aparece quando o tipo escolhido é "Outro tipo" #}
+                <div id="campo-tipo-novo">
+                    <label for="{{ form.tipo_novo.id_for_label }}">{{ form.tipo_novo.label }}</label>
+                    {{ form.tipo_novo }}
+                    {{ form.tipo_novo.errors }}
+                </div>
+
                 <label for="{{ form.titulo.id_for_label }}">Título</label>
                 {{ form.titulo }}
                 {{ form.titulo.errors }}
@@ -118,5 +125,36 @@
             </div>
 
         </form>
+
+        {# form separado: um form não pode ficar dentro do outro #}
+        <div class="caixa" id="sugerir-tipo">
+            <h2>Não achou o tipo?</h2>
+            <p class="cinza">Sugira um tipo novo. Ele aparece em "Outro tipo" para todo mundo depois que a equipe do NEXO aprovar.</p>
+
+            <form method="POST" action="{% url 'sugerir_tipo' %}" class="linha">
+                {% csrf_token %}
+                {{ sugerir_form.nome }}
+                <button type="submit" class="botao-contorno">Sugerir</button>
+            </form>
+
+            {% if sugestoes_em_analise %}
+            <p class="cinza">
+                Suas sugestões em análise:
+                {% for tipo in sugestoes_em_analise %}{{ tipo.nome }}{% if not forloop.last %}, {% endif %}{% endfor %}
+            </p>
+            {% endif %}
+        </div>
     </div>
+
+    <script>
+        const seletorTipo = document.getElementById("{{ form.tipo.id_for_label }}");
+        const campoTipoNovo = document.getElementById("campo-tipo-novo");
+
+        function atualizarCampoTipoNovo() {
+            campoTipoNovo.hidden = seletorTipo.value !== "outro";
+        }
+
+        seletorTipo.addEventListener("change", atualizarCampoTipoNovo);
+        atualizarCampoTipoNovo();
+    </script>
 {% endblock %}

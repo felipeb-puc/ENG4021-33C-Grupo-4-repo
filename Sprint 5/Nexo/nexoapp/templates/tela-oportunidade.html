@@ -14,9 +14,15 @@
         <p class="mensagem">{{ mensagem }}</p>
         {% endfor %}
 
+        {% if e_aluno %}
         <a href="{% url 'tela_busca' %}" class="cinza">
             ← Voltar para a busca
         </a>
+        {% elif e_dono %}
+        <a href="{% url 'tela_painel' %}" class="cinza">
+            ← Voltar para o painel
+        </a>
+        {% endif %}
 
         <div id="cabecalho">
             <div class="selo">{{ oportunidade.instituicao.nome|first|upper }}</div>
@@ -117,16 +123,18 @@
             <div id="lateral">
 
                 <div class="caixa">
+                    {% if e_aluno %}
                     {% if ja_candidatou %}
                     <span class="botao enviada">Candidatura enviada</span>
                     {% elif encerrada %}
                     <span class="botao desativado">Inscrições encerradas</span>
+                    {% elif periodo_insuficiente %}
+                    {# o período mínimo vale também para a vaga com link externo #}
+                    <span class="botao desativado">A partir do {{ oportunidade.periodo_minimo }}º período</span>
+                    <p class="cinza">Você está no {{ user.aluno.periodo }}º período. Se mudou de período, atualize no seu <a href="{% url 'tela_perfil' %}">perfil</a>.</p>
                     {% elif oportunidade.link_externo %}
                     {# RF10: a inscrição é feita no site de quem publicou; target="_blank" abre em outra aba #}
                     <a href="{{ oportunidade.link_externo }}" target="_blank" rel="noopener" class="botao">Inscrever-se no site da instituição</a>
-                    {% elif periodo_insuficiente %}
-                    <span class="botao desativado">A partir do {{ oportunidade.periodo_minimo }}º período</span>
-                    <p class="cinza">Você está no {{ user.aluno.periodo }}º período. Se mudou de período, atualize no seu <a href="{% url 'tela_perfil' %}">perfil</a>.</p>
                     {% else %}
                     <form method="post" action="{% url 'candidatar' oportunidade.id %}">
                         {% csrf_token %}
@@ -148,6 +156,19 @@
                         </button>
                         {% endif %}
                     </form>
+
+                    {% elif e_dono %}
+                    {# quem publicou não se candidata: vê o botão de editar #}
+                    {% if oportunidade.rascunho %}
+                    <span class="botao desativado">Rascunho (só você vê)</span>
+                    {% elif encerrada %}
+                    <span class="botao desativado">Inscrições encerradas</span>
+                    {% endif %}
+                    <a href="{% url 'editar_oportunidade' oportunidade.id %}" class="botao">Editar oportunidade</a>
+
+                    {% else %}
+                    <p class="cinza">Só estudantes se candidatam às oportunidades.</p>
+                    {% endif %}
 
                     {% if not encerrada %}
                     <a href="{{ link_agenda }}" target="_blank" class="botao-contorno">

@@ -3,12 +3,22 @@ from datetime import date
 
 from django import forms
 from django.contrib.auth.models import User
-from .models import Instituicao, Curso, Oportunidade, Aluno
+from django.contrib.auth.password_validation import validate_password
+from .models import Instituicao, Curso, Oportunidade, Aluno, TipoOportunidade, padronizar_nome_do_tipo
 
 
 TIPOS_INSTITUICAO_REPRESENTANTE = [
     tipo for tipo in Instituicao.TIPOS if tipo[0] != "empresa"
 ]
+
+
+def conferir_senha(senha, nome, email):
+    """Aplica no cadastro as mesmas regras de senha do settings.py (AUTH_PASSWORD_VALIDATORS):
+    nada parecido com o nome ou o e-mail, nada de senha comum e nada só com números.
+    Se a senha não passar, validate_password levanta o erro e ele aparece embaixo do campo."""
+    usuario = User(username=email or "", email=email or "", first_name=nome or "")
+    validate_password(senha, usuario)
+    return senha
 
 
 class CadastroRecrutadorForm(forms.Form):
@@ -52,6 +62,9 @@ class CadastroRecrutadorForm(forms.Form):
         label="Aceito os termos e a política de privacidade",
         required=True
     )
+
+    def clean_senha(self):
+        return conferir_senha(self.cleaned_data["senha"], self.cleaned_data.get("nome"), self.cleaned_data.get("email"))
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
@@ -118,16 +131,36 @@ class CadastroRepresentanteForm(forms.Form):
         }),
     )
 
+    # liga, equipe, empresa júnior e departamento pertencem a uma universidade;
+    # sem ela, as vagas da instituição nova não aparecem para nenhum aluno
+    universidade_nova_instituicao = forms.ModelChoiceField(
+        label="Universidade",
+        queryset=Instituicao.objects.filter(tipo="faculdade").order_by("nome"),
+        empty_label="Selecione",
+        required=False,
+    )
+
     aceita_termos = forms.BooleanField(
         label="Aceito os termos e a política de privacidade",
         required=True
     )
+
+    def clean_senha(self):
+        return conferir_senha(self.cleaned_data["senha"], self.cleaned_data.get("nome"), self.cleaned_data.get("email"))
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
         if User.objects.filter(username=email).exists():
             raise forms.ValidationError("Já existe uma conta com este e-mail.")
         return email
+
+    def clean(self):
+        dados = super().clean()
+        tipo = dados.get("tipo_nova_instituicao")
+        if dados.get("empresa") == "outro" and tipo and tipo != "faculdade":
+            if not dados.get("universidade_nova_instituicao"):
+                self.add_error("universidade_nova_instituicao", "Selecione a universidade da instituição.")
+        return dados
 
     def clean_nova_instituicao(self):
         nome = self.cleaned_data["nova_instituicao"].strip()
@@ -171,6 +204,9 @@ class CadastroAlunoForm(forms.Form):
         if User.objects.filter(username=email).exists():
             raise forms.ValidationError("Já existe uma conta com este e-mail.")
         return email
+
+    def clean_senha(self):
+        return conferir_senha(self.cleaned_data["senha"], self.cleaned_data.get("nome_completo"), self.cleaned_data.get("email_academico"))
 
     senha = forms.CharField(
         label="Senha",
@@ -272,6 +308,14 @@ class LoginForm(forms.Form):
 
 
 class OportunidadeForm(forms.ModelForm):
+    # aparece quando o tipo escolhido é "Outro tipo": só os tipos que o admin aprovou
+    tipo_novo = forms.ModelChoiceField(
+        queryset=TipoOportunidade.objects.filter(aprovado=True).order_by("nome"),
+        required=False,
+        empty_label="Selecione",
+        label="Qual tipo",
+    )
+
     universidades_alvo = forms.ModelMultipleChoiceField(
         queryset=Instituicao.objects.filter(tipo="faculdade").order_by("nome"),
         required=False,
@@ -283,6 +327,7 @@ class OportunidadeForm(forms.ModelForm):
         model = Oportunidade
         fields = [
             "tipo",
+            "tipo_novo",
             "titulo",
             "descricao",
             "requisitos",
@@ -331,7 +376,31 @@ class OportunidadeForm(forms.ModelForm):
         # universidades-alvo só valem para estágio; nos outros tipos a lista fica vazia
         if dados.get("tipo") != "estagio":
             dados["universidades_alvo"] = Instituicao.objects.none()
+        # "Outro tipo" precisa dizer qual; nos outros tipos o campo fica vazio
+        if dados.get("tipo") == "outro":
+            if not dados.get("tipo_novo"):
+                self.add_error("tipo_novo", "Escolha qual é o tipo.")
+        else:
+            dados["tipo_novo"] = None
         return dados
+
+
+class SugerirTipoForm(forms.Form):
+    nome = forms.CharField(
+        label="Nome do tipo",
+        max_length=50,
+        widget=forms.TextInput(attrs={"placeholder": "Ex.: Programa de trainee"}),
+    )
+
+    def clean_nome(self):
+        nome = padronizar_nome_do_tipo(self.cleaned_data["nome"])
+        if len(nome) < 3:
+            raise forms.ValidationError("Escreva um nome com pelo menos 3 letras.")
+        # não deixa repetir um tipo que já existe (fixo, aprovado ou em análise), sem diferença de maiúscula
+        nomes_fixos = [texto.lower() for valor, texto in Oportunidade.TIPOS]
+        if nome.lower() in nomes_fixos or TipoOportunidade.objects.filter(nome__iexact=nome).exists():
+            raise forms.ValidationError("Esse tipo já existe ou já foi sugerido.")
+        return nome
 
 
 class InstituicaoForm(forms.ModelForm):
@@ -344,21 +413,29 @@ class InstituicaoForm(forms.ModelForm):
 
 class PerfilAlunoForm(forms.ModelForm):
     # Só os campos que o aluno pode mudar. Universidade, curso e matrícula vêm do cadastro e não se editam.
+
+    # required=False: o aluno pode salvar período e CR antes de escrever o currículo
+    curriculo = forms.CharField(
+        label="Currículo",
+        required=False,
+        widget=forms.Textarea(attrs={
+            "rows": 10,
+            "placeholder": "Resumo, áreas de interesse, habilidades e experiências (monitoria, liga, estágio, projetos...)",
+        }),
+    )
+
     class Meta:
         model = Aluno
-        fields = ["periodo", "cr", "curriculo"]
+        fields = ["periodo", "cr", "curriculo", "aparecer_em_buscas"]
         labels = {
             "periodo": "Período",
             "cr": "CR",
             "curriculo": "Currículo",
+            "aparecer_em_buscas": "Aparecer no banco de talentos",
         }
         widgets = {
             "periodo": forms.NumberInput(attrs={"min": 1, "max": 12}),
             "cr": forms.NumberInput(attrs={"min": 0, "max": 10, "step": "0.1"}),
-            "curriculo": forms.Textarea(attrs={
-                "rows": 10,
-                "placeholder": "Resumo, áreas de interesse, habilidades e experiências (monitoria, liga, estágio, projetos...)",
-            }),
         }
 
     def clean_periodo(self):
