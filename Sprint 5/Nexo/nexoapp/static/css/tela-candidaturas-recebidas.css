@@ -26,6 +26,15 @@
   color: #4b6e65;
 }
 
+.form-status {
+  width: 180px;
+  margin: 0px;
+}
+
+.form-status select {
+  margin: 0px;
+}
+
 @media (max-width: 900px) {
   #filtros {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -33,7 +42,8 @@
 }
 
 @media (max-width: 600px) {
-  .status {
+  .status,
+  .form-status {
     width: 100%;
   }
 }

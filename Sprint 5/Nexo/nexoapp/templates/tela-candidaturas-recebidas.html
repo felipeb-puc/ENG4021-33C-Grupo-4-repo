@@ -16,6 +16,10 @@
             Quem se candidatou às oportunidades de {{ user.recrutador.empresa.nome|default:user.representante.instituicao.nome }}.
         </p>
 
+        {% for mensagem in messages %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
+
         {# GET: os filtros ficam na URL; onchange envia o form sozinho a cada mudança #}
         <form method="get" class="caixa" id="filtros" onchange="this.submit()">
 
@@ -113,7 +117,22 @@
                         </p>
                     </div>
 
-                    <span class="status">{{ candidatura.get_status_display }}</span>
+                    {% if candidatura.status == "desistiu" %}
+                        <span class="status">Desistiu</span>
+                    {% else %}
+                        {# escolher outra opção já envia o form, como nos filtros #}
+                        <form method="post" action="{% url 'mudar_status' candidatura.id %}" class="form-status">
+                            {% csrf_token %}
+                            <input type="hidden" name="voltar" value="{{ request.get_full_path }}">
+                            <select name="status" aria-label="Status da candidatura" onchange="this.form.submit()">
+                                {% for valor, texto in status_opcoes %}
+                                    {% if valor != "desistiu" %}
+                                    <option value="{{ valor }}" {% if valor == candidatura.status %}selected{% endif %}>{{ texto }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </form>
+                    {% endif %}
 
                 </div>
 

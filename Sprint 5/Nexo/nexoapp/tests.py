@@ -480,3 +480,48 @@ class PeriodoMinimoTests(BaseTarefasSprint11):
         self.entrar("bia@example.com")  # monitoria a partir do 2º
         self.client.post(reverse("candidatar", args=[self.vaga_puc.id]))
         self.assertTrue(Candidatura.objects.filter(aluno=self.calouro, oportunidade=self.vaga_puc).exists())
+
+
+class StatusNaTelaDeCandidaturasTests(BaseTarefasSprint11):
+
+    def test_recrutador_ve_o_seletor_de_status(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_candidaturas_recebidas"))
+        self.assertContains(resposta, reverse("mudar_status", args=[self.candidatura.id]))
+        self.assertContains(resposta, '<option value="entrevista"')
+
+    def test_desistiu_nao_aparece_como_opcao(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_candidaturas_recebidas"))
+        html = resposta.content.decode()
+        # o filtro de status do topo tem "Desistiu"; aqui só importa o seletor da candidatura
+        seletor = html[html.index('class="form-status"'):]
+        seletor = seletor[:seletor.index("</form>")]
+        self.assertNotIn('value="desistiu"', seletor)
+
+    def test_candidatura_desistida_mostra_so_o_texto(self):
+        self.candidatura.status = "desistiu"
+        self.candidatura.save()
+        self.entrar("carla@example.com")
+        resposta = self.client.get(reverse("tela_candidaturas_recebidas"))
+        self.assertNotContains(resposta, reverse("mudar_status", args=[self.candidatura.id]))
+        self.assertContains(resposta, "Desistiu")
+
+    def test_volta_para_a_lista_com_os_filtros_e_mostra_a_mensagem(self):
+        self.entrar("carla@example.com")
+        lista_filtrada = reverse("tela_candidaturas_recebidas") + "?status=inscrita"
+        resposta = self.client.post(
+            reverse("mudar_status", args=[self.candidatura.id]),
+            {"status": "entrevista", "voltar": lista_filtrada},
+            follow=True,
+        )
+        self.assertRedirects(resposta, lista_filtrada)
+        self.assertContains(resposta, "mudado para Entrevista")
+
+    def test_voltar_para_fora_do_site_e_ignorado(self):
+        self.entrar("carla@example.com")
+        resposta = self.client.post(
+            reverse("mudar_status", args=[self.candidatura.id]),
+            {"status": "entrevista", "voltar": "https://outro-site.com/"},
+        )
+        self.assertEqual(resposta["Location"], reverse("tela_candidaturas_recebidas"))
