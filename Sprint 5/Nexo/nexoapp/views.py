@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from urllib.parse import urlencode, quote
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -921,10 +922,16 @@ def mudar_status(request, candidatura_id):
     candidatura = get_object_or_404(Candidatura, id=candidatura_id)
     instituicao = instituicao_do_usuario(request.user)
 
+    # volta para a lista com os mesmos filtros que estavam na tela
+    lista = reverse("tela_candidaturas_recebidas")
+    voltar = request.POST.get("voltar", "")
+    if not voltar.startswith(lista):
+        voltar = lista
+
     # só quem publicou a oportunidade muda o status da candidatura
     if instituicao is None or candidatura.oportunidade.instituicao != instituicao:
         messages.error(request, "Você não pode mudar o status desta candidatura.")
-        return redirect("tela_candidaturas_recebidas")
+        return redirect(voltar)
 
     # "desistiu" é escolha do aluno: o recrutador não marca e não muda depois
     status_permitidos = ["inscrita", "em_analise", "entrevista", "aprovada", "recusada"]
@@ -938,4 +945,4 @@ def mudar_status(request, candidatura_id):
         candidatura.save()
         nome = candidatura.aluno.user.first_name
         messages.success(request, "Status de " + nome + " mudado para " + candidatura.get_status_display() + ".")
-    return redirect("tela_candidaturas_recebidas")
+    return redirect(voltar)
